@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Navigation = () => {
   return (
-    <div className="flex justify-between py-4 max-w-7xl mx-auto">
+    <div className="flex justify-between py-4 max-w-7xl mx-auto px-2">
       <div className="flex space-x-6">
         <Link href="/">Home</Link>
         <Link href="/pages/artist">Artist</Link>
