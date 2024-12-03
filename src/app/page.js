@@ -1,9 +1,11 @@
 import Image from 'next/image'
 
+import Hero_landing from '@/components/hero_landing/Hero_landing'
+
 export default function Home () {
   return (
     <div>
-      <h1>Hello World</h1>
+      <Hero_landing />
     </div>
   )
 }
