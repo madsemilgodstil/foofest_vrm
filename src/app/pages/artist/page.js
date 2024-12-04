@@ -63,10 +63,18 @@ async function displayArtists () {
                   <SheetTrigger>View Artist</SheetTrigger>
                   <SheetContent>
                     <SheetHeader>
-                      <SheetTitle>{band.name}</SheetTitle>
-                      <SheetDescription>{band.genre}</SheetDescription>
-                      <SheetDescription>{band.members}</SheetDescription>
-                      <SheetDescription>
+                      <SheetTitle className='text-center'>
+                        {band.name}
+                      </SheetTitle>
+                      <SheetDescription className='text-center'>
+                        {band.genre}
+                      </SheetDescription>
+                      <SheetDescription className='text-center'>
+                        {Array.isArray(band.members)
+                          ? band.members.join(', ')
+                          : band.members}
+                      </SheetDescription>
+                      <SheetDescription className='flex justify-center'>
                         {' '}
                         <Avatar className='w-48 h-48 rounded-full'>
                           <AvatarImage src={band.logo} alt={band.name} />
