@@ -1,16 +1,14 @@
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+const url = process.env.NEXT_PUBLIC_API_URL
 
 const headersList = {
   Accept: '*/*',
   'Content-Type': 'application/json',
-  'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-  apikey: key,
   Prefer: 'return=representation'
 }
 
 //Get
-export async function getArtist () {
-  const response = await fetch(url, {
+export async function getBands () {
+  const response = await fetch(url + '/bands', {
     method: 'GET',
     headers: headersList
   })
