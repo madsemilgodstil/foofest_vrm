@@ -25,28 +25,6 @@ export async function getSchedule (stage) {
   })
 
   const data = await response.json()
-  return data
-}
-
-//GET Schedule for stages
-export async function getSchedule (stage) {
-  const response = await fetch(`${url}/schedule`, {
-    method: 'GET',
-    headers: headersList
-  })
-
-  //   const data = await response.json();
-  //   return data;
-  // }
-
-  // //Post
-  // export async function postSub(subscriber) {
-  //   const response = await fetch(url, {
-  //     method: "POST",
-  //     headers: headersList,
-  //     body: JSON.stringify(subscriber),
-  //   });
-  const data = await response.json()
 
   return data[stage]
   //Rasmus -
