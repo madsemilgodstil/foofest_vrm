@@ -68,6 +68,7 @@ async function displayArtists () {
                     <AvatarFallback>{band.name}</AvatarFallback>
                   </Avatar>
                 </CardContent>
+
                 <CardFooter className='flex justify-center'>
                   <Sheet>
                     <SheetTrigger>
@@ -86,7 +87,7 @@ async function displayArtists () {
                             ? band.members.join(', ')
                             : band.members}
                         </SheetDescription>
-                        <SheetDescription className='flex justify-center'>
+                        <SheetDescription className='flex justify-center py-2'>
                           {/* Avatar */}
                           <Avatar className='w-48 h-48 rounded-full'>
                             <AvatarImage
@@ -96,8 +97,14 @@ async function displayArtists () {
                             <AvatarFallback>{band.name}</AvatarFallback>
                           </Avatar>
                         </SheetDescription>
-
-                        <SheetDescription>{band.bio}</SheetDescription>
+                        <SheetDescription className='flex justify-center'>
+                          <p className='text-center py-2 text-xs'>
+                            {band.logoCredits}
+                          </p>
+                        </SheetDescription>
+                        <SheetDescription className='py-2'>
+                          {band.bio}
+                        </SheetDescription>
                       </SheetHeader>
                     </SheetContent>
                   </Sheet>
