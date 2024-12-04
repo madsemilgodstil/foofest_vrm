@@ -29,8 +29,10 @@ import {
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
+import { Button } from '@/components/ui/button'
+
 function getImageUrl (band) {
-  const baseUrl = 'http://localhost:8080/logos'
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL + '/logos/'
   if (band.logo.startsWith('https://')) {
     return band.logo
   } else {
@@ -68,7 +70,9 @@ async function displayArtists () {
                 </CardContent>
                 <CardFooter className='flex justify-center'>
                   <Sheet>
-                    <SheetTrigger>View Artist</SheetTrigger>
+                    <SheetTrigger>
+                      <Button variant='outline'>View Artist</Button>
+                    </SheetTrigger>
                     <SheetContent>
                       <SheetHeader>
                         <SheetTitle className='text-center'>
