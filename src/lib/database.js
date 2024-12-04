@@ -8,7 +8,7 @@ const headersList = {
 
 //Get
 export async function getBands () {
-  const response = await fetch(`${url}/bands`, {
+  const response = await fetch(url + '/bands', {
     method: 'GET',
     headers: headersList
   })
