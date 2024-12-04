@@ -29,12 +29,13 @@ import {
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
-function getRelatedBands (bands, currentBand) {
-  const related = bands.filter(
-    band => band.genre === currentBand.genre && band.name !== currentBand.name
-  )
-
-  return related.slice(0, 3)
+function getImageUrl (band) {
+  const baseUrl = 'http://localhost:8080/logos'
+  if (band.logo.startsWith('https://')) {
+    return band.logo
+  } else {
+    return `${baseUrl}/${band.logo}`
+  }
 }
 
 async function displayArtists () {
@@ -48,8 +49,6 @@ async function displayArtists () {
         </h1>
         <div className='grid grid-cols-3 gap-8'>
           {bands.map(band => {
-            const relatedBands = getRelatedBands(bands, band)
-
             return (
               <Card key={band.id}>
                 <CardHeader>
@@ -63,7 +62,7 @@ async function displayArtists () {
                 <CardContent className='flex justify-center'>
                   {/* Avatar */}
                   <Avatar className='w-48 h-48 rounded-full'>
-                    <AvatarImage src={band.logo} alt={band.name} />
+                    <AvatarImage src={getImageUrl(band)} alt={band.name} />
                     <AvatarFallback>{band.name}</AvatarFallback>
                   </Avatar>
                 </CardContent>
@@ -84,11 +83,16 @@ async function displayArtists () {
                             : band.members}
                         </SheetDescription>
                         <SheetDescription className='flex justify-center'>
+                          {/* Avatar */}
                           <Avatar className='w-48 h-48 rounded-full'>
-                            <AvatarImage src={band.logo} alt={band.name} />
+                            <AvatarImage
+                              src={getImageUrl(band)}
+                              alt={band.name}
+                            />
                             <AvatarFallback>{band.name}</AvatarFallback>
                           </Avatar>
                         </SheetDescription>
+
                         <SheetDescription>{band.bio}</SheetDescription>
                       </SheetHeader>
                     </SheetContent>
