@@ -9,7 +9,7 @@ const headersList = {
 }
 
 //Get
-export async function getSubs () {
+export async function getArtist () {
   const response = await fetch(url, {
     method: 'GET',
     headers: headersList
