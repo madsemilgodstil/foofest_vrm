@@ -90,61 +90,6 @@ async function displayArtists () {
                           </Avatar>
                         </SheetDescription>
                         <SheetDescription>{band.bio}</SheetDescription>
-                        <SheetDescription>
-                          <h2 className='py-8 text-center'>Related</h2>
-                          <ul className='text-center space-y-2'>
-                            {relatedBands.map(related => (
-                              <li key={related.name}>
-                                <Sheet>
-                                  <SheetTrigger>{related.name}</SheetTrigger>
-                                  <SheetContent>
-                                    <SheetHeader>
-                                      <SheetTitle className='text-center'>
-                                        {band.name}
-                                      </SheetTitle>
-                                      <SheetDescription className='text-center'>
-                                        {band.genre}
-                                      </SheetDescription>
-                                      <SheetDescription className='text-center'>
-                                        {Array.isArray(band.members)
-                                          ? band.members.join(', ')
-                                          : band.members}
-                                      </SheetDescription>
-                                      <SheetDescription className='flex justify-center'>
-                                        <Avatar className='w-48 h-48 rounded-full'>
-                                          <AvatarImage
-                                            src={band.logo}
-                                            alt={band.name}
-                                          />
-                                          <AvatarFallback>
-                                            {band.name}
-                                          </AvatarFallback>
-                                        </Avatar>
-                                      </SheetDescription>
-                                      <SheetDescription>
-                                        {band.bio}
-                                      </SheetDescription>
-                                      <SheetDescription>
-                                        <h2 className='py-8 text-center'>
-                                          Related
-                                        </h2>
-                                        <ul className='text-center space-y-2'>
-                                          {relatedBands.map(related => (
-                                            <li key={related.name}>
-                                              <SheetTrigger>
-                                                {related.name}
-                                              </SheetTrigger>
-                                            </li>
-                                          ))}
-                                        </ul>
-                                      </SheetDescription>
-                                    </SheetHeader>
-                                  </SheetContent>
-                                </Sheet>
-                              </li>
-                            ))}
-                          </ul>
-                        </SheetDescription>
                       </SheetHeader>
                     </SheetContent>
                   </Sheet>
