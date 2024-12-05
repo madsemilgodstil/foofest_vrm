@@ -1,6 +1,6 @@
 // app/pages/program/page.jsx
-import React from "react";
-import Schedule from "@/components/schedule/Schedule";
+import React from 'react'
+import Schedule from '@/components/schedule/Schedule'
 
 const Program = () => {
   return (
@@ -8,7 +8,7 @@ const Program = () => {
       <h1 className="text-2xl font-bold mb-4">Program</h1>
       <Schedule />
     </div>
-  );
-};
+  )
+}
 
-export default Program;
+export default Program
