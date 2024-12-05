@@ -1,14 +1,21 @@
-// app/pages/program/page.jsx
-import React from "react";
-import Schedule from "@/components/schedule/Schedule";
+import Schedule from '@/components/schedule/Schedule'
+import { getSchedule } from '@/lib/database'
 
-const Program = () => {
+export default async function ProgramPage () {
+  const midgard = await getSchedule('Midgard')
+  const vanaheim = await getSchedule('Vanaheim')
+  const jotunheim = await getSchedule('Jotunheim')
+
+  const stages = [
+    { name: 'Midgard', stageSchedule: midgard },
+    { name: 'Vanaheim', stageSchedule: vanaheim },
+    { name: 'Jotunheim', stageSchedule: jotunheim }
+  ]
+
   return (
-    <div className="px-2 max-w-7xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Program</h1>
-      <Schedule />
+    <div>
+      <h1>Festival Program</h1>
+      <Schedule stages={stages} />
     </div>
-  );
-};
-
-export default Program;
+  )
+}
