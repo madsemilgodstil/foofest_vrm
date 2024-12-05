@@ -4,14 +4,14 @@ import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger,
+  TooltipTrigger
 } from "@/components/ui/tooltip";
 
 export default function ScrollToTop() {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth", // Smooth scrolling animation
+      behavior: "smooth" // Smooth scrolling animation
     });
   };
 
@@ -22,7 +22,7 @@ export default function ScrollToTop() {
           <TooltipTrigger>
             <button
               onClick={scrollToTop}
-              className="bg-blue-500 text-white px-4 py-2 rounded shadow-md"
+              className="bg-primary text-white px-4 py-2 rounded shadow-md"
             >
               Top
             </button>
