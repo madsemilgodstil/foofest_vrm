@@ -20,13 +20,6 @@ import {
   SheetTrigger
 } from '@/components/ui/sheet'
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from '@/components/ui/tooltip'
-
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 import { Button } from '@/components/ui/button'
@@ -113,18 +106,6 @@ async function displayArtists () {
             )
           })}
         </div>
-      </div>
-      <div className='fixed bottom-5 right-5'>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger>
-              <Link href='/pages/artist'>Top</Link>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Go to top</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
       </div>
     </>
   )

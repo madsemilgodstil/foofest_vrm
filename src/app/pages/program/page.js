@@ -13,9 +13,11 @@ export default async function ProgramPage () {
   ]
 
   return (
-    <div>
-      <h1>Festival Program</h1>
-      <Schedule stages={stages} />
-    </div>
+    <>
+      <div>
+        <h1>Festival Program</h1>
+        <Schedule stages={stages} />
+      </div>
+    </>
   )
 }
