@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Modal from "@/components/modal/Modal";
 import { useAuth } from "@/context/AuthContext"; // Import the AuthContext
+import { Button } from "../ui/button";
 
 const Navigation = () => {
   const pathname = usePathname(); // Get the current path

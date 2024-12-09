@@ -15,14 +15,14 @@ const Schedule = ({ stages }) => {
   };
 
   return (
-    <div>
+    <div className="mx-24">
       {/* Buttons for each day */}
-      <div className="flex gap-4 mb-8 mt-14 justify-center">
+      <div className="flex gap-3 mb-8 mt-14 justify-center">
         {allDays.map((day) => (
           <button
             key={day}
             onClick={() => scrollToDay(day)}
-            className=" px-10 py-4 bg-primary text-white rounded-full"
+            className=" px-10 py-2 bg-primary text-white rounded-full"
           >
             {day.charAt(0).toUpperCase() + day.slice(1)}
           </button>

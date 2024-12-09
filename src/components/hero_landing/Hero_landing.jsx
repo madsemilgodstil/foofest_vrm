@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link"; // Import Link
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 function Hero_landing() {
   return (
@@ -36,6 +37,19 @@ function Hero_landing() {
               className="px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg lg:text-xl"
               variant="outline"
             >
+              Tickets
+            </Button>
+          </Link>
+          {/* Line-up knap */}
+          <Link href="/pages/artist">
+            <Button className="px-8 py-2 bg-primary text-white text-base rounded-full">
+              Line-up
+            </Button>
+          </Link>
+
+          {/* Tickets knap */}
+          <Link href="/pages/booking">
+            <Button className="px-8 py-2 bg-primary text-white text-base rounded-full">
               Tickets
             </Button>
           </Link>
