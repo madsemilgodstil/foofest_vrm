@@ -4,12 +4,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Modal from "@/components/modal/Modal";
+import { useAuth } from "@/context/AuthContext"; // Import the AuthContext
 
 const Navigation = () => {
   const pathname = usePathname(); // Get the current path
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  const { isLoggedIn, logout } = useAuth(); // Access authentication status
 
   const toggleModal = () => setIsModalOpen((prev) => !prev);
+
+  const handleLogout = () => {
+    logout(); // Logout user
+    window.location.href = "/"; // Redirect to homepage after logout
+  };
 
   return (
     <>
@@ -89,21 +96,31 @@ const Navigation = () => {
               }`}
             ></span>
           </Link>
-          <button
-            onClick={toggleModal}
-            className={`relative group ${
-              pathname === "/pages/login" ? "text-primary" : ""
-            }`}
-          >
-            Login
-            <span
-              className={`absolute left-0 bottom-0 h-0.5 bg-primary transition-all duration-300 ${
-                pathname === "/pages/login"
-                  ? "w-full"
-                  : "w-0 group-hover:w-full"
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="relative group text-primary"
+            >
+              Logout
+              <span className="absolute left-0 bottom-0 h-0.5 bg-primary transition-all duration-300 w-full"></span>
+            </button>
+          ) : (
+            <button
+              onClick={toggleModal}
+              className={`relative group ${
+                pathname === "/pages/login" ? "text-primary" : ""
               }`}
-            ></span>
-          </button>
+            >
+              Login
+              <span
+                className={`absolute left-0 bottom-0 h-0.5 bg-primary transition-all duration-300 ${
+                  pathname === "/pages/login"
+                    ? "w-full"
+                    : "w-0 group-hover:w-full"
+                }`}
+              ></span>
+            </button>
+          )}
         </div>
       </div>
 
