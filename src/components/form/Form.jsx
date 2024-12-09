@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+// Define the schema using zod
 const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
@@ -23,7 +24,19 @@ const formSchema = z.object({
 });
 
 export function ProfileForm() {
-  // ...
+  // Initialize the form using react-hook-form and zod
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "", // Default value for username
+    },
+  });
+
+  // Handle form submission
+  const onSubmit = (data) => {
+    console.log("Form submitted:", data);
+    // Add your form submission logic here (e.g., API calls)
+  };
 
   return (
     <Form {...form}>
