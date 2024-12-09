@@ -1,6 +1,6 @@
-'use client' // Add this directive to make it a client component
+'use client'
 
-import { useState } from 'react' // Import useState for state management
+import { useState } from 'react'
 import {
   Menubar,
   MenubarContent,
@@ -9,8 +9,9 @@ import {
   MenubarSeparator,
   MenubarTrigger
 } from '@/components/ui/menubar'
-import LikedArtist from '@/components/likedartist/LikedArtist' // Corrected import path
-import LikedArtistProgram from '@/components/likedartistprogram/LikedArtistProgram' // Corrected import path
+import LikedArtist from '@/components/likedartist/LikedArtist'
+import LikedArtistProgram from '@/components/likedartistprogram/LikedArtistProgram'
+import UserSettings from '@/components/usersettings/UserSettings' // Import the new UserSettings component
 
 export default function LoginPage () {
   const [activeComponent, setActiveComponent] = useState('AllArtist') // State to track the active component
@@ -21,6 +22,8 @@ export default function LoginPage () {
         return <LikedArtist />
       case 'Program':
         return <LikedArtistProgram />
+      case 'UserSettings':
+        return <UserSettings /> // Render the UserSettings component
       default:
         return null
     }
@@ -45,7 +48,9 @@ export default function LoginPage () {
           <MenubarMenu>
             <MenubarTrigger>My Information</MenubarTrigger>
             <MenubarContent>
-              <MenubarItem>User</MenubarItem>
+              <MenubarItem onClick={() => setActiveComponent('UserSettings')}>
+                User Settings
+              </MenubarItem>
               <MenubarSeparator />
               <MenubarItem>Bookings</MenubarItem>
             </MenubarContent>
