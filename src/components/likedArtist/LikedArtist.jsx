@@ -6,7 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 
 export default function LikedArtist() {
-  const { user } = useAuth(); // Assuming you have an AuthContext to provide the user
+  const { user } = useAuth();
   const [likedArtists, setLikedArtists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
