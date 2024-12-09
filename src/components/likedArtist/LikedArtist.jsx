@@ -55,7 +55,7 @@ export default function LikedArtist() {
     return (
       <div className="flex flex-col items-center justify-center mt-20">
         <img
-          src="/placeholder-no-artists.svg" // Replace with your placeholder image path
+          src="https://picsum.photos/600/400?grayscale"
           alt="No liked artists"
           className="w-1/2 h-auto mb-4"
         />
