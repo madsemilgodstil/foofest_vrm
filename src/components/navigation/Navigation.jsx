@@ -79,6 +79,19 @@ const Navigation = () => {
             }`}
           ></span>
         </Link>
+        <Link
+          href="/pages/login"
+          className={`relative group ${
+            pathname === "/pages/info" ? "text-primary" : ""
+          }`}
+        >
+          Login
+          <span
+            className={`absolute left-0 bottom-0 h-0.5 bg-primary transition-all duration-300 ${
+              pathname === "/pages/login" ? "w-full" : "w-0 group-hover:w-full"
+            }`}
+          ></span>
+        </Link>
       </div>
     </div>
   );
