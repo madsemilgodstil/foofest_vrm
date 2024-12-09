@@ -1,9 +1,8 @@
 import Image from "next/image";
-import Link from "next/link"; // Import Link
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-function Hero_landing() {
+function HeroLanding() {
   return (
     <div className="relative">
       <h1 className="hidden">Hero Landing</h1>
@@ -14,7 +13,7 @@ function Hero_landing() {
       {/* Image Container */}
       <div className="relative h-screen w-full">
         <Image
-          src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" // Replace with your image URL
+          src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           alt="Festival Image"
           layout="fill"
           objectFit="cover"
@@ -24,6 +23,7 @@ function Hero_landing() {
       {/* Button Container */}
       <div className="absolute inset-0 flex flex-col items-center justify-center pb-[10%]">
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+          {/* Line-up Button */}
           <Link href="/pages/artist">
             <Button
               className="px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg lg:text-xl"
@@ -32,24 +32,12 @@ function Hero_landing() {
               Line-up
             </Button>
           </Link>
+          {/* Tickets Button */}
           <Link href="/pages/booking">
             <Button
               className="px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg lg:text-xl"
               variant="outline"
             >
-              Tickets
-            </Button>
-          </Link>
-          {/* Line-up knap */}
-          <Link href="/pages/artist">
-            <Button className="px-8 py-2 bg-primary text-white text-base rounded-full">
-              Line-up
-            </Button>
-          </Link>
-
-          {/* Tickets knap */}
-          <Link href="/pages/booking">
-            <Button className="px-8 py-2 bg-primary text-white text-base rounded-full">
               Tickets
             </Button>
           </Link>
@@ -59,4 +47,4 @@ function Hero_landing() {
   );
 }
 
-export default Hero_landing;
+export default HeroLanding;
