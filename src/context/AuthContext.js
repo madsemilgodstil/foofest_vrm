@@ -6,32 +6,32 @@ const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [userId, setUserId] = useState(null)
+  const [user, setUser] = useState(null) // Store the full user object
 
   // Check login state on load
   useEffect(() => {
     const loggedInStatus = localStorage.getItem('isLoggedIn')
-    const storedUserId = localStorage.getItem('user_id')
+    const storedUser = localStorage.getItem('user') // Retrieve the full user object
     setIsLoggedIn(loggedInStatus === 'true')
-    setUserId(storedUserId)
+    setUser(storedUser ? JSON.parse(storedUser) : null)
   }, [])
 
-  const login = id => {
+  const login = userData => {
     setIsLoggedIn(true)
-    setUserId(id)
+    setUser(userData) // Store the full user object
     localStorage.setItem('isLoggedIn', 'true')
-    localStorage.setItem('user_id', id) // Store the user ID
+    localStorage.setItem('user', JSON.stringify(userData)) // Store user object in localStorage
   }
 
   const logout = () => {
     setIsLoggedIn(false)
-    setUserId(null)
+    setUser(null)
     localStorage.removeItem('isLoggedIn')
-    localStorage.removeItem('user_id')
+    localStorage.removeItem('user')
   }
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, userId, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   )
