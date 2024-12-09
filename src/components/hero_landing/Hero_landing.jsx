@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link"; // Import Link
 import { Button } from "@/components/ui/button";
 
 function Hero_landing() {
@@ -22,18 +23,22 @@ function Hero_landing() {
       {/* Button Container */}
       <div className="absolute inset-0 flex flex-col items-center justify-center pb-[10%]">
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-          <Button
-            className="px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg lg:text-xl"
-            variant="outline"
-          >
-            Line-up
-          </Button>
-          <Button
-            className="px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg lg:text-xl"
-            variant="outline"
-          >
-            Tickets
-          </Button>
+          <Link href="/pages/artist">
+            <Button
+              className="px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg lg:text-xl"
+              variant="outline"
+            >
+              Line-up
+            </Button>
+          </Link>
+          <Link href="/pages/booking">
+            <Button
+              className="px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg lg:text-xl"
+              variant="outline"
+            >
+              Tickets
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
