@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Button } from "../ui/button";
 
 const Navigation = () => {
   const pathname = usePathname(); // Få den aktuelle sti
