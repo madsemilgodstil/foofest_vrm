@@ -1,5 +1,3 @@
-// src/lib/supabaseUser.js
-
 const url = process.env.NEXT_PUBLIC_USER_API_URL
 const api = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 const auth = `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`
@@ -82,6 +80,7 @@ export async function createUser (userData) {
     throw error
   }
 }
+
 // Update user information (PATCH)
 export async function updateUser (userId, updates) {
   try {

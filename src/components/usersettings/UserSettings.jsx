@@ -1,5 +1,3 @@
-// src/components/usersettings/UserSettings.jsx
-
 "use client";
 
 import { useState } from "react";
@@ -32,6 +30,15 @@ export default function UserSettings() {
           body: JSON.stringify({ [field]: value }),
         }
       );
+
+      if (response.status === 204) {
+        setMessage(
+          `${
+            field.charAt(0).toUpperCase() + field.slice(1)
+          } updated successfully!`
+        );
+        return;
+      }
 
       const result = await response.json();
 
@@ -76,12 +83,14 @@ export default function UserSettings() {
         }
       );
 
-      if (response.ok) {
+      if (response.status === 204 || response.ok) {
         setMessage("Your account has been deleted successfully.");
         logout();
-      } else {
-        throw new Error("Failed to delete account.");
+        return;
       }
+
+      const result = await response.json();
+      throw new Error(result.message || "Failed to delete account.");
     } catch (error) {
       setMessage(error.message);
     }
