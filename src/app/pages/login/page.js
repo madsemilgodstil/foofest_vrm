@@ -31,7 +31,9 @@ export default function LoginPage () {
 
   return (
     <>
-      <div>
+      <div className='flex justify-center mt-6'>
+        {' '}
+        {/* Center the menu */}
         <Menubar>
           <MenubarMenu>
             <MenubarTrigger>Liked Artist</MenubarTrigger>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 
@@ -10,10 +10,40 @@ const authHeader = `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`;
 
 export default function UserSettings() {
   const { user, logout } = useAuth();
+  const [currentData, setCurrentData] = useState({}); // Store current user data
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+
+  // Fetch the current user data
+  const fetchCurrentUser = async () => {
+    if (!user) return;
+
+    try {
+      const response = await fetch(`${url}?id=eq.${user.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: apiKey,
+          Authorization: authHeader,
+        },
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch user data.");
+
+      const data = await response.json();
+      if (data.length > 0) {
+        setCurrentData(data[0]); // Update current user data
+      }
+    } catch (error) {
+      setMessage(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, [user]);
 
   const handleUpdate = async (field, value) => {
     if (!user) {
@@ -40,6 +70,7 @@ export default function UserSettings() {
         }[field];
 
         setMessage(`${friendlyFieldName} updated successfully!`);
+        fetchCurrentUser(); // Re-fetch current user data to update the UI
         return;
       }
 
@@ -53,6 +84,7 @@ export default function UserSettings() {
         }[field];
 
         setMessage(`${friendlyFieldName} updated successfully!`);
+        fetchCurrentUser(); // Re-fetch current user data to update the UI
       } else {
         throw new Error(result.message || `Failed to update ${field}.`);
       }
@@ -108,6 +140,9 @@ export default function UserSettings() {
       {/* Update Name */}
       <div className="mb-6">
         <label className="block text-sm font-medium mb-2">Name</label>
+        <p className="text-gray-400 text-sm mb-2">
+          Current Name: {currentData.user_name || "Loading..."}
+        </p>
         <input
           type="text"
           value={name}
@@ -126,6 +161,9 @@ export default function UserSettings() {
       {/* Update Email */}
       <div className="mb-6">
         <label className="block text-sm font-medium mb-2">Email</label>
+        <p className="text-gray-400 text-sm mb-2">
+          Current Email: {currentData.user_email || "Loading..."}
+        </p>
         <input
           type="email"
           value={email}
@@ -144,6 +182,9 @@ export default function UserSettings() {
       {/* Update Password */}
       <div className="mb-6">
         <label className="block text-sm font-medium mb-2">Password</label>
+        <p className="text-gray-400 text-sm mb-2">
+          Current Password: {currentData.user_password || "Hidden for security"}
+        </p>
         <input
           type="password"
           value={password}
