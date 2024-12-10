@@ -1,10 +1,10 @@
 const InfoText = () => {
   return (
-    <div className="max-w-4xl mx-auto p-6 text-center">
-      <h1 className="text-4xl font-bold text-gray-800 mb-4">
+    <div className="max-w-4xl mx-auto mt-9 p-6 text-center">
+      <h1 className="text-4xl font-bold text-primary mb-4">
         About FooFest 2025
       </h1>
-      <p className="text-lg text-gray-600 leading-relaxed">
+      <p className="text-lg text-inherit leading-relaxed">
         FooFest 2025 is the premier music festival of the year, bringing
         together world-renowned artists, electrifying performances, and
         unforgettable experiences. From cutting-edge stages to vibrant food
