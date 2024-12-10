@@ -5,22 +5,22 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { getUserByCredentials, createUser } from "@/lib/supabaseUser";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext"; // Import AuthContext
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getUserByCredentials, createUser } from "@/lib/supabaseUser";
 
 // Validation schema using zod
 const schema = z.object({
-  name: z.string().optional(), // Name is required only for signup
+  name: z.string().optional(), // Name required only for signup
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 const Modal = ({ isOpen, onClose }) => {
   const [isLogin, setIsLogin] = useState(true); // Toggle between login and signup
-  const router = useRouter(); // For navigation
-  const { login } = useAuth(); // Access login function
+  const router = useRouter();
+  const { login } = useAuth(); // Use AuthContext for login
 
   const {
     register,
@@ -34,33 +34,28 @@ const Modal = ({ isOpen, onClose }) => {
   const onSubmit = async (data) => {
     try {
       if (isLogin) {
-        // Login logic
+        // Handle login
         const user = await getUserByCredentials(data.email, data.password);
         if (user) {
-          console.log("User logged in:", user);
-          login(); // Set user as logged in
+          login(user); // Pass full user object to AuthContext
           router.push("/pages/login"); // Redirect to the login page
         } else {
-          console.error("Invalid credentials. Please try again.");
           alert("Invalid email or password.");
         }
       } else {
-        // Signup logic
+        // Handle signup
         const newUser = {
-          name: data.name,
-          email: data.email,
-          password: data.password,
+          user_name: data.name,
+          user_email: data.email,
+          user_password: data.password,
         };
         const createdUser = await createUser(newUser);
-        console.log("User created:", createdUser);
-
-        // Automatically log the user in after signup
-        login(); // Set user as logged in
+        login(createdUser); // Log in after signup
         router.push("/pages/login"); // Redirect to the login page
       }
-      onClose(); // Close modal after a successful operation
+      onClose(); // Close modal after successful operation
     } catch (error) {
-      console.error("Error during authentication:", error);
+      console.error("Authentication error:", error.message);
       alert("An error occurred. Please try again.");
     }
   };

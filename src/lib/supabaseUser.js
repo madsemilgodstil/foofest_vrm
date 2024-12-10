@@ -1,24 +1,33 @@
-const url = 'https://wytltzrweejgryrvzprn.supabase.co/rest/v1/user'
+const url = process.env.NEXT_PUBLIC_USER_API_URL
+const api = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const auth = `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`
 
 const headersList = {
-  Accept: 'application/json', // Fix Accept header
+  Accept: 'application/json',
   'Content-Type': 'application/json',
   Prefer: 'return=representation',
-  apikey:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dGx0enJ3ZWVqZ3J5cnZ6cHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMxNDM0NDQsImV4cCI6MjA0ODcxOTQ0NH0.-ezs7giRIiXDbmC12ORI9Z-bKQ0w3NC7-TER1weoBuY',
-  Authorization:
-    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dGx0enJ3ZWVqZ3J5cnZ6cHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMxNDM0NDQsImV4cCI6MjA0ODcxOTQ0NH0.-ezs7giRIiXDbmC12ORI9Z-bKQ0w3NC7-TER1weoBuY'
+  apikey: api,
+  Authorization: auth // Fixed the Authorization header
 }
 
 // Fetch all users
 export async function getUsers () {
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: headersList
-  })
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: headersList
+    })
 
-  const data = await response.json()
-  return data
+    if (!response.ok) {
+      throw new Error(`Failed to fetch users: ${response.statusText}`)
+    }
+
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error('Supabase getUsers error:', error)
+    throw error
+  }
 }
 
 // Fetch user by email and password for login
@@ -32,8 +41,12 @@ export async function getUserByCredentials (email, password) {
       }
     )
 
+    if (!response.ok) {
+      throw new Error(`Failed to fetch user: ${response.statusText}`)
+    }
+
     const data = await response.json()
-    return data.length > 0 ? data[0] : null // Return the user if found, otherwise null
+    return data.length > 0 ? data[0] : null // Return user if found, otherwise null
   } catch (error) {
     console.error('Supabase getUserByCredentials error:', error)
     throw error
@@ -47,15 +60,16 @@ export async function createUser (userData) {
       method: 'POST',
       headers: headersList,
       body: JSON.stringify({
-        user_name: userData.user_name, // Corresponds to the "user_name" column
-        user_email: userData.user_email, // Corresponds to the "user_email" column
-        user_password: userData.user_password, // Corresponds to the "user_password" column
-        user_booking_id: userData.user_booking_id || null // Optional, corresponds to "user_booking_id"
+        user_name: userData.user_name,
+        user_email: userData.user_email,
+        user_password: userData.user_password,
+        user_booking_id: userData.user_booking_id || null
       })
     })
 
     if (!response.ok) {
       const error = await response.json()
+      console.error('Supabase createUser error response:', error)
       throw new Error(`Error creating user: ${error.message}`)
     }
 

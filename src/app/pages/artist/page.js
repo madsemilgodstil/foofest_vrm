@@ -43,28 +43,30 @@ async function displayArtists () {
         {bands.map(band => (
           <Sheet key={band.id}>
             <SheetTrigger asChild>
-              <Card className='hover:scale-105 transition ease-in-out duration-300 cursor-pointer'>
-                <CardContent className='flex justify-center p-0'>
-                  <div className='relative w-full h-40 overflow-hidden rounded-t-xl'>
-                    <Avatar className='absolute inset-0 w-full h-full'>
-                      <AvatarImage
-                        src={getImageUrl(band)}
-                        alt={band.name}
-                        className='object-cover w-full h-full'
-                      />
-                      <AvatarFallback>{band.name}</AvatarFallback>
-                    </Avatar>
-                  </div>
-                </CardContent>
-                <CardHeader className='py-4 px-2'>
-                  <CardTitle className='text-center text-xl text-primary'>
-                    {band.name}
-                  </CardTitle>
-                  <CardDescription className='text-center text-gray-500'>
-                    {band.genre}
-                  </CardDescription>
-                </CardHeader>
-              </Card>
+              <div>
+                <Card className='hover:scale-105 transition ease-in-out duration-300 cursor-pointer'>
+                  <CardContent className='flex justify-center p-0'>
+                    <div className='relative w-full h-40 overflow-hidden rounded-t-xl'>
+                      <Avatar className='absolute inset-0 w-full h-full'>
+                        <AvatarImage
+                          src={getImageUrl(band)}
+                          alt={band.name}
+                          className='object-cover w-full h-full'
+                        />
+                        <AvatarFallback>{band.name}</AvatarFallback>
+                      </Avatar>
+                    </div>
+                  </CardContent>
+                  <CardHeader className='py-4 px-2'>
+                    <CardTitle className='text-center text-xl text-primary'>
+                      {band.name}
+                    </CardTitle>
+                    <CardDescription className='text-center text-gray-500'>
+                      {band.genre}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </div>
             </SheetTrigger>
             <SheetContent>
               <SheetHeader>
