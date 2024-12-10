@@ -10,7 +10,7 @@ const authHeader = `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`;
 
 export default function UserSettings() {
   const { user, logout } = useAuth();
-  const [currentData, setCurrentData] = useState({}); // Store current user data
+  const [currentData, setCurrentData] = useState({});
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,7 +34,7 @@ export default function UserSettings() {
 
       const data = await response.json();
       if (data.length > 0) {
-        setCurrentData(data[0]); // Update current user data
+        setCurrentData(data[0]);
       }
     } catch (error) {
       setMessage(error.message);
@@ -45,9 +45,22 @@ export default function UserSettings() {
     fetchCurrentUser();
   }, [user]);
 
+  const validatePassword = (password) => {
+    const hasLetter = /[a-zA-Z]/.test(password);
+    const hasDigit = /\d/.test(password);
+    return password.length >= 6 && hasLetter && hasDigit;
+  };
+
   const handleUpdate = async (field, value) => {
     if (!user) {
       setMessage("You must be logged in to update your settings.");
+      return;
+    }
+
+    if (field === "user_password" && !validatePassword(value)) {
+      setMessage(
+        "Password must be at least 6 characters long and include at least one letter and one digit."
+      );
       return;
     }
 
@@ -70,7 +83,7 @@ export default function UserSettings() {
         }[field];
 
         setMessage(`${friendlyFieldName} updated successfully!`);
-        fetchCurrentUser(); // Re-fetch current user data to update the UI
+        fetchCurrentUser();
         return;
       }
 
@@ -84,7 +97,7 @@ export default function UserSettings() {
         }[field];
 
         setMessage(`${friendlyFieldName} updated successfully!`);
-        fetchCurrentUser(); // Re-fetch current user data to update the UI
+        fetchCurrentUser();
       } else {
         throw new Error(result.message || `Failed to update ${field}.`);
       }
