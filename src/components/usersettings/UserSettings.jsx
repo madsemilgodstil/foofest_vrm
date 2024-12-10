@@ -4,6 +4,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 
+const url = process.env.NEXT_PUBLIC_USER_API_URL;
+const apiKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const authHeader = `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`;
+
 export default function UserSettings() {
   const { user, logout } = useAuth();
   const [name, setName] = useState("");
@@ -18,36 +22,37 @@ export default function UserSettings() {
     }
 
     try {
-      const response = await fetch(
-        `https://wytltzrweejgryrvzprn.supabase.co/rest/v1/user?id=eq.${user.id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
-          },
-          body: JSON.stringify({ [field]: value }),
-        }
-      );
+      const response = await fetch(`${url}?id=eq.${user.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: apiKey,
+          Authorization: authHeader,
+        },
+        body: JSON.stringify({ [field]: value }),
+      });
 
       if (response.status === 204) {
-        setMessage(
-          `${
-            field.charAt(0).toUpperCase() + field.slice(1)
-          } updated successfully!`
-        );
+        const friendlyFieldName = {
+          user_name: "Name",
+          user_email: "Email",
+          user_password: "Password",
+        }[field];
+
+        setMessage(`${friendlyFieldName} updated successfully!`);
         return;
       }
 
       const result = await response.json();
 
       if (response.ok) {
-        setMessage(
-          `${
-            field.charAt(0).toUpperCase() + field.slice(1)
-          } updated successfully!`
-        );
+        const friendlyFieldName = {
+          user_name: "Name",
+          user_email: "Email",
+          user_password: "Password",
+        }[field];
+
+        setMessage(`${friendlyFieldName} updated successfully!`);
       } else {
         throw new Error(result.message || `Failed to update ${field}.`);
       }
@@ -71,17 +76,14 @@ export default function UserSettings() {
     }
 
     try {
-      const response = await fetch(
-        `https://wytltzrweejgryrvzprn.supabase.co/rest/v1/user?id=eq.${user.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
-          },
-        }
-      );
+      const response = await fetch(`${url}?id=eq.${user.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: apiKey,
+          Authorization: authHeader,
+        },
+      });
 
       if (response.status === 204 || response.ok) {
         setMessage("Your account has been deleted successfully.");
