@@ -12,9 +12,11 @@ const Tickets = ({ onNext }) => {
     updateTickets(updatedTickets);
   };
 
+  const hasSelectedTickets = tickets.some((ticket) => ticket.quantity > 0);
+
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Vælg Billetter</h2>
+      <h2 className="text-2xl font-bold mb-4 text-primary">Vælg Billetter</h2>
       {tickets.map((ticket) => (
         <div key={ticket.id} className="flex justify-between items-center mb-4">
           <p className="text-lg">{ticket.title}</p>
@@ -24,17 +26,23 @@ const Tickets = ({ onNext }) => {
             onChange={(e) =>
               handleQuantityChange(ticket.id, parseInt(e.target.value, 10) || 0)
             }
-            className="border p-2 w-16 text-center text-black rounded"
+            className="border border-primary p-2 w-16 text-center text-white bg-black rounded focus:outline-none focus:ring-0"
             min="0"
           />
         </div>
       ))}
-      <button
-        onClick={onNext}
-        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        Gå videre til Camping
-      </button>
+
+      <div className="flex justify-end mt-4">
+        <button
+          onClick={onNext}
+          className={`px-10 py-2 bg-primary border border-primary text-white rounded-full ${
+            !hasSelectedTickets ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          disabled={!hasSelectedTickets} // Disable button if no tickets selected
+        >
+          Gå videre til Camping
+        </button>
+      </div>
     </div>
   );
 };
