@@ -22,7 +22,7 @@ const Schedule = ({ stages }) => {
           <button
             key={day}
             onClick={() => scrollToDay(day)}
-            className=" px-10 py-2 bg-primary text-white rounded-full"
+            className=" px-10 py-2 bg-primary text-white rounded-full hover:opacity-85"
           >
             {day.charAt(0).toUpperCase() + day.slice(1)}
           </button>

@@ -6,7 +6,7 @@ const Footer = () => {
     <div className="py-10 px-2 max-w-7xl mx-auto">
       <div className="grid grid-cols-3 gap-20">
         <div className="flex flex-col">
-          <h2 className="text-lg font-bold mb-2">Pages</h2>
+          <h2 className="text-lg text-primary font-bold mb-2">Pages</h2>
           <Link href="/">Home</Link>
           <Link href="/pages/artist">Artist</Link>
           <Link href="/pages/program">Program</Link>
@@ -15,7 +15,7 @@ const Footer = () => {
         </div>
 
         <div className="flex flex-col">
-          <h2 className="text-lg font-bold mb-2">Contact</h2>
+          <h2 className="text-lg text-primary font-bold mb-2">Contact</h2>
           <Link href="tel:+4512345678">Tel: +45 12 34 56 78</Link>
           <Link href="mailto:foofest@info.dk">Mail: Foofest@info.dk</Link>
           <iframe
@@ -30,7 +30,7 @@ const Footer = () => {
           ></iframe>
         </div>
         <div className="flex flex-col">
-          <h2 className="text-lg font-bold mb-2">Social</h2>
+          <h2 className="text-lg  text-primary font-bold mb-2">Social</h2>
 
           <div className="flex gap-6">
             <a

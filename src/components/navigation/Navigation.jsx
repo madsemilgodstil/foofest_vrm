@@ -23,8 +23,11 @@ const Navigation = () => {
     <>
       <div className="flex justify-between items-center py-4 max-w-7xl mx-auto px-2">
         <div>
-          <h1 className="text-4xl font-bold text-primary">Foo Fest</h1>
+          <Link href="/">
+            <h1 className="text-4xl font-extrabold text-primary">FooFest</h1>
+          </Link>
         </div>
+
         <div className="flex space-x-8 font-bold">
           <Link
             href="/"
