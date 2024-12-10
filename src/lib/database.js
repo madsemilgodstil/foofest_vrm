@@ -6,6 +6,12 @@ const headersList = {
   Prefer: 'return=representation'
 }
 
+// const headersList = {
+//   Accept: 'application/json',
+//   'Content-Type': 'application/json',
+//   Prefer: 'return=representation',
+// };
+
 //Get
 export async function getBands () {
   const response = await fetch(url + '/bands', {
@@ -31,6 +37,25 @@ export async function getSchedule (stage) {
   //Stage er til at vælge mellem de 3 stages, så den kan hente alle 3 på en gang og kan loope igennem den, også på dagen.
   //Hvis vi henter på ${url}/schedule/${stages} tager den kun den ene stage af gangen
 }
+
+
+
+// GET Campingområder
+export async function getCampingAreas() {
+    const response = await fetch(`${url}/available-spots`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        //Hvorfor skal jeg det her før det virker?!
+        //Fik det af chatGPT få at få noget til at virke..
+      },
+    });
+    const data = await response.json();
+    console.log("Hentede campingområder:", data);
+    return data;
+}
+
 
 // //GET enkel
 // export async function getSubById(id) {
