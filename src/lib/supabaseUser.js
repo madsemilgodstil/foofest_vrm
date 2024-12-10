@@ -7,7 +7,7 @@ const headersList = {
   'Content-Type': 'application/json',
   Prefer: 'return=representation',
   apikey: api,
-  Authorization: auth // Fixed the Authorization header
+  Authorization: auth
 }
 
 // Fetch all users
@@ -80,7 +80,6 @@ export async function createUser (userData) {
     throw error
   }
 }
-
 // Update user information (PATCH)
 export async function updateUser (userId, updates) {
   try {
