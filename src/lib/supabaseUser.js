@@ -1,3 +1,5 @@
+// src/lib/supabaseUser.js
+
 const url = process.env.NEXT_PUBLIC_USER_API_URL
 const api = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 const auth = `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`

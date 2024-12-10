@@ -77,7 +77,7 @@ export default function LikedArtist() {
 
   return (
     <div className="liked-artist-list">
-      <div className="flex items-center justify-between mb-4">
+      {/* <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold">Liked Artists</h2>
         <Button onClick={fetchLikedArtists} className="bg-blue-500 text-white">
           Refresh
@@ -93,7 +93,7 @@ export default function LikedArtist() {
             <p className="text-sm text-gray-600">ID: {artist.artist_id}</p>
           </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 }

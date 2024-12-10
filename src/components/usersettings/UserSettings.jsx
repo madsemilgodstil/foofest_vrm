@@ -1,11 +1,13 @@
+// src/components/usersettings/UserSettings.jsx
+
 "use client";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/context/AuthContext"; // Import your AuthContext to get the logged-in user's ID
+import { useAuth } from "@/context/AuthContext";
 
 export default function UserSettings() {
-  const { user, logout } = useAuth(); // Get the logged-in user's information and logout function
+  const { user, logout } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,10 +26,8 @@ export default function UserSettings() {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            apikey:
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dGx0enJ3ZWVqZ3J5cnZ6cHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMxNDM0NDQsImV4cCI6MjA0ODcxOTQ0NH0.-ezs7giRIiXDbmC12ORI9Z-bKQ0w3NC7-TER1weoBuY",
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dGx0enJ3ZWVqZ3J5cnZ6cHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMxNDM0NDQsImV4cCI6MjA0ODcxOTQ0NH0.-ezs7giRIiXDbmC12ORI9Z-bKQ0w3NC7-TER1weoBuY",
+            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
           },
           body: JSON.stringify({ [field]: value }),
         }
@@ -70,17 +70,15 @@ export default function UserSettings() {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
-            apikey:
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dGx0enJ3ZWVqZ3J5cnZ6cHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMxNDM0NDQsImV4cCI6MjA0ODcxOTQ0NH0.-ezs7giRIiXDbmC12ORI9Z-bKQ0w3NC7-TER1weoBuY",
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5dGx0enJ3ZWVqZ3J5cnZ6cHJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMxNDM0NDQsImV4cCI6MjA0ODcxOTQ0NH0.-ezs7giRIiXDbmC12ORI9Z-bKQ0w3NC7-TER1weoBuY",
+            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
           },
         }
       );
 
       if (response.ok) {
         setMessage("Your account has been deleted successfully.");
-        logout(); // Log the user out after deletion
+        logout();
       } else {
         throw new Error("Failed to delete account.");
       }
@@ -90,71 +88,71 @@ export default function UserSettings() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-black shadow-md rounded-md">
-      <h2 className="text-lg font-semibold mb-6 text-center">User Settings</h2>
+    <div className="max-w-lg mx-auto mt-16 p-8 bg-black text-white shadow-lg rounded-lg">
+      <h2 className="text-3xl font-bold text-center mb-8">User Settings</h2>
       {message && (
-        <p className="text-sm text-center text-red-500 mb-4">{message}</p>
+        <p className="text-center text-sm text-red-500 mb-6">{message}</p>
       )}
 
       {/* Update Name */}
-      <div className="mb-4">
-        <label className="text-sm font-medium text-gray-700">Name</label>
+      <div className="mb-6">
+        <label className="block text-sm font-medium mb-2">Name</label>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full mt-1 p-2 border rounded text-sm bg-black text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-          placeholder="New name"
+          className="w-full p-3 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-orange-500"
+          placeholder="Enter new name"
         />
         <Button
-          onClick={() => handleUpdate("user_name", name)} // Map to "user_name" in Supabase
-          className="w-full mt-2 text-sm bg-blue-500 hover:bg-blue-600 text-white"
+          onClick={() => handleUpdate("user_name", name)}
+          className="w-full mt-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 rounded-md"
         >
           Update Name
         </Button>
       </div>
 
       {/* Update Email */}
-      <div className="mb-4">
-        <label className="text-sm font-medium text-gray-700">Email</label>
+      <div className="mb-6">
+        <label className="block text-sm font-medium mb-2">Email</label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full mt-1 p-2 border rounded text-sm bg-black text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-          placeholder="New email"
+          className="w-full p-3 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-orange-500"
+          placeholder="Enter new email"
         />
         <Button
-          onClick={() => handleUpdate("user_email", email)} // Map to "user_email" in Supabase
-          className="w-full mt-2 text-sm bg-blue-500 hover:bg-blue-600 text-white"
+          onClick={() => handleUpdate("user_email", email)}
+          className="w-full mt-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 rounded-md"
         >
           Update Email
         </Button>
       </div>
 
       {/* Update Password */}
-      <div className="mb-4">
-        <label className="text-sm font-medium text-gray-700">Password</label>
+      <div className="mb-6">
+        <label className="block text-sm font-medium mb-2">Password</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full mt-1 p-2 border rounded text-sm bg-black text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-          placeholder="New password"
+          className="w-full p-3 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-orange-500"
+          placeholder="Enter new password"
         />
         <Button
-          onClick={() => handleUpdate("user_password", password)} // Map to "user_password" in Supabase
-          className="w-full mt-2 text-sm bg-blue-500 hover:bg-blue-600 text-white"
+          onClick={() => handleUpdate("user_password", password)}
+          className="w-full mt-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 rounded-md"
         >
           Update Password
         </Button>
       </div>
 
       {/* Delete Account */}
-      <div className="mt-6">
+      <div className="mt-8">
         <Button
           onClick={handleDeleteAccount}
-          className="w-full text-sm bg-red-500 hover:bg-red-600 text-white"
+          className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-md"
         >
           Delete Account
         </Button>
