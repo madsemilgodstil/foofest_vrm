@@ -117,7 +117,7 @@ export default function Payment({ onBack }) {
 
   return (
     <div className="max-w-lg mx-auto bg-black text-white p-6 rounded-md">
-      <h2 className="text-yellow-400 text-2xl font-bold mb-4">
+      <h2 className="text-2xl font-bold mb-4 text-primary">
         Betalingsoplysninger
       </h2>
 
@@ -133,7 +133,7 @@ export default function Payment({ onBack }) {
             type="text"
             id="cardNumber"
             name="cardNumber"
-            className="w-full p-2 border border-gray-400 rounded text-black"
+            className="w-full text-white border border-gray-400 rounded-md p-3 bg-black focus:border-primary focus:outline-none"
             placeholder="Kort nummer"
             required
           />
@@ -146,7 +146,7 @@ export default function Payment({ onBack }) {
             type="text"
             id="cardHolder"
             name="cardHolder"
-            className="w-full p-2 border border-gray-400 rounded text-black"
+            className="w-full text-white border border-gray-400 rounded-md p-3 bg-black focus:border-primary focus:outline-none"
             placeholder="Kortholder navn"
             required
           />
@@ -163,7 +163,7 @@ export default function Payment({ onBack }) {
               type="text"
               id="expiryDate"
               name="expiryDate"
-              className="w-full p-2 border border-gray-400 rounded text-black"
+              className="w-full text-white border border-gray-400 rounded-md p-3 bg-black focus:border-primary focus:outline-none"
               placeholder="MM/ÅÅ"
               required
             />
@@ -176,26 +176,27 @@ export default function Payment({ onBack }) {
               type="text"
               id="cvc"
               name="cvc"
-              className="w-full p-2 border border-gray-400 rounded text-black"
+              className="w-full text-white border border-gray-400 rounded-md p-3 bg-black focus:border-primary focus:outline-none"
               placeholder="CVC"
               required
             />
           </div>
         </div>
-        <button
-          type="submit"
-          className="w-full bg-red-500 text-white font-medium py-3 px-4 rounded-md hover:bg-red-600"
-        >
-          Bekræft betaling
-        </button>
+        <div className="flex justify-between space-x-4 mt-4">
+          <button
+            onClick={onBack}
+            className="px-10 py-2 border border-primary text-white rounded-full"
+          >
+            Tilbage til Camping
+          </button>
+          <button
+            type="submit"
+            className="px-10 py-2 bg-primary border border-primary text-white rounded-full"
+          >
+            Bekræft betaling
+          </button>
+        </div>
       </form>
-
-      <button
-        onClick={onBack}
-        className="mt-4 w-full bg-gray-500 text-white font-medium py-3 px-4 rounded-md hover:bg-gray-600"
-      >
-        Tilbage til Camping
-      </button>
     </div>
   );
 }

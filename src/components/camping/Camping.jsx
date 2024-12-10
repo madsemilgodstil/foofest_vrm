@@ -54,20 +54,27 @@ const Camping = ({ onNext, onBack }) => {
   const hasSelectedTent =
     campingSelection.tents.twoPerson + campingSelection.tents.threePerson > 0;
 
+  // Allow proceeding to payment if:
+  // 1. No selection (totalTickets > 0), OR
+  // 2. Both area and tents are selected
   const canProceedToPayment =
     totalTickets > 0 &&
-    ((hasSelectedArea && hasSelectedTent) || totalTickets > 0);
+    ((hasSelectedArea && hasSelectedTent) ||
+      !hasSelectedArea ||
+      !hasSelectedTent);
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Vælg Camping Område</h2>
+      <h2 className="text-2xl font-bold mb-4 text-primary">
+        Vælg Camping Område
+      </h2>
       <div className="grid grid-cols-2 gap-4">
         {campingSelection.areas?.map((area) => (
           <button
             key={area.area}
             className={`p-4 border rounded ${
               campingSelection.area === area.area
-                ? "border-red-500"
+                ? "border-primary"
                 : "border-gray-500"
             } ${area.available === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
             onClick={() => area.available > 0 && handleAreaSelect(area.area)}
@@ -99,7 +106,7 @@ const Camping = ({ onNext, onBack }) => {
               parseInt(e.target.value, 10) - campingSelection.tents.twoPerson
             )
           }
-          className="border p-2 w-16 text-center text-black rounded"
+          className="border border-primary p-2 w-16 text-center text-white bg-black rounded focus:outline-none focus:ring-0"
           min="0"
         />
       </div>
@@ -114,7 +121,7 @@ const Camping = ({ onNext, onBack }) => {
               parseInt(e.target.value, 10) - campingSelection.tents.threePerson
             )
           }
-          className="border p-2 w-16 text-center text-black rounded"
+          className="border border-primary p-2 w-16 text-center text-white bg-black rounded focus:outline-none focus:ring-0"
           min="0"
         />
       </div>
@@ -125,16 +132,18 @@ const Camping = ({ onNext, onBack }) => {
           id="greenCamping"
           checked={campingSelection.greenCamping}
           onChange={toggleGreenCamping}
-          className="mr-2"
+          className="border border-primary text-primary w-5 h-5 rounded-md bg-black focus:outline-none focus:ring-2 focus:ring-primary mr-2"
         />
-        <label htmlFor="greenCamping">Grøn Camping</label>
+        <label htmlFor="greenCamping" className="text-lg text-white">
+          Grøn Camping
+        </label>
       </div>
 
       {/* Navigation */}
       <div className="flex justify-between mt-4">
         <button
           onClick={onBack}
-          className="bg-gray-500 text-white px-4 py-2 rounded"
+          className="px-10 py-2 border border-primary text-white rounded-full"
         >
           Tilbage til Billetter
         </button>
@@ -149,7 +158,7 @@ const Camping = ({ onNext, onBack }) => {
             }
             onNext();
           }}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="px-10 py-2 bg-primary border border-primary text-white rounded-full"
           disabled={!canProceedToPayment}
         >
           Gå videre til Betaling

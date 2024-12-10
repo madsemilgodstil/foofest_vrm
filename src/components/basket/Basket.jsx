@@ -28,33 +28,34 @@ const Basket = () => {
   const total = ticketTotal + tentTotal + greenCampingPrice + bookingFee;
 
   return (
-    <div className="sticky top-5 right-0 border border-gray-200 rounded-lg p-4 bg-black text-white">
+    <div className="sticky top-5 right-0 border border-primary rounded-lg p-4  text-white">
       {/* Billetter Overskrift */}
-      <h2 className="font-bold text-lg text-yellow-400 mb-2">Billetter</h2>
+      {totalTickets > 0 && (
+        <>
+          <h3 className="font-bold text-lg text-primary mb-2">Billetter</h3>
+          <div className="mb-4">
+            {tickets.map(
+              (ticket) =>
+                ticket.quantity > 0 && (
+                  <div key={ticket.id} className="flex justify-between mb-2">
+                    <p className="text-white">{ticket.title}</p>
+                    <p className="text-white">
+                      {ticket.quantity} x {ticket.price} DKK
+                    </p>
+                  </div>
+                )
+            )}
 
-      {/* Billetter */}
-      <div className="mb-4">
-        {tickets.map(
-          (ticket) =>
-            ticket.quantity > 0 && (
-              <div key={ticket.id} className="flex justify-between mb-2">
-                <p className="text-white">{ticket.title}</p>
-                <p className="text-white">
-                  {ticket.quantity} x {ticket.price} DKK
-                </p>
-              </div>
-            )
-        )}
-      </div>
+            {/* Divider */}
+            <hr className="border-primary my-4" />
+          </div>
+        </>
+      )}
 
-      {/* Divider */}
-      <hr className="border-gray-500 my-4" />
-
-      {/* Camping Overskrift */}
       {/* Camping Overskrift */}
       {(campingSelection.area || totalTents > 0) && (
         <>
-          <h2 className="font-bold text-lg text-yellow-400 mb-2">Camping</h2>
+          <h3 className="font-bold text-lg text-primary mb-2">Camping</h3>
 
           {/* Camping Område */}
           {campingSelection.area && (
@@ -86,12 +87,11 @@ const Basket = () => {
             </div>
           )}
           {/* Divider */}
-          <hr className="border-gray-500 my-4" />
+          <hr className="border-primary my-4" />
         </>
       )}
-
       {/* Oversigt */}
-      <h3 className="font-bold text-lg text-yellow-400 mb-2">Oversigt</h3>
+      <h3 className="font-bold text-lg text-primary mb-2">Oversigt</h3>
       {tickets.some((ticket) => ticket.quantity > 0) && (
         <div className="flex justify-between mb-2">
           <p>Billetter x {totalTickets}</p>
@@ -116,7 +116,7 @@ const Basket = () => {
       </div>
 
       {/* Divider */}
-      <hr className="border-gray-500 my-4" />
+      <hr className="border-primary my-4" />
 
       {/* Total */}
       <div className="flex justify-between text-lg font-bold">
