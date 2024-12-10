@@ -51,8 +51,6 @@ export default function LoginPage () {
               <MenubarItem onClick={() => setActiveComponent('UserSettings')}>
                 User Settings
               </MenubarItem>
-              <MenubarSeparator />
-              <MenubarItem>Bookings</MenubarItem>
             </MenubarContent>
           </MenubarMenu>
         </Menubar>
