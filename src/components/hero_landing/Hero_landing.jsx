@@ -7,7 +7,7 @@ function HeroLanding() {
     <div className="relative">
       <h1 className="hidden">Hero Landing</h1>
       {/* Styled h2 */}
-      <h2 className="absolute inset-x-0 top-[15%] text-center text-5xl sm:text-7xl lg:text-9xl font-black text-white z-10">
+      <h2 className="absolute inset-x-0 top-[15%] text-center text-5xl sm:text-7xl lg:text-9xl font-black text-white z-10 font-moiraione">
         FooFest 2025
       </h2>
       {/* Image Container */}

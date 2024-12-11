@@ -16,6 +16,18 @@ const geistMono = localFont({
   weight: '100 900'
 })
 
+const moiraione = localFont({
+  src: './fonts/moiraione-regular.woff',
+  variable: '--font-moiraione',
+  weight: '400 900'
+})
+
+const oswald = localFont({
+  src: './fonts/oswald.woff',
+  variable: '--font-oswald',
+  weight: '400 900'
+})
+
 export const metadata = {
   title: 'FooFest 2025',
   description: 'Created by VRM'
@@ -25,7 +37,7 @@ export default function RootLayout ({ children }) {
   return (
     <html lang='en'>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${oswald.variable} ${moiraione.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
           <Navigation />
