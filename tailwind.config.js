@@ -11,6 +11,7 @@ module.exports = {
       colors: {
         lightGray: "#EAEAEA",
         orange: "#EA580B",
+        darkorange: "#EA580B80",
         darkGray: "#3A3A3A",
         background: "hsl(20, 14.3%, 4.1%)",
         foreground: "hsl(60, 9.1%, 97.8%)",

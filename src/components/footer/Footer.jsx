@@ -5,13 +5,23 @@ const Footer = () => {
   return (
     <div className="py-10 px-2 max-w-7xl mx-auto">
       <div className="grid grid-cols-3 gap-20">
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-2">
           <h2 className="text-lg text-primary font-bold mb-2">Pages</h2>
-          <Link href="/">Home</Link>
-          <Link href="/pages/artist">Artist</Link>
-          <Link href="/pages/program">Program</Link>
-          <Link href="/pages/booking">Booking</Link>
-          <Link href="/pages/info">Info</Link>
+          <Link href="/" className="hover:text-primary">
+            Home
+          </Link>
+          <Link href="/pages/artist" className="hover:text-primary">
+            Artist
+          </Link>
+          <Link href="/pages/program" className="hover:text-primary">
+            Program
+          </Link>
+          <Link href="/pages/booking" className="hover:text-primary">
+            Booking
+          </Link>
+          <Link href="/pages/info" className="hover:text-primary">
+            Info
+          </Link>
         </div>
 
         <div className="flex flex-col">
@@ -37,7 +47,7 @@ const Footer = () => {
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white hover:text-gray-500 transition duration-300"
+              className="text-white hover:text-primary transition duration-300"
             >
               <FaFacebook size={24} />
             </a>
@@ -45,7 +55,7 @@ const Footer = () => {
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white hover:text-gray-500 transition duration-300"
+              className="text-white hover:text-primary transition duration-300"
             >
               <FaInstagram size={24} />
             </a>
@@ -53,7 +63,7 @@ const Footer = () => {
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white hover:text-gray-500 transition duration-300"
+              className="text-white hover:text-primary transition duration-300"
             >
               <FaLinkedin size={24} />
             </a>
@@ -61,7 +71,7 @@ const Footer = () => {
               href="https://twitter.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white hover:text-gray-500 transition duration-300"
+              className="text-white hover:text-primary transition duration-300"
             >
               <FaTwitter size={24} />
             </a>

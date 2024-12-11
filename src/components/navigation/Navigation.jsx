@@ -24,7 +24,13 @@ const Navigation = () => {
       <div className="flex justify-between items-center py-4 max-w-7xl mx-auto px-2">
         <div>
           <Link href="/">
-            <h1 className="text-4xl font-extrabold text-primary">FooFest</h1>
+            <h1
+              className={`text-4xl font-extrabold ${
+                pathname === "/" ? "text-primary" : "text-white"
+              }`}
+            >
+              FooFest
+            </h1>
           </Link>
         </div>
 
