@@ -56,7 +56,7 @@ const Schedule = ({ stages }) => {
     <div className="mx-4 lg:mx-24">
       {/* Buttons for each stage */}
       <div className="gap-6 mt-7 mb-20 ">
-        <div className="flex flex-wrap gap-3 mb-8 justify-center">
+        <div className="flex flex-wrap gap-3 mb-8 justify-center font-oswald">
           {stages.map(({ name }) => (
             <button
               key={name}
@@ -64,7 +64,7 @@ const Schedule = ({ stages }) => {
               className={`px-6 py-2 rounded-full border ${
                 selectedStage === name
                   ? "bg-primary text-white border-primary"
-                  : "bg-black text-white border-primary hover:bg-primary"
+                  : "bg-black text-white border-primary hover:bg-primary transition ease-out duration-200"
               }`}
             >
               {name}
@@ -73,12 +73,12 @@ const Schedule = ({ stages }) => {
         </div>
 
         {/* Buttons for each day */}
-        <div className="flex flex-wrap gap-3  justify-center">
+        <div className="flex flex-wrap gap-3 mb-8  justify-center font-oswald">
           {allDays.map((day) => (
             <button
               key={day}
               onClick={() => scrollToDay(day)}
-              className="px-6 py-2 bg-primary text-white rounded-full hover:bg-black border border-primary"
+              className="px-6 py-2 bg-primary text-white rounded-full hover:bg-black border border-primary transition ease-out duration-200"
             >
               {day.charAt(0).toUpperCase() + day.slice(1)}
             </button>
@@ -86,7 +86,7 @@ const Schedule = ({ stages }) => {
         </div>
 
         {/* Buttons for each genre */}
-        <div className="flex flex-wrap gap-3 justify-center mt-6">
+        <div className="flex flex-wrap gap-3 justify-center mt-6 font-oswald">
           {allGenres.map((genre) => (
             <button
               key={genre}
@@ -94,7 +94,7 @@ const Schedule = ({ stages }) => {
               className={`px-6 py-2 rounded-full border ${
                 selectedGenre === genre
                   ? "bg-primary text-white border-primary"
-                  : "bg-black text-white border-primary hover:bg-primary"
+                  : "bg-black text-white border-primary hover:bg-primary transition ease-out duration-200"
               }`}
             >
               {genre}
@@ -108,7 +108,7 @@ const Schedule = ({ stages }) => {
         className={`${
           selectedStage
             ? "flex justify-center items-center"
-            : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"
+            : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 p-6"
         }`}
       >
         {stages
@@ -116,11 +116,13 @@ const Schedule = ({ stages }) => {
           .map(({ name, stageSchedule }) => (
             <div
               key={name}
-              className={`p-2 rounded shadow bg-black border-darkorange border-2 ${
-                selectedStage ? "w-full max-w-2xl" : ""
+              className={`rounded-xl shadow bg-black border-darkorange border-2 text-center  p-8 mb-8 ${
+                selectedStage ? "w-full max-w-7xl" : ""
               }`}
             >
-              <h2 className="text-md font-bold mb-2 text-white">{name}</h2>
+              <h2 className="text-md text-3xl font-bold mb-8 text-white font-oswald">
+                {name}
+              </h2>
               {Object.keys(stageSchedule).map((day) => {
                 // Filter events for the day based on selected genre
                 const filteredEvents = stageSchedule[day]?.filter(
@@ -136,7 +138,7 @@ const Schedule = ({ stages }) => {
 
                 return (
                   <div key={day} id={day} className="mb-2">
-                    <h3 className="text-sm font-semibold mb-1 capitalize text-primary">
+                    <h3 className="text-lg font-semibold mb-1 capitalize text-primary">
                       {day}
                     </h3>
                     <div className="grid gap-1">
@@ -169,7 +171,7 @@ const Schedule = ({ stages }) => {
                                     logoCredits
                                   })
                                 }
-                                className="hover:scale-105 transition ease-in-out duration-300 border border-darkorange rounded-[10px] cursor-pointer"
+                                className="hover:scale-105 transition ease-in-out duration-300 border border-darkorange rounded-[10px] cursor-pointer hover:border-primary hover:text-primary"
                               >
                                 <CardHeader className="p-2">
                                   <CardTitle className="text-xs font-bold flex justify-between items-center">
