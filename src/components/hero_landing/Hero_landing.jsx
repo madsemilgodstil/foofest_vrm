@@ -22,7 +22,7 @@ function HeroLanding() {
       {/* Overlay and Content Wrapper */}
       <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
         <div className="flex flex-col items-center space-y-8 mb-44">
-          <h2 className="text-5xl sm:text-7xl lg:text-9xl font-extrabold text-white font-moiraione z-20">
+          <h2 className="text-5xl sm:text-7xl lg:text-9xl font-extrabold text-primary font-moiraione z-20">
             FooFest 2025
           </h2>
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 z-20">
@@ -30,7 +30,7 @@ function HeroLanding() {
             <Link href="/pages/artist">
               <Button
                 variant="default"
-                className="px-10 py-2 rounded-full hover:opacity-85"
+                className="px-12 py-7 bg-black border border-primary text-white rounded-full hover:bg-primary"
               >
                 Line-up
               </Button>
@@ -39,7 +39,7 @@ function HeroLanding() {
             <Link href="/pages/booking">
               <Button
                 variant="default"
-                className="px-10 py-2 rounded-full hover:opacity-85"
+                className="px-12 py-7 bg-black border border-primary text-white rounded-full hover:bg-primary"
               >
                 Tickets
               </Button>

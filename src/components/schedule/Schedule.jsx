@@ -8,7 +8,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetDescription,
-  SheetTitle,
+  SheetTitle
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -21,7 +21,7 @@ const Schedule = ({ stages }) => {
   const allDays = [
     ...new Set(
       stages.flatMap(({ stageSchedule }) => Object.keys(stageSchedule))
-    ),
+    )
   ];
 
   // Extract all unique genres, excluding "Unknown"
@@ -34,7 +34,7 @@ const Schedule = ({ stages }) => {
             .filter((genre) => genre && genre !== "Unknown")
         )
       )
-    ),
+    )
   ];
 
   const handleStageFilter = (stageName) => {
@@ -55,50 +55,52 @@ const Schedule = ({ stages }) => {
   return (
     <div className="mx-4 lg:mx-24">
       {/* Buttons for each stage */}
-      <div className="flex flex-wrap gap-3 mb-8 mt-14 justify-center">
-        {stages.map(({ name }) => (
-          <button
-            key={name}
-            onClick={() => handleStageFilter(name)}
-            className={`px-4 py-1 rounded-full border ${
-              selectedStage === name
-                ? "bg-primary text-white border-primary"
-                : "bg-white text-primary border-primary hover:bg-black hover:text-white"
-            }`}
-          >
-            {name}
-          </button>
-        ))}
-      </div>
+      <div className="gap-6 mt-7 mb-20 ">
+        <div className="flex flex-wrap gap-3 mb-8 justify-center">
+          {stages.map(({ name }) => (
+            <button
+              key={name}
+              onClick={() => handleStageFilter(name)}
+              className={`px-6 py-2 rounded-full border ${
+                selectedStage === name
+                  ? "bg-primary text-white border-primary"
+                  : "bg-black text-white border-primary"
+              }`}
+            >
+              {name}
+            </button>
+          ))}
+        </div>
 
-      {/* Buttons for each day */}
-      <div className="flex flex-wrap gap-3 mb-8 justify-center">
-        {allDays.map((day) => (
-          <button
-            key={day}
-            onClick={() => scrollToDay(day)}
-            className="px-6 py-2 bg-primary text-white rounded-full hover:bg-black border border-primary"
-          >
-            {day.charAt(0).toUpperCase() + day.slice(1)}
-          </button>
-        ))}
-      </div>
+        {/* Buttons for each day */}
+        <div className="flex flex-wrap gap-3  justify-center">
+          {allDays.map((day) => (
+            <button
+              key={day}
+              onClick={() => scrollToDay(day)}
+              className="px-6 py-2 bg-primary text-white rounded-full hover:bg-black border border-primary"
+            >
+              {day.charAt(0).toUpperCase() + day.slice(1)}
+            </button>
+          ))}
+        </div>
 
-      {/* Buttons for each genre */}
-      <div className="flex flex-wrap gap-3 mb-8 justify-center">
-        {allGenres.map((genre) => (
-          <button
-            key={genre}
-            onClick={() => handleGenreFilter(genre)}
-            className={`px-4 py-1 rounded-full border ${
-              selectedGenre === genre
-                ? "bg-primary text-white border-primary"
-                : "bg-white text-primary border-primary hover:bg-black hover:text-white"
-            }`}
-          >
-            {genre}
-          </button>
-        ))}
+        {/* Buttons for each genre */}
+        <div className="flex flex-wrap gap-3 justify-center mt-6">
+          {allGenres.map((genre) => (
+            <button
+              key={genre}
+              onClick={() => handleGenreFilter(genre)}
+              className={`px-6 py-2 rounded-full border ${
+                selectedGenre === genre
+                  ? "bg-primary text-white border-primary"
+                  : "bg-black text-white border-primary"
+              }`}
+            >
+              {genre}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Schedule grid */}
@@ -148,7 +150,7 @@ const Schedule = ({ stages }) => {
                             bio,
                             members,
                             logo,
-                            logoCredits,
+                            logoCredits
                           },
                           index
                         ) => (
@@ -164,7 +166,7 @@ const Schedule = ({ stages }) => {
                                     bio,
                                     members,
                                     logo,
-                                    logoCredits,
+                                    logoCredits
                                   })
                                 }
                                 className="hover:scale-105 transition ease-in-out duration-300 border border-darkorange rounded-[10px] cursor-pointer"
