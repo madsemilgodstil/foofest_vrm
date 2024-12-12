@@ -64,7 +64,7 @@ const Schedule = ({ stages }) => {
               className={`px-6 py-2 rounded-full border ${
                 selectedStage === name
                   ? "bg-primary text-white border-primary"
-                  : "bg-black text-white border-primary"
+                  : "bg-black text-white border-primary hover:bg-primary"
               }`}
             >
               {name}
@@ -94,7 +94,7 @@ const Schedule = ({ stages }) => {
               className={`px-6 py-2 rounded-full border ${
                 selectedGenre === genre
                   ? "bg-primary text-white border-primary"
-                  : "bg-black text-white border-primary"
+                  : "bg-black text-white border-primary hover:bg-primary"
               }`}
             >
               {genre}
