@@ -102,13 +102,21 @@ const Schedule = ({ stages }) => {
       </div>
 
       {/* Schedule grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+      <div
+        className={`${
+          selectedStage
+            ? "flex justify-center items-center"
+            : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"
+        }`}
+      >
         {stages
           .filter(({ name }) => !selectedStage || selectedStage === name) // Filter by selected stage
           .map(({ name, stageSchedule }) => (
             <div
               key={name}
-              className="p-2 rounded shadow bg-black border-darkorange border-2"
+              className={`p-2 rounded shadow bg-black border-darkorange border-2 ${
+                selectedStage ? "w-full max-w-2xl" : ""
+              }`}
             >
               <h2 className="text-md font-bold mb-2 text-white">{name}</h2>
               {Object.keys(stageSchedule).map((day) => {
