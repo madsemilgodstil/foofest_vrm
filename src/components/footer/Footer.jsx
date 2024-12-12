@@ -5,23 +5,25 @@ const Footer = () => {
   return (
     <div className="py-10 px-2 max-w-7xl mx-auto">
       <div className="grid grid-cols-3 gap-20">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-lg text-primary font-bold mb-2">Pages</h2>
-          <Link href="/" className="hover:text-primary">
-            Home
-          </Link>
-          <Link href="/pages/artist" className="hover:text-primary">
-            Artist
-          </Link>
-          <Link href="/pages/program" className="hover:text-primary">
-            Program
-          </Link>
-          <Link href="/pages/booking" className="hover:text-primary">
-            Booking
-          </Link>
-          <Link href="/pages/info" className="hover:text-primary">
-            Info
-          </Link>
+        <div>
+          <div className="flex flex-col items-start gap-2 w-auto">
+            <h2 className="text-lg text-primary font-bold mb-2">Pages</h2>
+            <Link href="/" className="hover:text-primary">
+              Home
+            </Link>
+            <Link href="/pages/artist" className="hover:text-primary">
+              Artist
+            </Link>
+            <Link href="/pages/program" className="hover:text-primary">
+              Program
+            </Link>
+            <Link href="/pages/booking" className="hover:text-primary">
+              Booking
+            </Link>
+            <Link href="/pages/info" className="hover:text-primary">
+              Info
+            </Link>
+          </div>
         </div>
 
         <div className="flex flex-col">

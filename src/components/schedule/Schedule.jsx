@@ -22,7 +22,7 @@ const Schedule = ({ stages }) => {
           <button
             key={day}
             onClick={() => scrollToDay(day)}
-            className=" px-10 py-2 bg-primary text-white rounded-full hover:opacity-85"
+            className=" px-10 py-2 bg-primary text-white rounded-full hover:bg-black border border-primary"
           >
             {day.charAt(0).toUpperCase() + day.slice(1)}
           </button>
@@ -34,7 +34,7 @@ const Schedule = ({ stages }) => {
         {stages.map(({ name, stageSchedule }) => (
           <div
             key={name}
-            className=" p-6 rounded shadow m-12 bg-darkGray gap-4"
+            className=" p-6 rounded shadow m-12 bg-black border-darkorange border-2 gap-4"
           >
             <h2 className="text-xl font-bold mb-4">{name}</h2>
             {Object.keys(stageSchedule).map((day) => (

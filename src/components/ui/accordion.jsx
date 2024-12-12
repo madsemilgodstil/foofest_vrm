@@ -28,6 +28,7 @@ const AccordionTrigger = React.forwardRef(
         ref={ref}
         className={cn(
           "flex flex-1 items-center justify-between py-4 text-sm font-medium transition-all text-left [&[data-state=open]>svg]:rotate-180",
+          "data-[state=open]:text-primary", // Skift farven til primary når åbent
           className
         )}
         {...props}
