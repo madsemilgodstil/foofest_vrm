@@ -1,4 +1,6 @@
-import React, { useEffect } from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import useBookingStore from "@/stores/useBookingStore";
 import { getCampingAreas } from "@/lib/database";
 
@@ -14,32 +16,69 @@ const Camping = ({ onNext, onBack }) => {
     0
   );
 
+  // State for at håndtere reservations-id
+  const [reservationId, setReservationId] = useState(null);
+
   useEffect(() => {
     const fetchCampingAreas = async () => {
       const areas = await getCampingAreas();
-      updateCampingSelection({ areas });
+      const formattedAreas = areas.map((area) => ({
+        area: area.name || area.area,
+        available: area.spots_left || area.available,
+      }));
+
+      updateCampingSelection({ areas: formattedAreas });
     };
 
     fetchCampingAreas();
   }, [updateCampingSelection]);
 
-  const handleAreaSelect = (area) => {
-    if (campingSelection.area === area) {
-      // Hvis området allerede er valgt, fjern det
-      updateCampingSelection({ area: null });
-    } else {
-      // Vælg området
-      updateCampingSelection({ area });
+  // Denne useEffect skal køre, når billetterne ændres og validere campingområdet
+  useEffect(() => {
+    let updatedTents = { ...campingSelection.tents };
+    let totalTents = updatedTents.twoPerson + updatedTents.threePerson;
+
+    // Nulstil kun campingområdet, hvis der er flere billetter end de ledige pladser
+    if (campingSelection.area) {
+      const selectedArea = campingSelection.areas.find(
+        (area) => area.area === campingSelection.area
+      );
+      if (selectedArea && totalTickets > selectedArea.available) {
+        updateCampingSelection({ area: null }); // Nulstil området, hvis der er flere billetter end pladser
+      }
     }
-  };
 
-  const handleTentChange = (type, change) => {
-    const updatedTents = {
-      ...campingSelection.tents,
-      [type]: Math.max(0, campingSelection.tents[type] + change),
-    };
+    // Behold teltene (teltene nulstilles ikke)
+    if (totalTents > totalTickets) {
+      while (totalTents > totalTickets) {
+        if (updatedTents.threePerson > 0) {
+          updatedTents.threePerson -= 1;
+        } else if (updatedTents.twoPerson > 0) {
+          updatedTents.twoPerson -= 1;
+        }
 
-    if (updatedTents.twoPerson + updatedTents.threePerson > totalTickets) {
+        totalTents = updatedTents.twoPerson + updatedTents.threePerson;
+      }
+
+      updateCampingSelection({ tents: updatedTents });
+    }
+  }, [
+    totalTickets,
+    campingSelection.tents,
+    campingSelection.area,
+    campingSelection.areas,
+    updateCampingSelection,
+  ]);
+
+  const handleTentChange = (type, value) => {
+    const updatedTents = { ...campingSelection.tents };
+    const newValue = Math.max(0, value);
+
+    updatedTents[type] = newValue;
+
+    const totalTents = updatedTents.twoPerson + updatedTents.threePerson;
+
+    if (totalTents > totalTickets) {
       return;
     }
 
@@ -50,18 +89,28 @@ const Camping = ({ onNext, onBack }) => {
     updateCampingSelection({ greenCamping: !campingSelection.greenCamping });
   };
 
+  const handleAreaSelect = (selectedArea) => {
+    if (campingSelection.area === selectedArea.area) {
+      updateCampingSelection({ area: null });
+    } else {
+      updateCampingSelection({ area: selectedArea.area });
+    }
+  };
+
   const hasSelectedArea = !!campingSelection.area;
   const hasSelectedTent =
     campingSelection.tents.twoPerson + campingSelection.tents.threePerson > 0;
 
-  // Allow proceeding to payment if:
-  // 1. No selection (totalTickets > 0), OR
-  // 2. Both area and tents are selected
   const canProceedToPayment =
-    totalTickets > 0 &&
-    ((hasSelectedArea && hasSelectedTent) ||
-      !hasSelectedArea ||
-      !hasSelectedTent);
+    totalTickets > 0 && hasSelectedArea && hasSelectedTent;
+
+  // Når vi går videre, skal vi oprette et reservations-id
+  const onNextHandler = () => {
+    // Simulér oprettelsen af reservations-id (for demo)
+    const id = `RES-${Math.floor(Math.random() * 100000)}`;
+    setReservationId(id);
+    onNext(); // Gå videre til næste trin (Info)
+  };
 
   return (
     <div>
@@ -76,54 +125,110 @@ const Camping = ({ onNext, onBack }) => {
               campingSelection.area === area.area
                 ? "border-primary"
                 : "border-gray-500"
-            } ${area.available === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
-            onClick={() => area.available > 0 && handleAreaSelect(area.area)}
-            disabled={area.available === 0}
+            } ${
+              area.available < totalTickets
+                ? "opacity-50 cursor-not-allowed"
+                : ""
+            }`}
+            onClick={() =>
+              area.available >= totalTickets && handleAreaSelect(area)
+            }
+            disabled={area.available < totalTickets}
           >
             <h3 className="text-lg font-semibold">{area.area}</h3>
             <p
               className={`${
-                area.available > 0 ? "text-green-500" : "text-red-500"
+                area.available >= totalTickets
+                  ? "text-green-500"
+                  : "text-red-500"
               }`}
             >
-              {area.available > 0
+              {area.available >= totalTickets
                 ? `${area.available} Ledige Pladser`
-                : "Udsolgt"}
+                : "Ikke nok pladser"}
             </p>
           </button>
         ))}
       </div>
 
       <h3 className="text-xl font-bold mt-6">Tilkøb af Telte</h3>
+
+      {/* 2 Personers Telt */}
       <div className="flex justify-between items-center mb-4">
         <p>2 Personers Telt</p>
-        <input
-          type="number"
-          value={campingSelection.tents.twoPerson}
-          onChange={(e) =>
-            handleTentChange(
-              "twoPerson",
-              parseInt(e.target.value, 10) - campingSelection.tents.twoPerson
-            )
-          }
-          className="border border-primary p-2 w-16 text-center text-white bg-black rounded focus:outline-none focus:ring-0"
-          min="0"
-        />
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() =>
+              handleTentChange(
+                "twoPerson",
+                campingSelection.tents.twoPerson - 1
+              )
+            }
+            className="flex items-center justify-center border border-primary text-white rounded-full bg-black hover:bg-primary text-lg transition focus:outline-none h-[32px] w-[32px] cursor-pointer"
+            disabled={campingSelection.tents.twoPerson <= 0}
+          >
+            -
+          </button>
+          <input
+            type="number"
+            value={campingSelection.tents.twoPerson}
+            onChange={(e) =>
+              handleTentChange("twoPerson", parseInt(e.target.value, 10) || 0)
+            }
+            className="w-16 text-center border border-primary text-white bg-black text-lg focus:outline-none focus:ring-0"
+            min="0"
+          />
+          <button
+            onClick={() =>
+              handleTentChange(
+                "twoPerson",
+                campingSelection.tents.twoPerson + 1
+              )
+            }
+            className="flex items-center justify-center bg-primary border border-primary text-white rounded-full hover:bg-black text-lg transition focus:outline-none h-[32px] w-[32px] cursor-pointer"
+          >
+            +
+          </button>
+        </div>
       </div>
-      <div className="flex justify-between items-center">
+
+      {/* 3 Personers Telt */}
+      <div className="flex justify-between items-center mb-4">
         <p>3 Personers Telt</p>
-        <input
-          type="number"
-          value={campingSelection.tents.threePerson}
-          onChange={(e) =>
-            handleTentChange(
-              "threePerson",
-              parseInt(e.target.value, 10) - campingSelection.tents.threePerson
-            )
-          }
-          className="border border-primary p-2 w-16 text-center text-white bg-black rounded focus:outline-none focus:ring-0"
-          min="0"
-        />
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() =>
+              handleTentChange(
+                "threePerson",
+                campingSelection.tents.threePerson - 1
+              )
+            }
+            className="flex items-center justify-center border border-primary text-white rounded-full bg-black hover:bg-primary text-lg transition focus:outline-none h-[32px] w-[32px] cursor-pointer"
+            disabled={campingSelection.tents.threePerson <= 0}
+          >
+            -
+          </button>
+          <input
+            type="number"
+            value={campingSelection.tents.threePerson}
+            onChange={(e) =>
+              handleTentChange("threePerson", parseInt(e.target.value, 10) || 0)
+            }
+            className="w-16 text-center border border-primary text-white bg-black text-lg focus:outline-none focus:ring-0"
+            min="0"
+          />
+          <button
+            onClick={() =>
+              handleTentChange(
+                "threePerson",
+                campingSelection.tents.threePerson + 1
+              )
+            }
+            className="flex items-center justify-center bg-primary border border-primary text-white rounded-full hover:bg-black text-lg transition focus:outline-none h-[32px] w-[32px] cursor-pointer"
+          >
+            +
+          </button>
+        </div>
       </div>
 
       <div className="flex items-center mt-4">
@@ -132,14 +237,15 @@ const Camping = ({ onNext, onBack }) => {
           id="greenCamping"
           checked={campingSelection.greenCamping}
           onChange={toggleGreenCamping}
-          className="border border-primary text-primary w-5 h-5 rounded-md bg-black focus:outline-none focus:ring-2 focus:ring-primary mr-2"
+          className="border border-primary text-primary w-5 h-5 rounded-md bg-black focus:outline-none focus:ring-2 focus:ring-primary"
         />
-        <label htmlFor="greenCamping" className="text-lg text-white">
+        <label htmlFor="greenCamping" className="text-lg text-white ml-2">
           Grøn Camping
         </label>
       </div>
 
-      {/* Navigation */}
+      <hr className="border-primary my-6" />
+
       <div className="flex justify-between mt-4">
         <button
           onClick={onBack}
@@ -148,20 +254,13 @@ const Camping = ({ onNext, onBack }) => {
           Tilbage til Billetter
         </button>
         <button
-          onClick={() => {
-            if (
-              (hasSelectedArea && !hasSelectedTent) ||
-              (!hasSelectedArea && hasSelectedTent)
-            ) {
-              alert("Du skal vælge både et område og minimum ét telt.");
-              return;
-            }
-            onNext();
-          }}
-          className="px-10 py-2 bg-primary border border-primary text-white rounded-full"
+          onClick={onNextHandler} // Kald onNextHandler i stedet for handleNext
+          className={`px-10 py-2 bg-primary border border-primary text-white rounded-full ${
+            !canProceedToPayment ? "opacity-50 cursor-not-allowed" : ""
+          }`}
           disabled={!canProceedToPayment}
         >
-          Gå videre til Betaling
+          Gå videre til Info
         </button>
       </div>
     </div>
