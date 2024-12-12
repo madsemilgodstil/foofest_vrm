@@ -1,6 +1,6 @@
 const InfoText = () => {
   return (
-    <div className="max-w-4xl mx-auto mt-9 p-6 text-center">
+    <div className="max-w-4xl mx-auto mb-10  p-6 text-center">
       <h1 className="text-4xl font-bold text-primary mb-4">
         About FooFest 2025
       </h1>

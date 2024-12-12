@@ -26,8 +26,8 @@ export default function UserSettings() {
         headers: {
           "Content-Type": "application/json",
           apikey: apiKey,
-          Authorization: authHeader,
-        },
+          Authorization: authHeader
+        }
       });
 
       if (!response.ok) throw new Error("Failed to fetch user data.");
@@ -70,16 +70,16 @@ export default function UserSettings() {
         headers: {
           "Content-Type": "application/json",
           apikey: apiKey,
-          Authorization: authHeader,
+          Authorization: authHeader
         },
-        body: JSON.stringify({ [field]: value }),
+        body: JSON.stringify({ [field]: value })
       });
 
       if (response.status === 204) {
         const friendlyFieldName = {
           user_name: "Name",
           user_email: "Email",
-          user_password: "Password",
+          user_password: "Password"
         }[field];
 
         setMessage(`${friendlyFieldName} updated successfully!`);
@@ -93,7 +93,7 @@ export default function UserSettings() {
         const friendlyFieldName = {
           user_name: "Name",
           user_email: "Email",
-          user_password: "Password",
+          user_password: "Password"
         }[field];
 
         setMessage(`${friendlyFieldName} updated successfully!`);
@@ -126,8 +126,8 @@ export default function UserSettings() {
         headers: {
           "Content-Type": "application/json",
           apikey: apiKey,
-          Authorization: authHeader,
-        },
+          Authorization: authHeader
+        }
       });
 
       if (response.status === 204 || response.ok) {
@@ -152,15 +152,17 @@ export default function UserSettings() {
 
       {/* Update Name */}
       <div className="mb-6">
-        <label className="block text-sm font-medium mb-2">Name</label>
-        <p className="text-gray-400 text-sm mb-2">
+        <label className="block text-sm font-medium mb-2 text-primary">
+          Name
+        </label>
+        <p className="text-gray-400 text-sm mb-2 ">
           Current Name: {currentData.user_name || "Loading..."}
         </p>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full p-3 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-orange-500"
+          className="w-full p-3 rounded-md bg-gray-800 text-white  outline-none focus:ring-1 focus:ring-darkorange"
           placeholder="Enter new name"
         />
         <Button
@@ -173,7 +175,9 @@ export default function UserSettings() {
 
       {/* Update Email */}
       <div className="mb-6">
-        <label className="block text-sm font-medium mb-2">Email</label>
+        <label className="block text-sm font-medium mb-2 text-primary">
+          Email
+        </label>
         <p className="text-gray-400 text-sm mb-2">
           Current Email: {currentData.user_email || "Loading..."}
         </p>
@@ -181,7 +185,7 @@ export default function UserSettings() {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-3 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-orange-500"
+          className="w-full p-3 rounded-md bg-gray-800 text-white  outline-none focus:ring-1 focus:ring-darkorange"
           placeholder="Enter new email"
         />
         <Button
@@ -194,7 +198,9 @@ export default function UserSettings() {
 
       {/* Update Password */}
       <div className="mb-6">
-        <label className="block text-sm font-medium mb-2">Password</label>
+        <label className="block text-sm font-medium mb-2 text-primary">
+          Password
+        </label>
         <p className="text-gray-400 text-sm mb-2">
           Current Password: {currentData.user_password || "Hidden for security"}
         </p>
@@ -202,7 +208,7 @@ export default function UserSettings() {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-3 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-orange-500"
+          className="w-full p-3 rounded-md bg-gray-800 text-white  outline-none focus:ring-1 focus:ring-darkorange"
           placeholder="Enter new password"
         />
         <Button
