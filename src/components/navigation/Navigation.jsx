@@ -21,11 +21,11 @@ const Navigation = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center py-4 max-w-7xl mx-auto px-2">
+      <div className="flex justify-between font-oswald items-center py-4 max-w-7xl mx-auto px-2">
         <div>
           <Link href="/">
             <h1
-              className={`text-4xl font-extrabold ${
+              className={`text-4xl font-moiraione  font-extrabold ${
                 pathname === "/" ? "text-primary" : "text-white"
               }`}
             >

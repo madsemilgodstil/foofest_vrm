@@ -37,14 +37,14 @@ async function displayArtists () {
   return (
     <div className='px-10'>
       <div className='flex flex-col items-center justify-center m-20'>
-        <h1 className='text-7xl font-bold mt-12'>All Artists</h1>
+        <h1 className='text-7xl font-bold mt-12 font-oswald'>All Artists</h1>
       </div>
       <div className='grid grid-cols-4 gap-8 mx-24'>
         {bands.map(band => (
           <Sheet key={band.id}>
             <SheetTrigger asChild>
               <div>
-                <Card className='hover:scale-105 transition ease-in-out duration-300 cursor-pointer'>
+                <Card className='hover:scale-105 transition ease-in-out duration-300 hover:border-primary border-4 cursor-pointer rounded-t-2xl hover:text-primary'>
                   <CardContent className='flex justify-center p-0'>
                     <div className='relative w-full h-40 overflow-hidden rounded-t-xl'>
                       <Avatar className='absolute inset-0 w-full h-full'>
@@ -58,10 +58,10 @@ async function displayArtists () {
                     </div>
                   </CardContent>
                   <CardHeader className='py-4 px-2'>
-                    <CardTitle className='text-center text-xl text-primary'>
+                    <CardTitle className='text-center text-xl font-oswald '>
                       {band.name}
                     </CardTitle>
-                    <CardDescription className='text-center font-bold text-white'>
+                    <CardDescription className='text-center font-black text-white font-oswald'>
                       {band.genre}
                     </CardDescription>
                   </CardHeader>
