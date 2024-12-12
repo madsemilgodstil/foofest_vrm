@@ -4,6 +4,7 @@ import Navigation from '@/components/navigation/Navigation'
 import Footer from '@/components/footer/Footer'
 import ScrollToTop from '@/components/scrolltotop/ScrollToTop'
 import { AuthProvider } from '@/context/AuthContext'
+import Cookie from '@/components/cookie/Cookie'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -45,6 +46,7 @@ export default function RootLayout ({ children }) {
           <Footer />
           <ScrollToTop />
         </AuthProvider>
+        <Cookie />
       </body>
     </html>
   )
