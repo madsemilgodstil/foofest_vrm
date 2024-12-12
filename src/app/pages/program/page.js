@@ -15,7 +15,9 @@ export default async function ProgramPage() {
   return (
     <>
       <div className="flex flex-col items-center justify-center min-h-screen gap-6">
-        <h1 className="text-7xl font-bold mt-12">Festival Program</h1>
+        <h1 className="text-7xl font-bold mt-12 font-oswald">
+          Festival Program
+        </h1>
         <Schedule stages={stages} />
       </div>
     </>
