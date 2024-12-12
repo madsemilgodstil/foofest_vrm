@@ -1,48 +1,51 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import {
   Sheet,
   SheetTrigger,
   SheetContent,
   SheetHeader,
   SheetDescription,
-  SheetTitle
+  SheetTitle,
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getCancelledEvents } from "@/lib/database";
 
 const Schedule = ({ stages }) => {
-  const [selectedGenre, setSelectedGenre] = useState(null); // State for filtering by genre
-  const [selectedStage, setSelectedStage] = useState(null); // State for filtering by stage
-  const [selectedBand, setSelectedBand] = useState(null); // State for selected band
+  const [selectedGenre, setSelectedGenre] = useState(null);
+  const [selectedStage, setSelectedStage] = useState(null);
+  const [cancelledActs, setCancelledActs] = useState([]); // State to store cancelled acts
 
-  // Extract all unique days
-  const allDays = [
-    ...new Set(
-      stages.flatMap(({ stageSchedule }) => Object.keys(stageSchedule))
-    )
-  ];
+  // Fetch cancelled acts
+  useEffect(() => {
+    const fetchCancelledEvents = async () => {
+      try {
+        const cancelled = await getCancelledEvents();
+        setCancelledActs(
+          cancelled.map((event) => event.act.toLowerCase()) // Normalize to lowercase for comparison
+        );
+      } catch (error) {
+        console.error("Error fetching cancelled events:", error);
+      }
+    };
 
-  // Extract all unique genres, excluding "Unknown"
-  const allGenres = [
-    ...new Set(
-      stages.flatMap(({ stageSchedule }) =>
-        Object.values(stageSchedule).flatMap((day) =>
-          day
-            .map(({ genre }) => genre)
-            .filter((genre) => genre && genre !== "Unknown")
-        )
-      )
-    )
-  ];
+    fetchCancelledEvents();
+  }, []);
 
   const handleStageFilter = (stageName) => {
-    setSelectedStage(stageName === selectedStage ? null : stageName); // Toggle stage filter
+    setSelectedStage(stageName === selectedStage ? null : stageName);
   };
 
   const handleGenreFilter = (genre) => {
-    setSelectedGenre(genre === selectedGenre ? null : genre); // Toggle genre filter
+    setSelectedGenre(genre === selectedGenre ? null : genre);
   };
 
   const scrollToDay = (day) => {
@@ -54,8 +57,8 @@ const Schedule = ({ stages }) => {
 
   return (
     <div className="mx-4 lg:mx-24">
-      {/* Buttons for each stage */}
-      <div className="gap-6 mt-7 mb-20 ">
+      {/* Stage buttons */}
+      <div className="gap-6 mt-7 mb-20">
         <div className="flex flex-wrap gap-3 mb-8 justify-center font-oswald">
           {stages.map(({ name }) => (
             <button
@@ -72,32 +75,15 @@ const Schedule = ({ stages }) => {
           ))}
         </div>
 
-        {/* Buttons for each day */}
-        <div className="flex flex-wrap gap-3 mb-8  justify-center font-oswald">
-          {allDays.map((day) => (
+        {/* Day buttons */}
+        <div className="flex flex-wrap gap-3 mb-8 justify-center font-oswald">
+          {Object.keys(stages[0]?.stageSchedule || {}).map((day) => (
             <button
               key={day}
               onClick={() => scrollToDay(day)}
               className="px-6 py-2 bg-primary text-white rounded-full hover:bg-black border border-primary transition ease-out duration-200"
             >
               {day.charAt(0).toUpperCase() + day.slice(1)}
-            </button>
-          ))}
-        </div>
-
-        {/* Buttons for each genre */}
-        <div className="flex flex-wrap gap-3 justify-center mt-6 font-oswald">
-          {allGenres.map((genre) => (
-            <button
-              key={genre}
-              onClick={() => handleGenreFilter(genre)}
-              className={`px-6 py-2 rounded-full border ${
-                selectedGenre === genre
-                  ? "bg-primary text-white border-primary"
-                  : "bg-black text-white border-primary hover:bg-primary transition ease-out duration-200"
-              }`}
-            >
-              {genre}
             </button>
           ))}
         </div>
@@ -112,151 +98,66 @@ const Schedule = ({ stages }) => {
         }`}
       >
         {stages
-          .filter(({ name }) => !selectedStage || selectedStage === name) // Filter by selected stage
+          .filter(({ name }) => !selectedStage || selectedStage === name)
           .map(({ name, stageSchedule }) => (
             <div
               key={name}
-              className={`rounded-xl shadow bg-black border-darkorange border-2 text-center  p-8 mb-8 ${
+              className={`rounded-xl shadow bg-black border-darkorange border-2 text-center p-8 mb-8 ${
                 selectedStage ? "w-full max-w-7xl" : ""
               }`}
             >
               <h2 className="text-md text-3xl font-bold mb-8 text-white font-oswald">
                 {name}
               </h2>
-              {Object.keys(stageSchedule).map((day) => {
-                // Filter events for the day based on selected genre
-                const filteredEvents = stageSchedule[day]?.filter(
-                  ({ genre }) =>
-                    (!selectedGenre || genre === selectedGenre) &&
-                    genre !== "Unknown" // Exclude "Unknown"
-                );
+              {Object.keys(stageSchedule).map((day) => (
+                <div key={day} id={day} className="mb-2">
+                  <h3 className="text-lg font-semibold mb-1 capitalize text-primary">
+                    {day}
+                  </h3>
+                  <div className="grid gap-1">
+                    {stageSchedule[day]?.map(
+                      ({ start, end, act, genre }, index) => {
+                        const isCancelled = cancelledActs.includes(
+                          act.toLowerCase()
+                        );
 
-                // Skip the day if there are no events
-                if (!filteredEvents || filteredEvents.length === 0) {
-                  return null;
-                }
-
-                return (
-                  <div key={day} id={day} className="mb-2">
-                    <h3 className="text-lg font-semibold mb-1 capitalize text-primary">
-                      {day}
-                    </h3>
-                    <div className="grid gap-1">
-                      {filteredEvents.map(
-                        (
-                          {
-                            start,
-                            end,
-                            act,
-                            genre,
-                            bio,
-                            members,
-                            logo,
-                            logoCredits
-                          },
-                          index
-                        ) => (
-                          <Sheet key={index}>
-                            <SheetTrigger asChild>
-                              <Card
-                                onClick={() =>
-                                  setSelectedBand({
-                                    act,
-                                    start,
-                                    end,
-                                    genre,
-                                    bio,
-                                    members,
-                                    logo,
-                                    logoCredits
-                                  })
-                                }
-                                className="hover:scale-105 transition ease-in-out duration-300 border border-darkorange rounded-[10px] cursor-pointer hover:border-primary hover:text-primary"
-                              >
-                                <CardHeader className="p-2">
-                                  <CardTitle className="text-xs font-bold flex justify-between items-center">
-                                    <span>{act}</span>
-                                    <span className="text-gray-500 text-[10px]">
-                                      {start} - {end}
-                                    </span>
-                                  </CardTitle>
-                                </CardHeader>
-                                <CardContent className="p-2">
-                                  {genre && (
-                                    <p className="text-gray-400 italic text-[10px]">
-                                      {genre}
-                                    </p>
-                                  )}
-                                </CardContent>
-                              </Card>
-                            </SheetTrigger>
-                            <SheetContent>
-                              <SheetHeader>
-                                {/* Band Logo */}
-                                {selectedBand?.logo && (
-                                  <div className="flex justify-center my-4">
-                                    <Avatar className="w-32 h-32">
-                                      <AvatarImage
-                                        src={selectedBand.logo}
-                                        alt={selectedBand.act}
-                                      />
-                                      <AvatarFallback>
-                                        {selectedBand.act}
-                                      </AvatarFallback>
-                                    </Avatar>
-                                  </div>
-                                )}
-
-                                {/* Band Name */}
-                                <SheetTitle className="text-lg font-bold">
-                                  {selectedBand?.act || ""}
-                                </SheetTitle>
-
-                                {/* Band Time */}
-                                <SheetDescription className="text-sm">
-                                  Time: {selectedBand?.start} -{" "}
-                                  {selectedBand?.end}
-                                </SheetDescription>
-
-                                {/* Band Genre */}
-                                {selectedBand?.genre && (
-                                  <SheetDescription className="italic text-gray-400">
-                                    Genre: {selectedBand.genre}
-                                  </SheetDescription>
-                                )}
-
-                                {/* Band Bio */}
-                                {selectedBand?.bio && (
-                                  <SheetDescription className="text-sm my-2">
-                                    {selectedBand.bio}
-                                  </SheetDescription>
-                                )}
-
-                                {/* Band Members */}
-                                {selectedBand?.members && (
-                                  <SheetDescription className="text-sm my-2">
-                                    <strong>Members:</strong>{" "}
-                                    {Array.isArray(selectedBand.members)
-                                      ? selectedBand.members.join(", ")
-                                      : selectedBand.members}
-                                  </SheetDescription>
-                                )}
-
-                                {/* Logo Credits */}
-                                {selectedBand?.logoCredits && (
-                                  <SheetDescription className="text-xs text-gray-500 text-center mt-4">
-                                    {selectedBand.logoCredits}
-                                  </SheetDescription>
-                                )}
-                              </SheetHeader>
-                            </SheetContent>
-                          </Sheet>
-                        )
-                      )}
-                    </div>
+                        return (
+                          <Card
+                            key={index}
+                            className={`transition ease-in-out duration-300 border rounded-[10px] ${
+                              isCancelled
+                                ? "border-red-500 bg-red-100 text-red-700"
+                                : "border-darkorange hover:border-primary hover:text-primary"
+                            }`}
+                          >
+                            <CardHeader className="p-2">
+                              <CardTitle className="text-xs font-bold flex justify-between items-center">
+                                <span>{act}</span>
+                                <span className="text-gray-500 text-[10px]">
+                                  {start} - {end}
+                                </span>
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent className="p-2">
+                              {isCancelled ? (
+                                <p className="text-red-600 font-semibold">
+                                  Cancelled
+                                </p>
+                              ) : (
+                                genre && (
+                                  <p className="text-gray-400 italic text-[10px]">
+                                    {genre}
+                                  </p>
+                                )
+                              )}
+                            </CardContent>
+                          </Card>
+                        );
+                      }
+                    )}
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           ))}
       </div>

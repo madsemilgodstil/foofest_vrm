@@ -1,57 +1,75 @@
 const url = process.env.NEXT_PUBLIC_API_URL
 
 const headersList = {
-  Accept: '/',
+  Accept: 'application/json',
   'Content-Type': 'application/json',
   Prefer: 'return=representation'
 }
 
-// const headersList = {
-//   Accept: 'application/json',
-//   'Content-Type': 'application/json',
-//   Prefer: 'return=representation',
-// };
+// Helper function to handle fetch errors
+async function handleResponse (response) {
+  if (!response.ok) {
+    const errorText = await response.text()
+    console.error(`API Error: ${response.status} - ${response.statusText}`)
+    console.error(`Details: ${errorText}`)
+    throw new Error(`Failed to fetch data: ${response.statusText}`)
+  }
+  return response.json()
+}
 
-//Get
+// Get Bands
 export async function getBands () {
-  const response = await fetch(url + '/bands', {
-    method: 'GET',
-    headers: headersList
-  })
-
-  const data = await response.json()
-  return data
+  try {
+    const response = await fetch(`${url}/bands`, {
+      method: 'GET',
+      headers: headersList
+    })
+    return await handleResponse(response)
+  } catch (error) {
+    console.error('Error fetching bands:', error.message)
+    throw error
+  }
 }
 
-//GET Schedule for stages
+// GET Schedule for stages
 export async function getSchedule (stage) {
-  const response = await fetch(`${url}/schedule`, {
-    method: 'GET',
-    headers: headersList
-  })
-
-  const data = await response.json()
-
-  return data[stage]
-  //Rasmus -
-  //Stage er til at vælge mellem de 3 stages, så den kan hente alle 3 på en gang og kan loope igennem den, også på dagen.
-  //Hvis vi henter på ${url}/schedule/${stages} tager den kun den ene stage af gangen
+  try {
+    const response = await fetch(`${url}/schedule`, {
+      method: 'GET',
+      headers: headersList
+    })
+    const data = await handleResponse(response)
+    return data[stage] // Return specific stage schedule
+  } catch (error) {
+    console.error('Error fetching schedule:', error.message)
+    throw error
+  }
 }
 
-
-
-// GET Campingområder
-export async function getCampingAreas() {
+// GET Camping Areas
+export async function getCampingAreas () {
+  try {
     const response = await fetch(`${url}/available-spots`, {
       method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        //Hvorfor skal jeg det her før det virker?!
-        //Fik det af chatGPT få at få noget til at virke..
-      },
-    });
-    const data = await response.json();
-    return data;
+      headers: headersList
+    })
+    return await handleResponse(response)
+  } catch (error) {
+    console.error('Error fetching camping areas:', error.message)
+    throw error
+  }
 }
 
+// GET Cancelled Events
+export async function getCancelledEvents () {
+  try {
+    const response = await fetch(`${url}/events`, {
+      method: 'GET',
+      headers: headersList
+    })
+    return await handleResponse(response)
+  } catch (error) {
+    console.error('Error fetching cancelled events:', error.message)
+    throw error
+  }
+}
