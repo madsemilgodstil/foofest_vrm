@@ -11,24 +11,17 @@ import useBookingStore from "@/stores/useBookingStore";
 
 const Booking = () => {
   const [currentView, setCurrentView] = useState("tickets"); // Default to tickets
-  const { resetBooking, timer, timerActive, decrementTimer } =
+  const { resetBooking, timer, timerActive, decrementTimer, setTimer } =
     useBookingStore(); // Zustand actions and state
 
   useEffect(() => {
-    // Reset booking when leaving the page
-    return () => {
-      resetBooking();
-    };
-  }, [resetBooking]);
-
-  useEffect(() => {
-    // Start timer countdown
+    // Start timer countdown when the timer is active
     if (timerActive) {
       const interval = setInterval(() => {
-        decrementTimer();
+        decrementTimer(); // Decrement timer by 1 every second
       }, 1000);
 
-      return () => clearInterval(interval);
+      return () => clearInterval(interval); // Clean up the interval when the component is unmounted
     }
   }, [timerActive, decrementTimer]);
 
@@ -45,6 +38,11 @@ const Booking = () => {
     setCurrentView("tickets");
   };
 
+  const startReservationTimer = () => {
+    // Start a 5-minute timer (300 seconds)
+    setTimer(300);
+  };
+
   return (
     <div className="px-4 max-w-5xl mx-auto">
       {/* Display global timer */}
@@ -54,7 +52,9 @@ const Booking = () => {
           {String(timer % 60).padStart(2, "0")}
         </div>
       )}
+      
       <h1 className="text-3xl font-bold mb-6 text-center">Booking</h1>
+      
       <div className="grid grid-cols-[65%_30%] justify-between">
         {/* Left side */}
         <div className="ticket-selection">
@@ -71,7 +71,10 @@ const Booking = () => {
           {/* Step 3: Camping */}
           {currentView === "camping" && (
             <Camping
-              onNext={() => setCurrentView("info")}
+              onNext={() => {
+                startReservationTimer(); // Start timer when moving to the next step
+                setCurrentView("info");
+              }}
               onBack={() => setCurrentView("tickets")}
             />
           )}
@@ -80,7 +83,8 @@ const Booking = () => {
           {currentView === "info" && (
             <Info
               onNext={() => setCurrentView("payment")}
-              onBack={() => setCurrentView("camping")}
+              onBack={() => setCurrentView("tickets")}
+              setCurrentView={setCurrentView} // Pass setCurrentView here
             />
           )}
 
@@ -89,6 +93,7 @@ const Booking = () => {
             <Payment onBack={() => setCurrentView("info")} />
           )}
         </div>
+
         {/* Right side */}
         <div className="basket-wrapper">
           <Basket />

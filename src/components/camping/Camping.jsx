@@ -106,9 +106,6 @@ const Camping = ({ onNext, onBack }) => {
 
   // Når vi går videre, skal vi oprette et reservations-id
   const onNextHandler = () => {
-    // Simulér oprettelsen af reservations-id (for demo)
-    const id = `RES-${Math.floor(Math.random() * 100000)}`;
-    setReservationId(id);
     onNext(); // Gå videre til næste trin (Info)
   };
 

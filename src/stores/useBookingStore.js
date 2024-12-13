@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { reserveSpot } from "@/lib/database"; // Importer API kaldet til at reservere plads
 
 const defaultTickets = [
   { id: 1, title: "Foo-Billet", price: 799, quantity: 0 },
@@ -28,15 +29,7 @@ const useBookingStore = create((set) => ({
   stopTimer: () => set({ timerActive: false, timer: 0 }),
   setReservationId: (id) => set({ reservationId: id }),
 
-  // Funktion til kun at nulstille campingområdet
-  resetSelectedArea: () =>
-    set((state) => ({
-      campingSelection: {
-        ...state.campingSelection,
-        area: null, // Kun nulstil området, ikke teltene
-      },
-    })),
-
+  // Opdaterer billetter og campingvalg
   updateTickets: (updatedTickets) => {
     set((state) => {
       const totalTickets = updatedTickets.reduce(
@@ -59,7 +52,6 @@ const useBookingStore = create((set) => ({
         }
       }
 
-      // Kontroller, om campingområdet skal nulstilles
       const selectedArea = state.campingSelection.area;
       let validArea = selectedArea;
 
@@ -85,6 +77,7 @@ const useBookingStore = create((set) => ({
     });
   },
 
+  // Opdatering af campingvalg (områder, telte etc.)
   updateCampingSelection: (updatedCamping) =>
     set((state) => ({
       campingSelection: {
@@ -101,6 +94,12 @@ const useBookingStore = create((set) => ({
       timerActive: false,
       reservationId: null,
     }),
+
+  // Opret reservation og start timer
+  createReservation: async (area, amount) => {
+    const { id, timeout } = await reserveSpot(area, amount); // Reservér campingplads via API
+    set({ reservationId: id, timer: timeout / 1000, timerActive: true }); // Start timeren med den tid, der er tilbage (i sekunder)
+  },
 }));
 
 export default useBookingStore;

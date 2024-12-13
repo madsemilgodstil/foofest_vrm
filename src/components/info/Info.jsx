@@ -4,8 +4,9 @@ import React, { useEffect } from "react";
 import useBookingStore from "@/stores/useBookingStore";
 import { useForm, useFieldArray } from "react-hook-form";
 
-const Info = ({ onNext, onBack }) => {
+const Info = ({ onNext, onBack, setCurrentView }) => {
   const tickets = useBookingStore((state) => state.tickets);
+  const { resetBooking, setReservationId, setTimer } = useBookingStore(); // Hent resetBooking for at nulstille timeren og reservationen
 
   // Hent totalTickets fra Zustand
   const totalTickets = tickets.reduce(
@@ -38,6 +39,19 @@ const Info = ({ onNext, onBack }) => {
     // Valider data og send det videre
     console.log("Form data:", data.forms);
     onNext();
+  };
+
+  // Nulstil kun timeren og reservationen, men ikke campingområdet
+  const onBackHandler = () => {
+    setReservationId(null); // Nulstil reservationId
+    setTimer(0); // Nulstil timeren
+    setCurrentView("tickets"); // Sæt currentView tilbage til tickets, men bevar camping- og teltvalg
+  };
+
+  // Afslut reservationen og nulstil alt og gå tilbage til Tickets
+  const onFinishHandler = () => {
+    resetBooking(); // Nulstil alt
+    setCurrentView("tickets"); // Sæt currentView tilbage til tickets
   };
 
   return (
@@ -94,11 +108,11 @@ const Info = ({ onNext, onBack }) => {
 
         <div className="flex justify-between mt-4">
           <button
-            onClick={onBack}
+            onClick={onBackHandler} // Nulstil kun timer og reservation, og gå tilbage til Tickets
             type="button"
             className="px-10 py-2 border border-primary text-white rounded-full"
           >
-            Tilbage til Camping
+            Afslut Reservationen
           </button>
           <button
             type="submit"

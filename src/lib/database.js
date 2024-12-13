@@ -59,12 +59,17 @@ export async function getCampingAreas() {
 
 
 export async function reserveSpot(area, amount) {
+  const bodyContent = JSON.stringify({
+    area: area,  
+    amount: amount 
+  });
+
   const response = await fetch(`${url}/reserve-spot`, {
     method: "PUT",
     headers: headersList,
-    body: JSON.stringify({ area, amount }),
+    body: bodyContent  
   });
 
   const data = await response.json();
-  return data.id; // Returnér reservations-ID
+  return data.id;
 }

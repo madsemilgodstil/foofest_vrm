@@ -3,8 +3,8 @@ import useBookingStore from "@/stores/useBookingStore";
 
 const Tickets = ({ onNext }) => {
   const tickets = useBookingStore((state) => state.tickets);
-  const campingSelection = useBookingStore((state) => state.campingSelection);
   const updateTickets = useBookingStore((state) => state.updateTickets);
+  const campingSelection = useBookingStore((state) => state.campingSelection);
   const resetSelectedArea = useBookingStore((state) => state.resetSelectedArea); // Importer resetSelectedArea
   const [errorMessage, setErrorMessage] = useState("");
 
