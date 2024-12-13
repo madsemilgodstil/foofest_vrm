@@ -1,3 +1,4 @@
+// booking/page.js
 "use client";
 
 import { useState, useEffect } from "react";
@@ -10,9 +11,14 @@ import BookingLogin from "@/components/bookingLogin/BookingLogin";
 import useBookingStore from "@/stores/useBookingStore";
 
 const Booking = () => {
-  const [currentView, setCurrentView] = useState("tickets"); // Default to tickets
-  const { resetBooking, timer, timerActive, decrementTimer, setTimer } =
+  const [currentView, setCurrentView] = useState("tickets");
+  const { resetBooking, resetBasket, timer, timerActive, decrementTimer, setTimer } =
     useBookingStore(); // Zustand actions and state
+
+  useEffect(() => {
+    // Reset basket when entering the booking page
+    resetBasket();
+  }, [resetBasket]); // Call resetBasket whenever the component mounts
 
   useEffect(() => {
     // Start timer countdown when the timer is active
@@ -39,8 +45,7 @@ const Booking = () => {
   };
 
   const startReservationTimer = () => {
-    // Start a 5-minute timer (300 seconds)
-    setTimer(300);
+    setTimer(300); // Start a 5-minute timer (300 seconds)
   };
 
   return (
@@ -56,19 +61,15 @@ const Booking = () => {
       <h1 className="text-3xl font-bold mb-6 text-center">Booking</h1>
       
       <div className="grid grid-cols-[65%_30%] justify-between">
-        {/* Left side */}
         <div className="ticket-selection">
-          {/* Step 1: Login/Signup */}
           {currentView === "login" && (
             <BookingLogin onLoginSuccess={handleLoginSuccess} />
           )}
 
-          {/* Step 2: Tickets */}
           {currentView === "tickets" && (
             <Tickets onNext={() => setCurrentView("camping")} />
           )}
 
-          {/* Step 3: Camping */}
           {currentView === "camping" && (
             <Camping
               onNext={() => {
@@ -79,22 +80,19 @@ const Booking = () => {
             />
           )}
 
-          {/* Step 4: Info */}
           {currentView === "info" && (
             <Info
               onNext={() => setCurrentView("payment")}
               onBack={() => setCurrentView("tickets")}
-              setCurrentView={setCurrentView} // Pass setCurrentView here
+              setCurrentView={setCurrentView} 
             />
           )}
 
-          {/* Step 5: Payment */}
           {currentView === "payment" && (
             <Payment onBack={() => setCurrentView("info")} />
           )}
         </div>
 
-        {/* Right side */}
         <div className="basket-wrapper">
           <Basket />
         </div>

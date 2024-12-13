@@ -1,5 +1,6 @@
+// useBookingStore.js
+
 import { create } from "zustand";
-import { reserveSpot } from "@/lib/database"; // Importer API kaldet til at reservere plads
 
 const defaultTickets = [
   { id: 1, title: "Foo-Billet", price: 799, quantity: 0 },
@@ -29,14 +30,19 @@ const useBookingStore = create((set) => ({
   stopTimer: () => set({ timerActive: false, timer: 0 }),
   setReservationId: (id) => set({ reservationId: id }),
 
-  // Opdaterer billetter og campingvalg
+  // Reset function to clear basket and camping selection
+  resetBasket: () =>
+    set({
+      tickets: [...defaultTickets],
+      campingSelection: { ...defaultCampingSelection },
+    }),
+
   updateTickets: (updatedTickets) => {
     set((state) => {
       const totalTickets = updatedTickets.reduce(
         (total, ticket) => total + ticket.quantity,
         0
       );
-
       const totalTents =
         state.campingSelection.tents.twoPerson +
         state.campingSelection.tents.threePerson;
@@ -59,10 +65,6 @@ const useBookingStore = create((set) => ({
         const area = state.campingSelection.areas.find(
           (area) => area.area === selectedArea
         );
-
-        if (area && totalTickets > area.available) {
-          validArea = null; // Nulstil området, hvis billetterne er større end de ledige pladser
-        }
       }
 
       return {
@@ -70,14 +72,13 @@ const useBookingStore = create((set) => ({
         tickets: updatedTickets,
         campingSelection: {
           ...state.campingSelection,
-          tents: updatedTents, // Behold teltene (ikke nulstil dem)
-          area: validArea, // Behold området, hvis det er gyldigt
+          tents: updatedTents,
+          area: validArea,
         },
       };
     });
   },
 
-  // Opdatering af campingvalg (områder, telte etc.)
   updateCampingSelection: (updatedCamping) =>
     set((state) => ({
       campingSelection: {
@@ -95,10 +96,9 @@ const useBookingStore = create((set) => ({
       reservationId: null,
     }),
 
-  // Opret reservation og start timer
   createReservation: async (area, amount) => {
-    const { id, timeout } = await reserveSpot(area, amount); // Reservér campingplads via API
-    set({ reservationId: id, timer: timeout / 1000, timerActive: true }); // Start timeren med den tid, der er tilbage (i sekunder)
+    const { id, timeout } = await reserveSpot(area, amount);
+    set({ reservationId: id, timer: timeout / 1000, timerActive: true });
   },
 }));
 

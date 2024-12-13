@@ -16,8 +16,8 @@ const Camping = ({ onNext, onBack }) => {
     0
   );
 
-  // State for at håndtere reservations-id
-  const [reservationId, setReservationId] = useState(null);
+  const totalTents =
+    campingSelection.tents.twoPerson + campingSelection.tents.threePerson;
 
   useEffect(() => {
     const fetchCampingAreas = async () => {
@@ -33,38 +33,19 @@ const Camping = ({ onNext, onBack }) => {
     fetchCampingAreas();
   }, [updateCampingSelection]);
 
-  // Denne useEffect skal køre, når billetterne ændres og validere campingområdet
   useEffect(() => {
-    let updatedTents = { ...campingSelection.tents };
-    let totalTents = updatedTents.twoPerson + updatedTents.threePerson;
-
-    // Nulstil kun campingområdet, hvis der er flere billetter end de ledige pladser
+    // Kun validér området, hvis antallet af telte overskrider de ledige pladser i området
     if (campingSelection.area) {
       const selectedArea = campingSelection.areas.find(
         (area) => area.area === campingSelection.area
       );
-      if (selectedArea && totalTickets > selectedArea.available) {
-        updateCampingSelection({ area: null }); // Nulstil området, hvis der er flere billetter end pladser
+      if (selectedArea && totalTents > selectedArea.available) {
+        updateCampingSelection({ area: null }); // Nulstil området, hvis der er for mange telte
+        // alert("Der er ikke nok pladser til de valgte telte.");
       }
-    }
-
-    // Behold teltene (teltene nulstilles ikke)
-    if (totalTents > totalTickets) {
-      while (totalTents > totalTickets) {
-        if (updatedTents.threePerson > 0) {
-          updatedTents.threePerson -= 1;
-        } else if (updatedTents.twoPerson > 0) {
-          updatedTents.twoPerson -= 1;
-        }
-
-        totalTents = updatedTents.twoPerson + updatedTents.threePerson;
-      }
-
-      updateCampingSelection({ tents: updatedTents });
     }
   }, [
-    totalTickets,
-    campingSelection.tents,
+    totalTents,
     campingSelection.area,
     campingSelection.areas,
     updateCampingSelection,
@@ -104,7 +85,6 @@ const Camping = ({ onNext, onBack }) => {
   const canProceedToPayment =
     totalTickets > 0 && hasSelectedArea && hasSelectedTent;
 
-  // Når vi går videre, skal vi oprette et reservations-id
   const onNextHandler = () => {
     onNext(); // Gå videre til næste trin (Info)
   };
@@ -123,24 +103,20 @@ const Camping = ({ onNext, onBack }) => {
                 ? "border-primary"
                 : "border-gray-500"
             } ${
-              area.available < totalTickets
-                ? "opacity-50 cursor-not-allowed"
-                : ""
+              area.available < totalTents ? "opacity-50 cursor-not-allowed" : ""
             }`}
             onClick={() =>
-              area.available >= totalTickets && handleAreaSelect(area)
+              area.available >= totalTents && handleAreaSelect(area)
             }
-            disabled={area.available < totalTickets}
+            disabled={area.available < totalTents}
           >
             <h3 className="text-lg font-semibold">{area.area}</h3>
             <p
               className={`${
-                area.available >= totalTickets
-                  ? "text-green-500"
-                  : "text-red-500"
+                area.available >= totalTents ? "text-green-500" : "text-red-500"
               }`}
             >
-              {area.available >= totalTickets
+              {area.available >= totalTents
                 ? `${area.available} Ledige Pladser`
                 : "Ikke nok pladser"}
             </p>
