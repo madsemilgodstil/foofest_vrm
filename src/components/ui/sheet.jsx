@@ -4,6 +4,9 @@ import * as React from "react";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { cva } from "class-variance-authority";
 import { X } from "lucide-react";
+import Image from "next/image";
+
+import { getImageUrl } from "@/lib/utils"; // Sørg for, at funktionen findes i utils og ikke defineres igen.
 
 import { cn } from "@/lib/utils";
 
@@ -37,29 +40,65 @@ const sheetVariants = cva(
           "inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
         left: "inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
         right:
-          "inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-xl",
-      },
+          "inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-xl"
+      }
     },
     defaultVariants: {
-      side: "right",
-    },
+      side: "right"
+    }
   }
 );
 
 const SheetContent = React.forwardRef(
-  ({ side = "right", className, children, ...props }, ref) => (
+  ({ side = "right", className, band = {}, ...props }, ref) => (
     <SheetPortal>
       <SheetOverlay />
       <SheetPrimitive.Content
         ref={ref}
-        className={cn(sheetVariants({ side }), className)}
+        className={cn(
+          "fixed inset-0 z-50 grid grid-cols-3 min-h-screen bg-background text-white overflow-hidden",
+          className
+        )}
         {...props}
       >
-        <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-          <X className="h-4 w-4" />
-          <span className="sr-only">Close</span>
+        {/* Venstre side */}
+        <div className="col-span-2 relative">
+          <Image
+            src={getImageUrl(band)}
+            alt={band.name}
+            fill
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-primary/70 backdrop-blur-md"></div>
+        </div>
+
+        {/* Højre side */}
+        <div className="p-8 flex flex-col justify-start space-y-6">
+          {/* Band navn */}
+          <h1 className="text-5xl font-bold">{band.name}</h1>
+
+          {/* Beskrivelse */}
+          <p className="text-lg text-gray-300">
+            {band.bio || "No description available"}
+          </p>
+
+          {/* Genre */}
+          <p className="text-xl font-semibold text-primary">
+            {band.genre || "Unknown genre"}
+          </p>
+
+          {/* Photo credits */}
+          {band.logoCredits && (
+            <p className="text-sm text-gray-500">
+              Photo Credits: {band.logoCredits}
+            </p>
+          )}
+        </div>
+
+        {/* Luk knap */}
+        <SheetPrimitive.Close className="absolute top-4 right-4 text-white">
+          <X className="w-6 h-6" />
         </SheetPrimitive.Close>
-        {children}
       </SheetPrimitive.Content>
     </SheetPortal>
   )
@@ -116,5 +155,5 @@ export {
   SheetHeader,
   SheetFooter,
   SheetTitle,
-  SheetDescription,
+  SheetDescription
 };
