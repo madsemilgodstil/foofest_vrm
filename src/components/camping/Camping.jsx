@@ -10,6 +10,7 @@ const Camping = ({ onNext, onBack }) => {
   const updateCampingSelection = useBookingStore(
     (state) => state.updateCampingSelection
   );
+  const [areaError, setAreaError] = useState(""); // Tilføjet tilstandsvariabel til fejlbesked
 
   const totalTickets = tickets.reduce(
     (total, ticket) => total + ticket.quantity,
@@ -41,7 +42,11 @@ const Camping = ({ onNext, onBack }) => {
       );
       if (selectedArea && totalTents > selectedArea.available) {
         updateCampingSelection({ area: null }); // Nulstil området, hvis der er for mange telte
-        // alert("Der er ikke nok pladser til de valgte telte.");
+        setAreaError(
+          "Der er ikke nok pladser til de valgte telte. Vælg et andet område."
+        ); // Sæt fejlbesked
+      } else {
+        setAreaError(""); // Fjern fejlbesked, hvis der er plads
       }
     }
   }, [
@@ -103,26 +108,33 @@ const Camping = ({ onNext, onBack }) => {
                 ? "border-primary"
                 : "border-gray-500"
             } ${
-              area.available < totalTents ? "opacity-50 cursor-not-allowed" : ""
+              area.available < totalTents || area.available === 0
+                ? "opacity-50 cursor-not-allowed"
+                : ""
             }`}
             onClick={() =>
               area.available >= totalTents && handleAreaSelect(area)
             }
-            disabled={area.available < totalTents}
+            disabled={area.available < totalTents || area.available === 0}
           >
             <h3 className="text-lg font-semibold">{area.area}</h3>
             <p
               className={`${
-                area.available >= totalTents ? "text-green-500" : "text-red-500"
+                area.available === 0 || area.available < totalTents
+                  ? "text-red-500"
+                  : "text-green-500"
               }`}
             >
-              {area.available >= totalTents
-                ? `${area.available} Ledige Pladser`
-                : "Ikke nok pladser"}
+              {area.available === 0 || area.available < totalTents
+                ? "Ikke nok pladser"
+                : `${area.available} Ledige Pladser`}
             </p>
           </button>
         ))}
       </div>
+
+      {/* Fejlbesked under campingområder */}
+      {areaError && <p className="text-red-500 text-sm mt-4">{areaError}</p>}
 
       <h3 className="text-xl font-bold mt-6">Tilkøb af Telte</h3>
 

@@ -1,4 +1,3 @@
-// booking/page.js
 "use client";
 
 import { useState, useEffect } from "react";
@@ -15,28 +14,31 @@ const Booking = () => {
   const { resetBooking, resetBasket, timer, timerActive, decrementTimer, setTimer } =
     useBookingStore(); // Zustand actions and state
 
+  // Reset basket when entering the booking page
   useEffect(() => {
-    // Reset basket when entering the booking page
     resetBasket();
-  }, [resetBasket]); // Call resetBasket whenever the component mounts
+  }, [resetBasket]);
 
+  // Start timer countdown when the timer is active
   useEffect(() => {
-    // Start timer countdown when the timer is active
+    console.log("Timer active:", timerActive); // Logging if the timer is active
     if (timerActive) {
       const interval = setInterval(() => {
         decrementTimer(); // Decrement timer by 1 every second
+        console.log("Timer decremented: ", timer); // Logging the timer value after each decrement
       }, 1000);
 
       return () => clearInterval(interval); // Clean up the interval when the component is unmounted
     }
-  }, [timerActive, decrementTimer]);
+  }, [timerActive, decrementTimer, timer]);
 
+  // Handle expired reservation
   useEffect(() => {
-    // Handle expired reservation
     if (timer === 0 && timerActive) {
+      console.log("Timer reached 0! Showing alert.");
       alert("Din reservation er udløbet.");
-      resetBooking();
-      setCurrentView("tickets");
+      resetBooking(); // Reset the booking state
+      setCurrentView("tickets"); // Go back to the tickets view
     }
   }, [timer, timerActive, resetBooking]);
 
@@ -49,55 +51,57 @@ const Booking = () => {
   };
 
   return (
-    <div className="px-4 max-w-5xl mx-auto">
+    <>
       {/* Display global timer */}
       {timerActive && (
-        <div className="fixed top-0 left-0 right-0 bg-red-500 text-white text-center py-2">
+        <div className="sticky top-0 z-50 bg-black text-primary border-b border-t border-primary text text-center py-2 mb-8">
           Reservation udløber om: {Math.floor(timer / 60)}:
           {String(timer % 60).padStart(2, "0")}
         </div>
       )}
-      
-      <h1 className="text-3xl font-bold mb-6 text-center">Booking</h1>
-      
-      <div className="grid grid-cols-[65%_30%] justify-between">
-        <div className="ticket-selection">
-          {currentView === "login" && (
-            <BookingLogin onLoginSuccess={handleLoginSuccess} />
-          )}
 
-          {currentView === "tickets" && (
-            <Tickets onNext={() => setCurrentView("camping")} />
-          )}
+      <div className="px-4 max-w-5xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6 text-center">Booking</h1>
 
-          {currentView === "camping" && (
-            <Camping
-              onNext={() => {
-                startReservationTimer(); // Start timer when moving to the next step
-                setCurrentView("info");
-              }}
-              onBack={() => setCurrentView("tickets")}
-            />
-          )}
+        <div className="grid grid-cols-[65%_30%] justify-between">
+          <div className="ticket-selection">
+            {currentView === "login" && (
+              <BookingLogin onLoginSuccess={handleLoginSuccess} />
+            )}
 
-          {currentView === "info" && (
-            <Info
-              onNext={() => setCurrentView("payment")}
-              onBack={() => setCurrentView("tickets")}
-              setCurrentView={setCurrentView} 
-            />
-          )}
+            {currentView === "tickets" && (
+              <Tickets onNext={() => setCurrentView("camping")} />
+            )}
 
-          {currentView === "payment" && (
-            <Payment onBack={() => setCurrentView("info")} />
-          )}
-        </div>
+            {currentView === "camping" && (
+              <Camping
+                onNext={() => {
+                  startReservationTimer(); // Start timer when moving to the next step
+                  setCurrentView("info");
+                }}
+                onBack={() => setCurrentView("tickets")}
+              />
+            )}
 
-        <div className="basket-wrapper">
-          <Basket />
+            {currentView === "info" && (
+              <Info
+                onNext={() => setCurrentView("payment")}
+                onBack={() => setCurrentView("tickets")}
+                setCurrentView={setCurrentView}
+              />
+            )}
+
+            {currentView === "payment" && (
+              <Payment onBack={() => setCurrentView("info")} />
+            )}
+          </div>
+
+          <div className="basket-wrapper">
+            <Basket />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
