@@ -11,31 +11,29 @@ import useBookingStore from "@/stores/useBookingStore";
 
 const Booking = () => {
   const [currentView, setCurrentView] = useState("tickets");
-  const { resetBooking, resetBasket, timer, timerActive, decrementTimer, setTimer } =
+  const { resetBooking, resetBasket, timer, timerActive, decrementTimer, setTimer, stopTimer } =
     useBookingStore(); // Zustand actions and state
 
   // Reset basket when entering the booking page
   useEffect(() => {
     resetBasket();
-  }, [resetBasket]);
+    stopTimer(); // Stop and reset the timer when navigating to the booking page
+  }, [resetBasket, stopTimer]);
 
   // Start timer countdown when the timer is active
   useEffect(() => {
-    console.log("Timer active:", timerActive); // Logging if the timer is active
     if (timerActive) {
       const interval = setInterval(() => {
         decrementTimer(); // Decrement timer by 1 every second
-        console.log("Timer decremented: ", timer); // Logging the timer value after each decrement
       }, 1000);
 
       return () => clearInterval(interval); // Clean up the interval when the component is unmounted
     }
-  }, [timerActive, decrementTimer, timer]);
+  }, [timerActive, decrementTimer]);
 
   // Handle expired reservation
   useEffect(() => {
     if (timer === 0 && timerActive) {
-      console.log("Timer reached 0! Showing alert.");
       alert("Din reservation er udløbet.");
       resetBooking(); // Reset the booking state
       setCurrentView("tickets"); // Go back to the tickets view

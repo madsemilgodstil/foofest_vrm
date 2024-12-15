@@ -56,8 +56,7 @@ export async function getCampingAreas() {
 }
 
 
-
-
+//PUT
 export async function reserveSpot(area, amount) {
   const bodyContent = JSON.stringify({
     area: area,  
@@ -71,5 +70,24 @@ export async function reserveSpot(area, amount) {
   });
 
   const data = await response.json();
+  console.log("Generated Reservation ID:", data.id);
   return data.id;
+}
+
+
+// POST Fuldfør reservation
+export async function fullfillReservation(reservationId) {
+  const bodyContent = JSON.stringify({
+    id: reservationId, // Send reservationens ID som en del af body'en
+  });
+
+  const response = await fetch(`${url}/fullfill-reservation`, {
+    method: "POST",
+    headers: headersList,
+    body: bodyContent, // Sender reservationens ID i body'en
+  });
+
+
+  const data = await response.json(); // Hvis alt gik godt, returneres data
+  return data; // Returnér det data, som serveren sender tilbage (f.eks. reservations-ID)
 }
