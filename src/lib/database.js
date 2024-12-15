@@ -59,31 +59,40 @@ export async function getCampingAreas() {
 //PUT
 export async function reserveSpot(area, amount) {
   const bodyContent = JSON.stringify({
-    area: area,  
-    amount: amount 
+    area: area,
+    amount: amount,
   });
 
   const response = await fetch(`${url}/reserve-spot`, {
     method: "PUT",
-    headers: headersList,
-    body: bodyContent  
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: bodyContent,
   });
 
-  const data = await response.json();
-  console.log("Generated Reservation ID:", data.id);
-  return data.id;
-}
 
+  const data = await response.json();
+
+  // Sørg for, at data indeholder `id` og `timeout`
+  return {
+    id: data.id, // Ekstraher ID fra respons
+    timeout: data.timeout || 300000, // Sæt en default timeout, hvis den mangler
+  };
+}
 
 // POST Fuldfør reservation
 export async function fullfillReservation(reservationId) {
   const bodyContent = JSON.stringify({
     id: reservationId, // Send reservationens ID som en del af body'en
   });
-
   const response = await fetch(`${url}/fullfill-reservation`, {
     method: "POST",
-    headers: headersList,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
     body: bodyContent, // Sender reservationens ID i body'en
   });
 

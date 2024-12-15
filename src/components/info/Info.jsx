@@ -4,9 +4,12 @@ import React, { useEffect } from "react";
 import useBookingStore from "@/stores/useBookingStore";
 import { useForm, useFieldArray } from "react-hook-form";
 
-const Info = ({ onNext, onBack, setCurrentView }) => {
+const Info = ({ onNext, setCurrentView }) => {
   const tickets = useBookingStore((state) => state.tickets);
-  const { resetBooking, setReservationId, setTimer } = useBookingStore(); // Hent resetBooking for at nulstille timeren og reservationen
+  const createReservation = useBookingStore((state) => state.createReservation);
+  const reservationId = useBookingStore((state) => state.reservationId);
+  const setReservationId = useBookingStore((state) => state.setReservationId);
+  const { resetBooking, setTimer } = useBookingStore();
 
   // Hent totalTickets fra Zustand
   const totalTickets = tickets.reduce(
@@ -20,7 +23,7 @@ const Info = ({ onNext, onBack, setCurrentView }) => {
     },
   });
 
-  const { fields, append } = useFieldArray({
+  const { fields } = useFieldArray({
     control,
     name: "forms",
   });
@@ -34,24 +37,44 @@ const Info = ({ onNext, onBack, setCurrentView }) => {
     setValue("forms", newForms);
   }, [totalTickets, setValue]);
 
+  // Opret reservation og vis ID
+  useEffect(() => {
+    if (totalTickets > 0 && !reservationId) {
+      const fetchReservation = async () => {
+        try {
+          const id = await createReservation("Alfheim", totalTickets); // Henter dynamisk område senere
+          if (id) {
+            console.log("Reservation ID oprettet:", id);
+            setReservationId(id);
+          } else {
+            throw new Error("Reservation ID er null.");
+          }
+        } catch (error) {
+          console.error("Kunne ikke oprette reservation:", error.message);
+        }
+      };
+      fetchReservation();
+    }
+  }, [totalTickets, reservationId, createReservation, setReservationId]);
+
+  // Log reservationId, når det opdateres
+  useEffect(() => {
+    if (reservationId) {
+      console.log("Reservation ID opdateret:", reservationId);
+    }
+  }, [reservationId]);
+
   // Håndter næste trin
   const onSubmit = (data) => {
-    // Valider data og send det videre
     console.log("Form data:", data.forms);
     onNext();
   };
 
-  // Nulstil kun timeren og reservationen, men ikke campingområdet
+  // Nulstil kun timeren og reservationen
   const onBackHandler = () => {
-    setReservationId(null); // Nulstil reservationId
-    setTimer(0); // Nulstil timeren
-    setCurrentView("tickets"); // Sæt currentView tilbage til tickets, men bevar camping- og teltvalg
-  };
-
-  // Afslut reservationen og nulstil alt og gå tilbage til Tickets
-  const onFinishHandler = () => {
-    resetBooking(); // Nulstil alt
-    setCurrentView("tickets"); // Sæt currentView tilbage til tickets
+    setReservationId(null);
+    setTimer(0);
+    setCurrentView("tickets");
   };
 
   return (
@@ -59,6 +82,16 @@ const Info = ({ onNext, onBack, setCurrentView }) => {
       <h2 className="text-2xl font-bold mb-4 text-primary">
         Udfyld Oplysninger
       </h2>
+
+      {/* Vis Reservation ID med grøn tekst */}
+      {/* {reservationId ? (
+        <p className="text-green-400 font-semibold mb-4">
+          Reservation ID: {reservationId}
+        </p>
+      ) : (
+        <p className="text-yellow-400 mb-4">Opretter reservation...</p>
+      )} */}
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {fields.map((item, index) => (
           <div key={item.id} className="mb-4 rounded-md">
@@ -108,7 +141,7 @@ const Info = ({ onNext, onBack, setCurrentView }) => {
 
         <div className="flex justify-between mt-4">
           <button
-            onClick={onBackHandler} // Nulstil kun timer og reservation, og gå tilbage til Tickets
+            onClick={onBackHandler}
             type="button"
             className="px-10 py-2 border border-primary text-white rounded-full"
           >

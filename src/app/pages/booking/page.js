@@ -11,8 +11,15 @@ import useBookingStore from "@/stores/useBookingStore";
 
 const Booking = () => {
   const [currentView, setCurrentView] = useState("tickets");
-  const { resetBooking, resetBasket, timer, timerActive, decrementTimer, setTimer, stopTimer } =
-    useBookingStore(); // Zustand actions and state
+  const {
+    resetBooking,
+    resetBasket,
+    timer,
+    timerActive,
+    decrementTimer,
+    setTimer,
+    stopTimer,
+  } = useBookingStore(); // Zustand actions and state
 
   // Reset basket when entering the booking page
   useEffect(() => {
@@ -52,7 +59,7 @@ const Booking = () => {
     <>
       {/* Display global timer */}
       {timerActive && (
-        <div className="sticky top-0 z-50 bg-black text-primary border-b border-t border-primary text text-center py-2 mb-8">
+        <div className="sticky top-0 z-50 bg-black text-primary border-b border-t border-primary text-center py-2 mb-8">
           Reservation udløber om: {Math.floor(timer / 60)}:
           {String(timer % 60).padStart(2, "0")}
         </div>
@@ -90,7 +97,10 @@ const Booking = () => {
             )}
 
             {currentView === "payment" && (
-              <Payment onBack={() => setCurrentView("info")} />
+              <Payment
+                onBack={() => setCurrentView("info")}
+                setCurrentView={setCurrentView} // Pass setCurrentView to allow navigation
+              />
             )}
           </div>
 

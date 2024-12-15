@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { reserveSpot, fullfillReservation } from "../lib/database";
 
 // Standarddata for billetter og campingområder
 const defaultTickets = [
@@ -10,53 +11,80 @@ const defaultCampingSelection = {
   area: null,
   tents: { twoPerson: 0, threePerson: 0 },
   greenCamping: false,
-  areas: [], // Tilgængelige campingområder
+  areas: [],
 };
 
-const useBookingStore = create((set) => ({
+const useBookingStore = create((set, get) => ({
   tickets: [...defaultTickets],
   campingSelection: { ...defaultCampingSelection },
   timer: 0,
   timerActive: false,
   reservationId: null,
 
-  // Funktion til at sætte timeren
+  // Sæt timer
   setTimer: (time) => set({ timer: time, timerActive: true }),
 
-  // Funktion til at dekrementere timeren
+  // Dekrementer timer
   decrementTimer: () =>
     set((state) => ({
       timer: state.timer > 0 ? state.timer - 1 : 0,
-      timerActive: state.timer > 0,  // Hvis timeren er over 0, er timeren aktiv
+      timerActive: state.timer > 0,
     })),
 
-  // Funktion til at stoppe timeren
+  // Stop timer
   stopTimer: () => set({ timerActive: false, timer: 0 }),
 
-  // Funktion til at opdatere Reservation ID
+  // Sæt reservation ID
   setReservationId: (id) => set({ reservationId: id }),
 
-  // Funktion til at nulstille kurv og campingvalg
+  // Nulstil kurv og campingvalg
   resetBasket: () =>
     set({
       tickets: [...defaultTickets],
       campingSelection: { ...defaultCampingSelection },
     }),
 
-  // Opdatering af billetter
+  // Opret reservation
+  createReservation: async (area, amount) => {
+    try {
+      const { id, timeout } = await reserveSpot(area, amount);
+      set({ reservationId: id, timer: timeout / 1000, timerActive: true });
+      return id; // Returnér ID for yderligere brug
+    } catch (error) {
+      console.error("Fejl ved oprettelse af reservation:", error);
+      return null; // Returnér null ved fejl
+    }
+  },
+
+  // Fuldfør reservation
+  completeReservation: async () => {
+    const { reservationId } = get();
+    if (!reservationId) return;
+
+    try {
+      const response = await fullfillReservation(reservationId);
+      set({ reservationId: null, timer: 0, timerActive: false });
+      return response;
+    } catch (error) {
+      console.error("Fejl ved fuldførelse af reservation:", error);
+      return null;
+    }
+  },
+
+  // Opdater billetter
   updateTickets: (updatedTickets) => {
     set((state) => {
       const totalTickets = updatedTickets.reduce(
         (total, ticket) => total + ticket.quantity,
         0
       );
+
       const totalTents =
         state.campingSelection.tents.twoPerson +
         state.campingSelection.tents.threePerson;
 
       let updatedTents = { ...state.campingSelection.tents };
       if (totalTents > totalTickets) {
-        // Hvis antallet af telte overstiger billetterne, reducerer teltene
         while (updatedTents.twoPerson + updatedTents.threePerson > totalTickets) {
           if (updatedTents.threePerson > 0) {
             updatedTents.threePerson -= 1;
@@ -66,28 +94,18 @@ const useBookingStore = create((set) => ({
         }
       }
 
-      const selectedArea = state.campingSelection.area;
-      let validArea = selectedArea;
-
-      if (selectedArea) {
-        const area = state.campingSelection.areas.find(
-          (area) => area.area === selectedArea
-        );
-      }
-
       return {
         ...state,
         tickets: updatedTickets,
         campingSelection: {
           ...state.campingSelection,
           tents: updatedTents,
-          area: validArea,
         },
       };
     });
   },
 
-  // Opdatering af campingvalget
+  // Opdater campingvalg
   updateCampingSelection: (updatedCamping) =>
     set((state) => ({
       campingSelection: {
@@ -96,7 +114,7 @@ const useBookingStore = create((set) => ({
       },
     })),
 
-  // Nulstil alt ved udløb af booking eller afbestilling
+  // Nulstil booking
   resetBooking: () =>
     set({
       tickets: [...defaultTickets],
@@ -105,13 +123,6 @@ const useBookingStore = create((set) => ({
       timerActive: false,
       reservationId: null,
     }),
-
-  // Opret reservation
-  createReservation: async (area, amount) => {
-    // Kalder en API for at oprette reservation og starte timer
-    const { id, timeout } = await reserveSpot(area, amount);
-    set({ reservationId: id, timer: timeout / 1000, timerActive: true });
-  },
 }));
 
 export default useBookingStore;

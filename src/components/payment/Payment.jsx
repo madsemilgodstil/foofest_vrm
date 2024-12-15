@@ -4,9 +4,14 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import useBookingStore from "@/stores/useBookingStore";
 
-export default function Payment({ onBack }) {
+export default function Payment({ onBack, setCurrentView }) {
   const tickets = useBookingStore((state) => state.tickets);
   const campingSelection = useBookingStore((state) => state.campingSelection);
+  const reservationId = useBookingStore((state) => state.reservationId);
+  const completeReservation = useBookingStore(
+    (state) => state.completeReservation
+  );
+  const resetBooking = useBookingStore((state) => state.resetBooking); // Nulstil booking
 
   const bookingFee = 99; // Bookinggebyr
 
@@ -18,50 +23,65 @@ export default function Payment({ onBack }) {
     mode: "onChange", // Validering sker under indtastning
   });
 
-  const onSubmit = (data) => {
-    const ticketDetails = tickets
-      .filter((ticket) => ticket.quantity > 0)
-      .map(
-        (ticket) =>
-          `${ticket.title} x ${ticket.quantity} - ${
-            ticket.price * ticket.quantity
-          } DKK`
-      )
-      .join("\n");
+  const onSubmit = async (data) => {
+    const response = await completeReservation();
 
-    const tentsDetails = `
-      2 Personers Telte x ${campingSelection.tents.twoPerson} - ${
-      campingSelection.tents.twoPerson * 299
-    } DKK
-      3 Personers Telte x ${campingSelection.tents.threePerson} - ${
-      campingSelection.tents.threePerson * 399
-    } DKK
-    `.trim();
+    if (response) {
+      const ticketDetails = tickets
+        .filter((ticket) => ticket.quantity > 0)
+        .map(
+          (ticket) =>
+            `${ticket.title} x ${ticket.quantity} - ${
+              ticket.price * ticket.quantity
+            } DKK`
+        )
+        .join("\n");
 
-    const totalAmount =
-      tickets.reduce(
-        (total, ticket) => total + ticket.price * ticket.quantity,
-        0
-      ) +
-      campingSelection.tents.twoPerson * 299 +
-      campingSelection.tents.threePerson * 399 +
-      bookingFee;
+      const tentsDetails = `
+        2 Personers Telte x ${campingSelection.tents.twoPerson} - ${
+        campingSelection.tents.twoPerson * 299
+      } DKK
+        3 Personers Telte x ${campingSelection.tents.threePerson} - ${
+        campingSelection.tents.threePerson * 399
+      } DKK
+      `.trim();
 
-    alert(`
-      Betaling gennemført! Tak for din ordre.
+      const totalAmount =
+        tickets.reduce(
+          (total, ticket) => total + ticket.price * ticket.quantity,
+          0
+        ) +
+        campingSelection.tents.twoPerson * 299 +
+        campingSelection.tents.threePerson * 399 +
+        bookingFee;
 
-      Kortnummer: ${data.cardNumber}
-      Udløbsdato: ${data.expiryDate}
-      CVC: ${data.cvc}
+      // Vis alert med detaljer
+      alert(`
+        Betaling gennemført! Tak for din ordre.
 
-      Bestillingsdetaljer:
-      ${ticketDetails}
-      ${tentsDetails}
+        Reservation ID: ${reservationId}
 
-      Booking gebyr: ${bookingFee} DKK
+        Kortnummer: ${data.cardNumber}
+        Udløbsdato: ${data.expiryDate}
+        CVC: ${data.cvc}
 
-      I ALT: ${totalAmount} DKK
-    `);
+        Bestillingsdetaljer:
+        ${ticketDetails}
+        ${tentsDetails}
+
+        Booking gebyr: ${bookingFee} DKK
+
+        I ALT: ${totalAmount} DKK
+      `);
+
+      // Nulstil booking og naviger til tickets
+      resetBooking(); // Nulstil alle bookingoplysninger
+      if (setCurrentView) {
+        setCurrentView("tickets");
+      }
+    } else {
+      alert("Noget gik galt med din reservation. Prøv igen.");
+    }
   };
 
   return (
@@ -171,7 +191,7 @@ export default function Payment({ onBack }) {
             className={`px-10 py-2 bg-primary border border-primary text-white rounded-full ${
               !isValid ? "opacity-50 cursor-not-allowed" : ""
             }`}
-            disabled={!isValid} // Disable button if the form is not valid
+            disabled={!isValid} // Disable knappen, hvis formen ikke er valid
           >
             Bekræft betaling
           </button>
