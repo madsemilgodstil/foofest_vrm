@@ -58,26 +58,21 @@ export default function Payment({ onBack, setCurrentView }) {
       // Vis alert med detaljer
       alert(`
         Betaling gennemført! Tak for din ordre.
-
+  
         Reservation ID: ${reservationId}
-
-        Kortnummer: ${data.cardNumber}
-        Udløbsdato: ${data.expiryDate}
-        CVC: ${data.cvc}
-
+  
         Bestillingsdetaljer:
         ${ticketDetails}
         ${tentsDetails}
-
+  
         Booking gebyr: ${bookingFee} DKK
-
+  
         I ALT: ${totalAmount} DKK
       `);
 
-      // Nulstil booking og naviger til tickets
-      resetBooking(); // Nulstil alle bookingoplysninger
+      // Naviger til login-siden uden at nulstille reservationId
       if (setCurrentView) {
-        setCurrentView("tickets");
+        setCurrentView("login");
       }
     } else {
       alert("Noget gik galt med din reservation. Prøv igen.");

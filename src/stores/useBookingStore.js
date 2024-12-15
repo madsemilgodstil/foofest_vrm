@@ -59,7 +59,10 @@ const useBookingStore = create((set, get) => ({
   // Fuldfør reservation
   completeReservation: async () => {
     const { reservationId } = get();
-    if (!reservationId) return;
+    if (!reservationId) {
+      console.error("Ingen reservations-ID fundet.");
+      return null;
+    }
 
     try {
       const response = await fullfillReservation(reservationId);
@@ -113,6 +116,9 @@ const useBookingStore = create((set, get) => ({
         ...updatedCamping,
       },
     })),
+
+  // Hent reservations-ID
+  getReservationId: () => get().reservationId,
 
   // Nulstil booking
   resetBooking: () =>

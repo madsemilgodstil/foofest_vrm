@@ -70,10 +70,6 @@ const Booking = () => {
 
         <div className="grid grid-cols-[65%_30%] justify-between">
           <div className="ticket-selection">
-            {currentView === "login" && (
-              <BookingLogin onLoginSuccess={handleLoginSuccess} />
-            )}
-
             {currentView === "tickets" && (
               <Tickets onNext={() => setCurrentView("camping")} />
             )}
@@ -102,11 +98,16 @@ const Booking = () => {
                 setCurrentView={setCurrentView} // Pass setCurrentView to allow navigation
               />
             )}
+
+            {currentView === "login" && (    
+              <BookingLogin onLoginSuccess={handleLoginSuccess} />
+            )}
           </div>
 
           <div className="basket-wrapper">
             <Basket />
           </div>
+  
         </div>
       </div>
     </>
