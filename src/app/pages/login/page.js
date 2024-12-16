@@ -9,8 +9,8 @@ import {
   MenubarSeparator,
   MenubarTrigger
 } from '@/components/ui/menubar'
-// import LikedArtist from '@/components/likedartist/LikedArtist'
-// import LikedArtistProgram from '@/components/likedartistprogram/LikedArtistProgram'
+import LikedArtist from '@/components/likedartist/LikedArtist'
+import LikedArtistProgram from '@/components/likedartistprogram/LikedArtistProgram'
 import UserSettings from '@/components/usersettings/UserSettings'
 
 export default function LoginPage () {

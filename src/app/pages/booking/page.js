@@ -6,7 +6,6 @@ import Camping from '@/components/camping/Camping'
 import Payment from '@/components/payment/Payment'
 import Basket from '@/components/basket/Basket'
 import Info from '@/components/info/Info'
-
 import useBookingStore from '@/stores/useBookingStore'
 
 const Booking = () => {
