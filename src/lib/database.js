@@ -38,65 +38,79 @@ export async function getSchedule (stage) {
   //Hvis vi henter på ${url}/schedule/${stages} tager den kun den ene stage af gangen
 }
 
-
-
-// GET Campingområder
-export async function getCampingAreas() {
-    const response = await fetch(`${url}/available-spots`, {
+// Fetch Schedule
+export async function getScheduleSlider () {
+  try {
+    const response = await fetch(`${url}/schedule`, {
       method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        //Hvorfor skal jeg det her før det virker?!
-        //Fik det af chatGPT få at få noget til at virke..
-      },
-    });
-    const data = await response.json();
-    return data;
+      headers: headersList
+    })
+    if (!response.ok) {
+      throw new Error(`Failed to fetch schedule: ${response.status}`)
+    }
+    const data = await response.json()
+    console.log('Server Fetched Schedule Data:', data) // Debugging log
+    return data || {}
+  } catch (error) {
+    console.error('Error fetching schedule:', error)
+    return {} // Return an empty object on failure
+  }
 }
 
+// GET Campingområder
+export async function getCampingAreas () {
+  const response = await fetch(`${url}/available-spots`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+      //Hvorfor skal jeg det her før det virker?!
+      //Fik det af chatGPT få at få noget til at virke..
+    }
+  })
+  const data = await response.json()
+  return data
+}
 
 //PUT
-export async function reserveSpot(area, amount) {
+export async function reserveSpot (area, amount) {
   const bodyContent = JSON.stringify({
     area: area,
-    amount: amount,
-  });
+    amount: amount
+  })
 
   const response = await fetch(`${url}/reserve-spot`, {
-    method: "PUT",
+    method: 'PUT',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
     },
-    body: bodyContent,
-  });
+    body: bodyContent
+  })
 
-
-  const data = await response.json();
+  const data = await response.json()
 
   // Sørg for, at data indeholder `id` og `timeout`
   return {
     id: data.id, // Ekstraher ID fra respons
-    timeout: data.timeout || 300000, // Sæt en default timeout, hvis den mangler
-  };
+    timeout: data.timeout || 300000 // Sæt en default timeout, hvis den mangler
+  }
 }
 
 // POST Fuldfør reservation
-export async function fullfillReservation(reservationId) {
+export async function fullfillReservation (reservationId) {
   const bodyContent = JSON.stringify({
-    id: reservationId, // Send reservationens ID som en del af body'en
-  });
+    id: reservationId // Send reservationens ID som en del af body'en
+  })
   const response = await fetch(`${url}/fullfill-reservation`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
     },
-    body: bodyContent, // Sender reservationens ID i body'en
-  });
+    body: bodyContent // Sender reservationens ID i body'en
+  })
 
-
-  const data = await response.json(); // Hvis alt gik godt, returneres data
-  return data; // Returnér det data, som serveren sender tilbage (f.eks. reservations-ID)
+  const data = await response.json() // Hvis alt gik godt, returneres data
+  return data // Returnér det data, som serveren sender tilbage (f.eks. reservations-ID)
 }
