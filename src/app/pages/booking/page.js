@@ -1,76 +1,131 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-
 import Tickets from '@/components/ticket/Ticket'
 import Camping from '@/components/camping/Camping'
 import Payment from '@/components/payment/Payment'
 import Basket from '@/components/basket/Basket'
-import BookingLogin from '@/components/bookingLogin/bookingLogin'
-
-import useBookingStore from '@/stores/useBookingStore' // Importer Zustand store
+import Info from '@/components/info/Info'
+import BookingLogin from '@/components/bookingLogin/BookingLogin'
+import useBookingStore from '@/stores/useBookingStore'
 
 const Booking = () => {
-  const [currentView, setCurrentView] = useState('login') // Default to login step
-  const { resetBooking } = useBookingStore() // Use resetBooking function from Zustand
+  const [currentView, setCurrentView] = useState('tickets')
+  const {
+    resetBooking,
+    resetBasket,
+    timer,
+    timerActive,
+    decrementTimer,
+    stopTimer
+    // createReservation, // Henter createReservation fra Zustand
+  } = useBookingStore()
 
+  // Reset basket when entering the booking page
   useEffect(() => {
-    return () => {
-      resetBooking() // Use Zustand method to reset the state when user leaves the page
-    }
-  }, [resetBooking])
+    resetBasket()
+    stopTimer() // Stop and reset the timer when navigating to the booking page
+  }, [resetBasket, stopTimer])
 
-  const handleLoginSuccess = () => {
-    setCurrentView('tickets') // Proceed to tickets after login/signup
+  // Start timer countdown when the timer is active
+  useEffect(() => {
+    if (timerActive) {
+      const interval = setInterval(() => {
+        decrementTimer() // Decrement timer by 1 every second
+      }, 1000)
+
+      return () => clearInterval(interval) // Clean up the interval when the component is unmounted
+    }
+  }, [timerActive, decrementTimer])
+
+  // Handle expired reservation
+  useEffect(() => {
+    if (timer === 0 && timerActive) {
+      alert('Din reservation er udløbet.')
+      resetBooking() // Reset the booking state
+      setCurrentView('tickets') // Go back to the tickets view
+    }
+  }, [timer, timerActive, resetBooking])
+
+  const handleCampingNext = async () => {
+    const { campingSelection, tickets, createReservation } =
+      useBookingStore.getState() // Hent fra Zustand
+    const { area } = campingSelection // Du henter kun area, men tents bliver stadig gemt i Zustand
+    const amount = tickets.reduce((total, ticket) => total + ticket.quantity, 0) // Beregn samlet antal billetter
+
+    // Valider input
+    if (!area || amount === 0) {
+      alert('Vælg et område og mindst én billet for at fortsætte.')
+      return
+    }
+
+    try {
+      // Opret reservation dynamisk
+      const reservationId = await createReservation(area, amount)
+      if (reservationId) {
+        console.log('Reservation oprettet:', reservationId)
+        setCurrentView('info') // Naviger til næste trin
+      } else {
+        alert('Kunne ikke oprette reservation. Prøv igen.')
+      }
+    } catch (error) {
+      console.error('Fejl under oprettelse af reservation:', error)
+      alert('Noget gik galt. Prøv igen.')
+    }
   }
 
   return (
-    <div className='px-4 max-w-5xl mx-auto'>
-      {' '}
-      {/* Justeret bredden */}
-      <h1 className='text-3xl font-bold mb-6 text-center font-oswald'>
-        Booking
-      </h1>
-      <div className='grid grid-cols-[65%_30%] justify-between'>
-        {' '}
-        {/* Justeret gitterafstand */}
-        {/* Venstre side */}
-        <div className='ticket-selection'>
-          {/* Step 1: Login/Signup */}
-          {currentView === 'login' && (
-            <BookingLogin onLoginSuccess={handleLoginSuccess} />
-          )}
+    <>
+      {/* Display global timer */}
+      {timerActive && (
+        <div className='sticky top-0 z-50 bg-black text-primary border-b border-t border-primary text-center py-2 mb-8'>
+          Reservation udløber om: {Math.floor(timer / 60)}:
+          {String(timer % 60).padStart(2, '0')}
+        </div>
+      )}
 
-          {/* Step 2: Tickets */}
-          {currentView === 'tickets' && (
-            <>
+      <div className='px-4 max-w-5xl mx-auto'>
+        <h1 className='text-3xl font-bold mb-6 text-center'>Booking</h1>
+
+        <div className='grid grid-cols-[65%_30%] justify-between'>
+          <div className='ticket-selection'>
+            {currentView === 'tickets' && (
               <Tickets onNext={() => setCurrentView('camping')} />
-            </>
-          )}
+            )}
 
-          {/* Step 3: Camping */}
-          {currentView === 'camping' && (
-            <>
+            {currentView === 'camping' && (
               <Camping
-                onNext={() => setCurrentView('payment')}
+                onNext={handleCampingNext} // Dynamisk kald til handleCampingNext
                 onBack={() => setCurrentView('tickets')}
               />
-            </>
-          )}
+            )}
 
-          {/* Step 4: Payment */}
-          {currentView === 'payment' && (
-            <>
-              <Payment onBack={() => setCurrentView('camping')} />
-            </>
-          )}
-        </div>
-        {/* Højre side */}
-        <div className='basket-wrapper'>
-          <Basket />
+            {currentView === 'info' && (
+              <Info
+                onNext={() => setCurrentView('payment')}
+                onBack={() => setCurrentView('tickets')}
+                setCurrentView={setCurrentView}
+              />
+            )}
+
+            {currentView === 'payment' && (
+              <Payment
+                onBack={() => setCurrentView('info')}
+                setCurrentView={setCurrentView}
+              />
+            )}
+
+            {currentView === 'login' && (
+              <BookingLogin onLoginSuccess={() => setCurrentView('tickets')} />
+            )}
+          </div>
+
+          <div className='basket-wrapper'>
+            <Basket />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

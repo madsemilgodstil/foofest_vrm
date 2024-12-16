@@ -13,7 +13,7 @@ import { getUserByCredentials, createUser } from "@/lib/supabaseUser"; // Auth h
 const schema = z.object({
   name: z.string().optional(), // Name required only for signup
   email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters")
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 const BookingLogin = ({ onLoginSuccess }) => {
@@ -24,9 +24,9 @@ const BookingLogin = ({ onLoginSuccess }) => {
     register,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors },
   } = useForm({
-    resolver: zodResolver(schema)
+    resolver: zodResolver(schema),
   });
 
   const onSubmit = async (data) => {
@@ -44,7 +44,7 @@ const BookingLogin = ({ onLoginSuccess }) => {
       const newUser = {
         user_name: data.name,
         user_email: data.email,
-        user_password: data.password
+        user_password: data.password,
       };
       const createdUser = await createUser(newUser);
       login(createdUser); // Log in after signup
@@ -54,8 +54,10 @@ const BookingLogin = ({ onLoginSuccess }) => {
 
   return (
     <div className="w-full p-8 rounded-lg shadow-lg max-w-4xl mx-auto text-white border border-primary">
-      <h2 className="text-white text-2xl mb-6 text-center">
-        {isLogin ? "Login to buy tickets at FooFest" : "Create an Account"}
+      <h2 className="text-primary text-2xl mb-6 text-center">
+        {isLogin
+          ? "Login or sign up to see your tickets to FooFest"
+          : "Create an Account"}
       </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {!isLogin && (
@@ -66,7 +68,7 @@ const BookingLogin = ({ onLoginSuccess }) => {
             <Input
               placeholder="Your Name"
               {...register("name")}
-              className="w-full bg-gray-700 text-white border border-gray-600 rounded-md p-3"
+              className="w-full  text-white border rounded-md p-3"
             />
             {errors.name && (
               <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
