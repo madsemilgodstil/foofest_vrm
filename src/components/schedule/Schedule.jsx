@@ -8,7 +8,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetDescription,
-  SheetTitle
+  SheetTitle,
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -21,7 +21,7 @@ const Schedule = ({ stages }) => {
   const allDays = [
     ...new Set(
       stages.flatMap(({ stageSchedule }) => Object.keys(stageSchedule))
-    )
+    ),
   ];
 
   // Extract all unique genres, excluding "Unknown"
@@ -34,7 +34,7 @@ const Schedule = ({ stages }) => {
             .filter((genre) => genre && genre !== "Unknown")
         )
       )
-    )
+    ),
   ];
 
   const handleStageFilter = (stageName) => {
@@ -116,7 +116,7 @@ const Schedule = ({ stages }) => {
           .map(({ name, stageSchedule }) => (
             <div
               key={name}
-              className={`rounded-xl shadow bg-black border-darkorange border-2 text-center  p-8 mb-8 ${
+              className={`rounded-xl shadow bg-black border-darkorange border-2 text-center p-8 mb-8 ${
                 selectedStage ? "w-full max-w-7xl" : ""
               }`}
             >
@@ -152,7 +152,8 @@ const Schedule = ({ stages }) => {
                             bio,
                             members,
                             logo,
-                            logoCredits
+                            logoCredits,
+                            cancelled,
                           },
                           index
                         ) => (
@@ -168,14 +169,25 @@ const Schedule = ({ stages }) => {
                                     bio,
                                     members,
                                     logo,
-                                    logoCredits
+                                    logoCredits,
+                                    cancelled,
                                   })
                                 }
-                                className="hover:scale-105 transition ease-in-out duration-300 border border-darkorange rounded-[10px] cursor-pointer hover:border-primary hover:text-primary"
+                                className={`hover:scale-105 transition ease-in-out duration-300 border rounded-[10px] cursor-pointer ${
+                                  cancelled
+                                    ? "bg-red-900 border-red-500 text-white" // Hvis aflyst: rød baggrund og border
+                                    : "border-darkorange hover:border-primary hover:text-primary"
+                                }`}
                               >
                                 <CardHeader className="p-2">
                                   <CardTitle className="text-xs font-bold flex justify-between items-center">
                                     <span>{act}</span>
+                                    {cancelled && (
+                                      <span className="text-red-500 font-semibold">
+                                        (AFLYST){" "}
+                                        {/* Tilføjer "AFLYST" hvis cancelled er true */}
+                                      </span>
+                                    )}
                                     <span className="text-gray-500 text-[10px]">
                                       {start} - {end}
                                     </span>
@@ -225,27 +237,10 @@ const Schedule = ({ stages }) => {
                                   </SheetDescription>
                                 )}
 
-                                {/* Band Bio */}
-                                {selectedBand?.bio && (
-                                  <SheetDescription className="text-sm my-2">
-                                    {selectedBand.bio}
-                                  </SheetDescription>
-                                )}
-
-                                {/* Band Members */}
-                                {selectedBand?.members && (
-                                  <SheetDescription className="text-sm my-2">
-                                    <strong>Members:</strong>{" "}
-                                    {Array.isArray(selectedBand.members)
-                                      ? selectedBand.members.join(", ")
-                                      : selectedBand.members}
-                                  </SheetDescription>
-                                )}
-
-                                {/* Logo Credits */}
-                                {selectedBand?.logoCredits && (
-                                  <SheetDescription className="text-xs text-gray-500 text-center mt-4">
-                                    {selectedBand.logoCredits}
+                                {/* Cancelled Notice */}
+                                {selectedBand?.cancelled && (
+                                  <SheetDescription className="text-red-500 font-semibold">
+                                    AFLYST
                                   </SheetDescription>
                                 )}
                               </SheetHeader>
