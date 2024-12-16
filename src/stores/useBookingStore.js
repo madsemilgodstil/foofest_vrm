@@ -47,14 +47,19 @@ const useBookingStore = create((set, get) => ({
   // Opret reservation
   createReservation: async (area, amount) => {
     try {
-      const { id, timeout } = await reserveSpot(area, amount);
-      set({ reservationId: id, timer: timeout / 1000, timerActive: true });
-      return id; // Returnér ID for yderligere brug
+      const { id, timeout } = await reserveSpot(area, amount); // Hent timeout fra API'et
+      set({
+        reservationId: id,
+        timer: timeout / 1000, // Konverter fra millisekunder til sekunder
+        timerActive: true,
+      });
+      return id; // Returnér reservations-ID til yderligere brug
     } catch (error) {
       console.error("Fejl ved oprettelse af reservation:", error);
-      return null; // Returnér null ved fejl
+      return null;
     }
   },
+
 
   // Fuldfør reservation
   completeReservation: async () => {

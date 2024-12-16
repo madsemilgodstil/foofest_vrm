@@ -11,7 +11,6 @@ export default function Payment({ onBack, setCurrentView }) {
   const completeReservation = useBookingStore(
     (state) => state.completeReservation
   );
-  const resetBooking = useBookingStore((state) => state.resetBooking); // Nulstil booking
 
   const bookingFee = 99; // Bookinggebyr
 
@@ -23,10 +22,11 @@ export default function Payment({ onBack, setCurrentView }) {
     mode: "onChange", // Validering sker under indtastning
   });
 
-  const onSubmit = async (data) => {
-    const response = await completeReservation();
+  // Håndter betaling
+  const handlePayment = async () => {
+    const success = await completeReservation();
 
-    if (response) {
+    if (success) {
       const ticketDetails = tickets
         .filter((ticket) => ticket.quantity > 0)
         .map(
@@ -85,7 +85,7 @@ export default function Payment({ onBack, setCurrentView }) {
         Betalingsoplysninger
       </h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(handlePayment)} className="space-y-4">
         <div>
           <label htmlFor="cardNumber" className="block text-sm font-bold mb-1">
             Kortnummer

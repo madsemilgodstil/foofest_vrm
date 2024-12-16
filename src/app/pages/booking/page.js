@@ -17,9 +17,9 @@ const Booking = () => {
     timer,
     timerActive,
     decrementTimer,
-    setTimer,
     stopTimer,
-  } = useBookingStore(); // Zustand actions and state
+    // createReservation, // Henter createReservation fra Zustand
+  } = useBookingStore();
 
   // Reset basket when entering the booking page
   useEffect(() => {
@@ -47,13 +47,32 @@ const Booking = () => {
     }
   }, [timer, timerActive, resetBooking]);
 
-  const handleLoginSuccess = () => {
-    setCurrentView("tickets");
-  };
 
-  const startReservationTimer = () => {
-    setTimer(300); // Start a 5-minute timer (300 seconds)
-  };
+  const handleCampingNext = async () => {
+  const { campingSelection, tickets, createReservation } = useBookingStore.getState(); // Hent fra Zustand
+  const { area } = campingSelection; // Du henter kun area, men tents bliver stadig gemt i Zustand
+  const amount = tickets.reduce((total, ticket) => total + ticket.quantity, 0); // Beregn samlet antal billetter
+
+  // Valider input
+  if (!area || amount === 0) {
+    alert("Vælg et område og mindst én billet for at fortsætte.");
+    return;
+  }
+
+  try {
+    // Opret reservation dynamisk
+    const reservationId = await createReservation(area, amount);
+    if (reservationId) {
+      console.log("Reservation oprettet:", reservationId);
+      setCurrentView("info"); // Naviger til næste trin
+    } else {
+      alert("Kunne ikke oprette reservation. Prøv igen.");
+    }
+  } catch (error) {
+    console.error("Fejl under oprettelse af reservation:", error);
+    alert("Noget gik galt. Prøv igen.");
+  }
+};
 
   return (
     <>
@@ -76,10 +95,7 @@ const Booking = () => {
 
             {currentView === "camping" && (
               <Camping
-                onNext={() => {
-                  startReservationTimer(); // Start timer when moving to the next step
-                  setCurrentView("info");
-                }}
+                onNext={handleCampingNext} // Dynamisk kald til handleCampingNext
                 onBack={() => setCurrentView("tickets")}
               />
             )}
@@ -95,19 +111,18 @@ const Booking = () => {
             {currentView === "payment" && (
               <Payment
                 onBack={() => setCurrentView("info")}
-                setCurrentView={setCurrentView} // Pass setCurrentView to allow navigation
+                setCurrentView={setCurrentView}
               />
             )}
 
-            {currentView === "login" && (    
-              <BookingLogin onLoginSuccess={handleLoginSuccess} />
+            {currentView === "login" && (
+              <BookingLogin onLoginSuccess={() => setCurrentView("tickets")} />
             )}
           </div>
 
           <div className="basket-wrapper">
             <Basket />
           </div>
-  
         </div>
       </div>
     </>
