@@ -1,4 +1,4 @@
-"use client"; // Mark this as a client component
+"use client";
 
 import {
   Tooltip,
@@ -11,7 +11,7 @@ export default function ScrollToTop() {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth" // Smooth scrolling animation
+      behavior: "smooth"
     });
   };
 

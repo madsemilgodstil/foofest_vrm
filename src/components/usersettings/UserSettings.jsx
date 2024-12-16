@@ -16,7 +16,6 @@ export default function UserSettings() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  // Fetch the current user data
   const fetchCurrentUser = async () => {
     if (!user) return;
 
@@ -26,8 +25,8 @@ export default function UserSettings() {
         headers: {
           "Content-Type": "application/json",
           apikey: apiKey,
-          Authorization: authHeader,
-        },
+          Authorization: authHeader
+        }
       });
 
       if (!response.ok) throw new Error("Failed to fetch user data.");
@@ -70,16 +69,16 @@ export default function UserSettings() {
         headers: {
           "Content-Type": "application/json",
           apikey: apiKey,
-          Authorization: authHeader,
+          Authorization: authHeader
         },
-        body: JSON.stringify({ [field]: value }),
+        body: JSON.stringify({ [field]: value })
       });
 
       if (response.status === 204) {
         const friendlyFieldName = {
           user_name: "Name",
           user_email: "Email",
-          user_password: "Password",
+          user_password: "Password"
         }[field];
 
         setMessage(`${friendlyFieldName} updated successfully!`);
@@ -93,7 +92,7 @@ export default function UserSettings() {
         const friendlyFieldName = {
           user_name: "Name",
           user_email: "Email",
-          user_password: "Password",
+          user_password: "Password"
         }[field];
 
         setMessage(`${friendlyFieldName} updated successfully!`);
@@ -126,8 +125,8 @@ export default function UserSettings() {
         headers: {
           "Content-Type": "application/json",
           apikey: apiKey,
-          Authorization: authHeader,
-        },
+          Authorization: authHeader
+        }
       });
 
       if (response.status === 204 || response.ok) {
@@ -150,7 +149,6 @@ export default function UserSettings() {
         <p className="text-center text-sm text-red-500 mb-6">{message}</p>
       )}
 
-      {/* Update Name */}
       <div className="mb-6">
         <label className="block text-sm font-medium mb-2 text-primary">
           Name
@@ -173,7 +171,6 @@ export default function UserSettings() {
         </Button>
       </div>
 
-      {/* Update Email */}
       <div className="mb-6">
         <label className="block text-sm font-medium mb-2 text-primary">
           Email
@@ -196,7 +193,6 @@ export default function UserSettings() {
         </Button>
       </div>
 
-      {/* Update Password */}
       <div className="mb-6">
         <label className="block text-sm font-medium mb-2 text-primary">
           Password
@@ -219,7 +215,6 @@ export default function UserSettings() {
         </Button>
       </div>
 
-      {/* Delete Account */}
       <div className="mt-8">
         <Button
           onClick={handleDeleteAccount}

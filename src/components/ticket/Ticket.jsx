@@ -37,7 +37,6 @@ const Tickets = ({ onNext }) => {
         <div key={ticket.id} className="flex justify-between items-center mb-4">
           <p className="text-lg">{ticket.title}</p>
           <div className="flex items-center space-x-2">
-            {/* Minus-knap */}
             <button
               onClick={() =>
                 handleQuantityChange(ticket.id, ticket.quantity - 1)
@@ -47,7 +46,7 @@ const Tickets = ({ onNext }) => {
             >
               -
             </button>
-            {/* Input-felt */}
+
             <input
               type="number"
               value={ticket.quantity}
@@ -60,7 +59,7 @@ const Tickets = ({ onNext }) => {
               className="w-16 text-center border border-primary text-white bg-black text-lg focus:outline-none focus:ring-0"
               min="0"
             />
-            {/* Plus-knap */}
+
             <button
               onClick={() =>
                 handleQuantityChange(ticket.id, ticket.quantity + 1)
@@ -73,7 +72,6 @@ const Tickets = ({ onNext }) => {
         </div>
       ))}
 
-      {/* Fejlbesked */}
       {errorMessage && (
         <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
       )}
@@ -81,11 +79,11 @@ const Tickets = ({ onNext }) => {
       <hr className="border-primary my-6" />
       <div className="flex justify-end mt-4">
         <button
-          onClick={onNext} // Kald handleNext for at gå videre og nulstille campingområdet, hvis nødvendigt
+          onClick={onNext}
           className={`px-10 py-2 bg-primary border border-primary text-white rounded-full ${
             !hasSelectedTickets ? "opacity-50 cursor-not-allowed" : ""
           }`}
-          disabled={!hasSelectedTickets} // Disable button hvis ingen billetter er valgt
+          disabled={!hasSelectedTickets}
         >
           Gå videre til Camping
         </button>

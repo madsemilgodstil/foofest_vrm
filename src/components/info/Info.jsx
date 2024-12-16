@@ -11,7 +11,6 @@ const Info = ({ onNext, setCurrentView }) => {
   const setReservationId = useBookingStore((state) => state.setReservationId);
   const { resetBooking, setTimer } = useBookingStore();
 
-  // Hent totalTickets fra Zustand
   const totalTickets = tickets.reduce(
     (total, ticket) => total + ticket.quantity,
     0
@@ -19,30 +18,28 @@ const Info = ({ onNext, setCurrentView }) => {
 
   const { control, register, handleSubmit, setValue } = useForm({
     defaultValues: {
-      forms: [],
-    },
+      forms: []
+    }
   });
 
   const { fields } = useFieldArray({
     control,
-    name: "forms",
+    name: "forms"
   });
 
-  // Initialiser formularer baseret på totalTickets
   useEffect(() => {
     const newForms = Array.from({ length: totalTickets }, () => ({
       name: "",
-      email: "",
+      email: ""
     }));
     setValue("forms", newForms);
   }, [totalTickets, setValue]);
 
-  // Opret reservation og vis ID
   useEffect(() => {
     if (totalTickets > 0 && !reservationId) {
       const fetchReservation = async () => {
         try {
-          const id = await createReservation("Alfheim", totalTickets); // Henter dynamisk område senere
+          const id = await createReservation("Alfheim", totalTickets);
           if (id) {
             console.log("Reservation ID oprettet:", id);
             setReservationId(id);
@@ -57,20 +54,17 @@ const Info = ({ onNext, setCurrentView }) => {
     }
   }, [totalTickets, reservationId, createReservation, setReservationId]);
 
-  // Log reservationId, når det opdateres
   useEffect(() => {
     if (reservationId) {
       console.log("Reservation ID opdateret:", reservationId);
     }
   }, [reservationId]);
 
-  // Håndter næste trin
   const onSubmit = (data) => {
     console.log("Form data:", data.forms);
     onNext();
   };
 
-  // Nulstil kun timeren og reservationen
   const onBackHandler = () => {
     setReservationId(null);
     setTimer(0);
@@ -82,15 +76,6 @@ const Info = ({ onNext, setCurrentView }) => {
       <h2 className="text-2xl font-bold mb-4 text-primary">
         Udfyld Oplysninger
       </h2>
-
-      {/* Vis Reservation ID med grøn tekst */}
-      {/* {reservationId ? (
-        <p className="text-green-400 font-semibold mb-4">
-          Reservation ID: {reservationId}
-        </p>
-      ) : (
-        <p className="text-yellow-400 mb-4">Opretter reservation...</p>
-      )} */}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {fields.map((item, index) => (
@@ -107,7 +92,7 @@ const Info = ({ onNext, setCurrentView }) => {
               </label>
               <input
                 {...register(`forms.${index}.name`, {
-                  required: "Navn er påkrævet.",
+                  required: "Navn er påkrævet."
                 })}
                 type="text"
                 className="w-full text-white border border-gray-400 rounded-md p-3 bg-black focus:border-primary focus:outline-none"
@@ -127,8 +112,8 @@ const Info = ({ onNext, setCurrentView }) => {
                   required: "Email er påkrævet.",
                   pattern: {
                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Ugyldig emailadresse.",
-                  },
+                    message: "Ugyldig emailadresse."
+                  }
                 })}
                 type="email"
                 className="w-full text-white border border-gray-400 rounded-md p-3 bg-black focus:border-primary focus:outline-none"

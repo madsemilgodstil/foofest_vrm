@@ -4,19 +4,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Modal from "@/components/modal/Modal";
-import { useAuth } from "@/context/AuthContext"; // Import the AuthContext
+import { useAuth } from "@/context/AuthContext";
 import { Button } from "../ui/button";
 
 const Navigation = () => {
-  const pathname = usePathname(); // Get the current path
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
-  const { isLoggedIn, logout } = useAuth(); // Access authentication status
+  const pathname = usePathname();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isLoggedIn, logout } = useAuth();
 
   const toggleModal = () => setIsModalOpen((prev) => !prev);
 
   const handleLogout = () => {
-    logout(); // Logout user
-    window.location.href = "/"; // Redirect to homepage after logout
+    logout();
+    window.location.href = "/";
   };
 
   return (
@@ -153,7 +153,6 @@ const Navigation = () => {
         </div>
       </div>
 
-      {/* Modal */}
       <Modal isOpen={isModalOpen} onClose={toggleModal} />
     </>
   );

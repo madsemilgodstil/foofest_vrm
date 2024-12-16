@@ -5,22 +5,21 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext"; // Import AuthContext
+import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getUserByCredentials, createUser } from "@/lib/supabaseUser";
 
-// Validation schema using zod
 const schema = z.object({
-  name: z.string().optional(), // Name required only for signup
+  name: z.string().optional(),
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters")
 });
 
 const Modal = ({ isOpen, onClose }) => {
-  const [isLogin, setIsLogin] = useState(true); // Toggle between login and signup
+  const [isLogin, setIsLogin] = useState(true);
   const router = useRouter();
-  const { login } = useAuth(); // Use AuthContext for login
+  const { login } = useAuth();
 
   const {
     register,
@@ -34,26 +33,24 @@ const Modal = ({ isOpen, onClose }) => {
   const onSubmit = async (data) => {
     try {
       if (isLogin) {
-        // Handle login
         const user = await getUserByCredentials(data.email, data.password);
         if (user) {
-          login(user); // Pass full user object to AuthContext
-          router.push("/pages/login"); // Redirect to the login page
+          login(user);
+          router.push("/pages/login");
         } else {
           alert("Invalid email or password.");
         }
       } else {
-        // Handle signup
         const newUser = {
           user_name: data.name,
           user_email: data.email,
           user_password: data.password
         };
         const createdUser = await createUser(newUser);
-        login(createdUser); // Log in after signup
-        router.push("/pages/login"); // Redirect to the login page
+        login(createdUser);
+        router.push("/pages/login");
       }
-      onClose(); // Close modal after successful operation
+      onClose();
     } catch (error) {
       console.error("Authentication error:", error.message);
       alert("An error occurred. Please try again.");
@@ -142,7 +139,7 @@ const Modal = ({ isOpen, onClose }) => {
           <span
             onClick={() => {
               setIsLogin(!isLogin);
-              reset(); // Reset form when toggling
+              reset();
             }}
             className="text-primary cursor-pointer font-semibold hover:underline"
           >
