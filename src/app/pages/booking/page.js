@@ -115,7 +115,11 @@ const Booking = () => {
               />
             )}
 
-            {currentView === 'login' && <div>RET DENNE TIL</div>}
+            {currentView === 'login' && (
+              <div>
+                <h1>RET DENNE TIL</h1>
+              </div>
+            )}
           </div>
 
           <div className='basket-wrapper'>
