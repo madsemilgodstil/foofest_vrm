@@ -26,8 +26,8 @@ export default function UserSettings() {
         headers: {
           "Content-Type": "application/json",
           apikey: apiKey,
-          Authorization: authHeader
-        }
+          Authorization: authHeader,
+        },
       });
 
       if (!response.ok) throw new Error("Failed to fetch user data.");
@@ -70,16 +70,16 @@ export default function UserSettings() {
         headers: {
           "Content-Type": "application/json",
           apikey: apiKey,
-          Authorization: authHeader
+          Authorization: authHeader,
         },
-        body: JSON.stringify({ [field]: value })
+        body: JSON.stringify({ [field]: value }),
       });
 
       if (response.status === 204) {
         const friendlyFieldName = {
           user_name: "Name",
           user_email: "Email",
-          user_password: "Password"
+          user_password: "Password",
         }[field];
 
         setMessage(`${friendlyFieldName} updated successfully!`);
@@ -93,7 +93,7 @@ export default function UserSettings() {
         const friendlyFieldName = {
           user_name: "Name",
           user_email: "Email",
-          user_password: "Password"
+          user_password: "Password",
         }[field];
 
         setMessage(`${friendlyFieldName} updated successfully!`);
@@ -126,8 +126,8 @@ export default function UserSettings() {
         headers: {
           "Content-Type": "application/json",
           apikey: apiKey,
-          Authorization: authHeader
-        }
+          Authorization: authHeader,
+        },
       });
 
       if (response.status === 204 || response.ok) {
