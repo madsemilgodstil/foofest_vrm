@@ -6,7 +6,7 @@ import Camping from '@/components/camping/Camping'
 import Payment from '@/components/payment/Payment'
 import Basket from '@/components/basket/Basket'
 import Info from '@/components/info/Info'
-import BookingLogin from '@/components/bookingLogin/BookingLogin'
+
 import useBookingStore from '@/stores/useBookingStore'
 
 const Booking = () => {
@@ -115,9 +115,7 @@ const Booking = () => {
               />
             )}
 
-            {currentView === 'login' && (
-              <BookingLogin onLoginSuccess={() => setCurrentView('tickets')} />
-            )}
+            {currentView === 'login' && <div>RET DENNE TIL</div>}
           </div>
 
           <div className='basket-wrapper'>
