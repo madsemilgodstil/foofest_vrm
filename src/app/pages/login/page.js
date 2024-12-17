@@ -1,39 +1,38 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
 import {
   Menubar,
   MenubarContent,
   MenubarItem,
   MenubarMenu,
   MenubarTrigger
-} from '@/components/ui/menubar'
+} from "@/components/ui/menubar";
 
-import UserSettings from '@/components/usersettings/UserSettings'
+import UserSettings from "@/components/usersettings/UserSettings";
 
-export default function LoginPage () {
-  const [activeComponent, setActiveComponent] = useState('UserSettings') // Default to UserSettings
+export default function LoginPage() {
+  const [activeComponent, setActiveComponent] = useState("UserSettings");
 
   const renderComponent = () => {
     switch (activeComponent) {
-      case 'UserSettings':
-        return <UserSettings />
+      case "UserSettings":
+        return <UserSettings />;
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   return (
     <>
-      <div className='flex justify-center mt-6'>
-        {/* Center the menu */}
+      <div className="flex justify-center mt-6">
         <Menubar>
           <MenubarMenu>
             <MenubarTrigger>My Information</MenubarTrigger>
             <MenubarContent>
               <MenubarItem
-                onClick={() => setActiveComponent('UserSettings')}
-                className='text-primary'
+                onClick={() => setActiveComponent("UserSettings")}
+                className="text-primary"
               >
                 User Settings
               </MenubarItem>
@@ -42,8 +41,8 @@ export default function LoginPage () {
         </Menubar>
       </div>
       <section>
-        <div>{renderComponent()}</div> {/* Render the selected component */}
+        <div>{renderComponent()}</div>
       </section>
     </>
-  )
+  );
 }

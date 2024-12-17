@@ -5,7 +5,6 @@ const Basket = () => {
   const tickets = useBookingStore((state) => state.tickets);
   const campingSelection = useBookingStore((state) => state.campingSelection);
 
-  // Totaler for billetter og telte
   const ticketTotal = tickets.reduce(
     (total, ticket) => total + ticket.price * ticket.quantity,
     0
@@ -29,7 +28,6 @@ const Basket = () => {
 
   return (
     <div className="sticky top-5 right-0 border border-primary rounded-lg p-4  text-white">
-      {/* Billetter Overskrift */}
       {totalTickets > 0 && (
         <>
           <h3 className="font-bold text-lg text-primary mb-2">Billetter</h3>
@@ -46,18 +44,15 @@ const Basket = () => {
                 )
             )}
 
-            {/* Divider */}
             <hr className="border-primary my-4" />
           </div>
         </>
       )}
 
-      {/* Camping Overskrift */}
       {(campingSelection.area || totalTents > 0) && (
         <>
           <h3 className="font-bold text-lg text-primary mb-2">Camping</h3>
 
-          {/* Camping Område */}
           {campingSelection.area && (
             <div className="flex justify-between items-center">
               <p className="text-white">Område:</p>
@@ -65,7 +60,6 @@ const Basket = () => {
             </div>
           )}
 
-          {/* Telte under camping */}
           {campingSelection.tents.twoPerson > 0 && (
             <div className="flex justify-between mb-2">
               <p className="text-white">
@@ -86,11 +80,11 @@ const Basket = () => {
               </p>
             </div>
           )}
-          {/* Divider */}
+
           <hr className="border-primary my-4" />
         </>
       )}
-      {/* Oversigt */}
+
       <h3 className="font-bold text-lg text-primary mb-2">Oversigt</h3>
       {tickets.some((ticket) => ticket.quantity > 0) && (
         <div className="flex justify-between mb-2">
@@ -115,10 +109,8 @@ const Basket = () => {
         <p>{bookingFee} DKK</p>
       </div>
 
-      {/* Divider */}
       <hr className="border-primary my-4" />
 
-      {/* Total */}
       <div className="flex justify-between text-lg font-bold">
         <p>I ALT</p>
         <p>{total} DKK</p>

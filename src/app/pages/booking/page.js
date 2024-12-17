@@ -17,53 +17,47 @@ const Booking = () => {
     timerActive,
     decrementTimer,
     stopTimer
-    // createReservation, // Henter createReservation fra Zustand
   } = useBookingStore()
 
-  // Reset basket when entering the booking page
   useEffect(() => {
     resetBasket()
-    stopTimer() // Stop and reset the timer when navigating to the booking page
+    stopTimer()
   }, [resetBasket, stopTimer])
 
-  // Start timer countdown when the timer is active
   useEffect(() => {
     if (timerActive) {
       const interval = setInterval(() => {
-        decrementTimer() // Decrement timer by 1 every second
+        decrementTimer()
       }, 1000)
 
-      return () => clearInterval(interval) // Clean up the interval when the component is unmounted
+      return () => clearInterval(interval)
     }
   }, [timerActive, decrementTimer])
 
-  // Handle expired reservation
   useEffect(() => {
     if (timer === 0 && timerActive) {
       alert('Din reservation er udløbet.')
-      resetBooking() // Reset the booking state
-      setCurrentView('tickets') // Go back to the tickets view
+      resetBooking()
+      setCurrentView('tickets')
     }
   }, [timer, timerActive, resetBooking])
 
   const handleCampingNext = async () => {
     const { campingSelection, tickets, createReservation } =
-      useBookingStore.getState() // Hent fra Zustand
-    const { area } = campingSelection // Du henter kun area, men tents bliver stadig gemt i Zustand
-    const amount = tickets.reduce((total, ticket) => total + ticket.quantity, 0) // Beregn samlet antal billetter
+      useBookingStore.getState()
+    const { area } = campingSelection
+    const amount = tickets.reduce((total, ticket) => total + ticket.quantity, 0)
 
-    // Valider input
-    // if (!area || amount === 0) {
-    //   alert('Vælg et område og mindst én billet for at fortsætte.')
-    //   return
-    // }
+    if (!area || amount === 0) {
+      alert('Vælg et område og mindst én billet for at fortsætte.')
+      return
+    }
 
     try {
-      // Opret reservation dynamisk
       const reservationId = await createReservation(area, amount)
       if (reservationId) {
         console.log('Reservation oprettet:', reservationId)
-        setCurrentView('info') // Naviger til næste trin
+        setCurrentView('info')
       } else {
         alert('Kunne ikke oprette reservation. Prøv igen.')
       }
@@ -75,7 +69,6 @@ const Booking = () => {
 
   return (
     <>
-      {/* Display global timer */}
       {timerActive && (
         <div className='sticky top-0 z-50 bg-black text-primary border-b border-t border-primary text-center py-2 mb-8'>
           Reservation udløber om: {Math.floor(timer / 60)}:
@@ -94,7 +87,7 @@ const Booking = () => {
 
             {currentView === 'camping' && (
               <Camping
-                onNext={handleCampingNext} // Dynamisk kald til handleCampingNext
+                onNext={handleCampingNext}
                 onBack={() => setCurrentView('tickets')}
               />
             )}

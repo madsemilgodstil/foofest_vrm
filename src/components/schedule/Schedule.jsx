@@ -13,18 +13,16 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Schedule = ({ stages }) => {
-  const [selectedGenre, setSelectedGenre] = useState(null); // State for filtering by genre
-  const [selectedStage, setSelectedStage] = useState(null); // State for filtering by stage
-  const [selectedBand, setSelectedBand] = useState(null); // State for selected band
+  const [selectedGenre, setSelectedGenre] = useState(null);
+  const [selectedStage, setSelectedStage] = useState(null);
+  const [selectedBand, setSelectedBand] = useState(null);
 
-  // Extract all unique days
   const allDays = [
     ...new Set(
       stages.flatMap(({ stageSchedule }) => Object.keys(stageSchedule))
     ),
   ];
 
-  // Extract all unique genres, excluding "Unknown"
   const allGenres = [
     ...new Set(
       stages.flatMap(({ stageSchedule }) =>
@@ -38,11 +36,11 @@ const Schedule = ({ stages }) => {
   ];
 
   const handleStageFilter = (stageName) => {
-    setSelectedStage(stageName === selectedStage ? null : stageName); // Toggle stage filter
+    setSelectedStage(stageName === selectedStage ? null : stageName);
   };
 
   const handleGenreFilter = (genre) => {
-    setSelectedGenre(genre === selectedGenre ? null : genre); // Toggle genre filter
+    setSelectedGenre(genre === selectedGenre ? null : genre);
   };
 
   const scrollToDay = (day) => {
@@ -54,7 +52,6 @@ const Schedule = ({ stages }) => {
 
   return (
     <div className="mx-4 lg:mx-24">
-      {/* Buttons for each stage */}
       <div className="gap-6 mt-7 mb-20 ">
         <div className="flex flex-wrap gap-3 mb-8 justify-center font-oswald">
           {stages.map(({ name }) => (
@@ -72,7 +69,6 @@ const Schedule = ({ stages }) => {
           ))}
         </div>
 
-        {/* Buttons for each day */}
         <div className="flex flex-wrap gap-3 mb-8  justify-center font-oswald">
           {allDays.map((day) => (
             <button
@@ -85,7 +81,6 @@ const Schedule = ({ stages }) => {
           ))}
         </div>
 
-        {/* Buttons for each genre */}
         <div className="flex flex-wrap gap-3 justify-center mt-6 font-oswald">
           {allGenres.map((genre) => (
             <button
@@ -103,7 +98,6 @@ const Schedule = ({ stages }) => {
         </div>
       </div>
 
-      {/* Schedule grid */}
       <div
         className={`${
           selectedStage
@@ -112,7 +106,7 @@ const Schedule = ({ stages }) => {
         }`}
       >
         {stages
-          .filter(({ name }) => !selectedStage || selectedStage === name) // Filter by selected stage
+          .filter(({ name }) => !selectedStage || selectedStage === name)
           .map(({ name, stageSchedule }) => (
             <div
               key={name}
@@ -124,14 +118,12 @@ const Schedule = ({ stages }) => {
                 {name}
               </h2>
               {Object.keys(stageSchedule).map((day) => {
-                // Filter events for the day based on selected genre
                 const filteredEvents = stageSchedule[day]?.filter(
                   ({ genre }) =>
                     (!selectedGenre || genre === selectedGenre) &&
-                    genre !== "Unknown" // Exclude "Unknown"
+                    genre !== "Unknown"
                 );
 
-                // Skip the day if there are no events
                 if (!filteredEvents || filteredEvents.length === 0) {
                   return null;
                 }
@@ -204,7 +196,6 @@ const Schedule = ({ stages }) => {
                             </SheetTrigger>
                             <SheetContent>
                               <SheetHeader>
-                                {/* Band Logo */}
                                 {selectedBand?.logo && (
                                   <div className="flex justify-center my-4">
                                     <Avatar className="w-32 h-32">
@@ -219,28 +210,39 @@ const Schedule = ({ stages }) => {
                                   </div>
                                 )}
 
-                                {/* Band Name */}
                                 <SheetTitle className="text-lg font-bold">
                                   {selectedBand?.act || ""}
                                 </SheetTitle>
 
-                                {/* Band Time */}
                                 <SheetDescription className="text-sm">
                                   Time: {selectedBand?.start} -{" "}
                                   {selectedBand?.end}
                                 </SheetDescription>
 
-                                {/* Band Genre */}
                                 {selectedBand?.genre && (
                                   <SheetDescription className="italic text-gray-400">
                                     Genre: {selectedBand.genre}
                                   </SheetDescription>
                                 )}
 
-                                {/* Cancelled Notice */}
-                                {selectedBand?.cancelled && (
-                                  <SheetDescription className="text-red-500 font-semibold">
-                                    AFLYST
+                                {selectedBand?.bio && (
+                                  <SheetDescription className="text-sm my-2">
+                                    {selectedBand.bio}
+                                  </SheetDescription>
+                                )}
+
+                                {selectedBand?.members && (
+                                  <SheetDescription className="text-sm my-2">
+                                    <strong>Members:</strong>{" "}
+                                    {Array.isArray(selectedBand.members)
+                                      ? selectedBand.members.join(", ")
+                                      : selectedBand.members}
+                                  </SheetDescription>
+                                )}
+
+                                {selectedBand?.logoCredits && (
+                                  <SheetDescription className="text-xs text-gray-500 text-center mt-4">
+                                    {selectedBand.logoCredits}
                                   </SheetDescription>
                                 )}
                               </SheetHeader>

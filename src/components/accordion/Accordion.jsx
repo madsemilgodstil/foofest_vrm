@@ -2,7 +2,7 @@ import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger,
+  AccordionTrigger
 } from "@/components/ui/accordion";
 
 const AccordionComponent = () => {
@@ -13,7 +13,6 @@ const AccordionComponent = () => {
         collapsible
         className="w-full max-w-lg text-inherit font-inherit"
       >
-        {/* Åbningstider */}
         <AccordionItem value="item-1">
           <AccordionTrigger className="text-inherit text-lg no-underline">
             Hvornår åbner festivalen?
@@ -24,7 +23,6 @@ const AccordionComponent = () => {
           </AccordionContent>
         </AccordionItem>
 
-        {/* Transport */}
         <AccordionItem value="item-2">
           <AccordionTrigger className="text-inherit text-lg no-underline">
             Hvordan kommer jeg til festivalen?
@@ -36,7 +34,6 @@ const AccordionComponent = () => {
           </AccordionContent>
         </AccordionItem>
 
-        {/* Mad og drikke */}
         <AccordionItem value="item-3">
           <AccordionTrigger className="text-inherit text-lg no-underline">
             Er der mad og drikke tilgængeligt på festivalen?
@@ -48,7 +45,6 @@ const AccordionComponent = () => {
           </AccordionContent>
         </AccordionItem>
 
-        {/* Betaling */}
         <AccordionItem value="item-4">
           <AccordionTrigger className="text-inherit text-lg no-underline">
             Kan jeg betale med kontanter på festivalen?
@@ -59,7 +55,6 @@ const AccordionComponent = () => {
           </AccordionContent>
         </AccordionItem>
 
-        {/* Overnatning */}
         <AccordionItem value="item-5">
           <AccordionTrigger className="text-inherit text-lg no-underline">
             Er der campingmuligheder på festivalen?

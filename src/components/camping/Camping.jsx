@@ -10,7 +10,7 @@ const Camping = ({ onNext, onBack }) => {
   const updateCampingSelection = useBookingStore(
     (state) => state.updateCampingSelection
   );
-  const [areaError, setAreaError] = useState(""); // Tilføjet tilstandsvariabel til fejlbesked
+  const [areaError, setAreaError] = useState("");
 
   const totalTickets = tickets.reduce(
     (total, ticket) => total + ticket.quantity,
@@ -25,7 +25,7 @@ const Camping = ({ onNext, onBack }) => {
       const areas = await getCampingAreas();
       const formattedAreas = areas.map((area) => ({
         area: area.name || area.area,
-        available: area.spots_left || area.available,
+        available: area.spots_left || area.available
       }));
 
       updateCampingSelection({ areas: formattedAreas });
@@ -35,25 +35,24 @@ const Camping = ({ onNext, onBack }) => {
   }, [updateCampingSelection]);
 
   useEffect(() => {
-    // Kun validér området, hvis antallet af telte overskrider de ledige pladser i området
     if (campingSelection.area) {
       const selectedArea = campingSelection.areas.find(
         (area) => area.area === campingSelection.area
       );
       if (selectedArea && totalTents > selectedArea.available) {
-        updateCampingSelection({ area: null }); // Nulstil området, hvis der er for mange telte
+        updateCampingSelection({ area: null });
         setAreaError(
           "Der er ikke nok pladser til de valgte telte. Vælg et andet område."
-        ); // Sæt fejlbesked
+        );
       } else {
-        setAreaError(""); // Fjern fejlbesked, hvis der er plads
+        setAreaError("");
       }
     }
   }, [
     totalTents,
     campingSelection.area,
     campingSelection.areas,
-    updateCampingSelection,
+    updateCampingSelection
   ]);
 
   const handleTentChange = (type, value) => {
@@ -91,7 +90,7 @@ const Camping = ({ onNext, onBack }) => {
     totalTickets > 0 && hasSelectedArea && hasSelectedTent;
 
   const onNextHandler = () => {
-    onNext(); // Gå videre til næste trin (Info)
+    onNext();
   };
 
   return (
@@ -133,12 +132,10 @@ const Camping = ({ onNext, onBack }) => {
         ))}
       </div>
 
-      {/* Fejlbesked under campingområder */}
       {areaError && <p className="text-red-500 text-sm mt-4">{areaError}</p>}
 
       <h3 className="text-xl font-bold mt-6">Tilkøb af Telte</h3>
 
-      {/* 2 Personers Telt */}
       <div className="flex justify-between items-center mb-4">
         <p>2 Personers Telt</p>
         <div className="flex items-center space-x-2">
@@ -177,7 +174,6 @@ const Camping = ({ onNext, onBack }) => {
         </div>
       </div>
 
-      {/* 3 Personers Telt */}
       <div className="flex justify-between items-center mb-4">
         <p>3 Personers Telt</p>
         <div className="flex items-center space-x-2">
@@ -239,7 +235,7 @@ const Camping = ({ onNext, onBack }) => {
           Tilbage til Billetter
         </button>
         <button
-          onClick={onNextHandler} // Kald onNextHandler i stedet for handleNext
+          onClick={onNextHandler}
           className={`px-10 py-2 bg-primary border border-primary text-white rounded-full ${
             !canProceedToPayment ? "opacity-50 cursor-not-allowed" : ""
           }`}

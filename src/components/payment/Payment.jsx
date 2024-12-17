@@ -12,17 +12,16 @@ export default function Payment({ onBack, setCurrentView }) {
     (state) => state.completeReservation
   );
 
-  const bookingFee = 99; // Bookinggebyr
+  const bookingFee = 99;
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid }
   } = useForm({
-    mode: "onChange", // Validering sker under indtastning
+    mode: "onChange"
   });
 
-  // Håndter betaling
   const handlePayment = async () => {
     const success = await completeReservation();
 
@@ -55,7 +54,6 @@ export default function Payment({ onBack, setCurrentView }) {
         campingSelection.tents.threePerson * 399 +
         bookingFee;
 
-      // Vis alert med detaljer
       alert(`
         Betaling gennemført! Tak for din ordre.
   
@@ -70,7 +68,6 @@ export default function Payment({ onBack, setCurrentView }) {
         I ALT: ${totalAmount} DKK
       `);
 
-      // Naviger til login-siden uden at nulstille reservationId
       if (setCurrentView) {
         setCurrentView("login");
       }
@@ -95,8 +92,8 @@ export default function Payment({ onBack, setCurrentView }) {
               required: "Kortnummer er påkrævet.",
               pattern: {
                 value: /^[0-9]{13,19}$/,
-                message: "Kortnummer skal være mellem 13 og 19 cifre.",
-              },
+                message: "Kortnummer skal være mellem 13 og 19 cifre."
+              }
             })}
             type="text"
             className="w-full text-white border border-gray-400 rounded-md p-3 bg-black focus:border-primary focus:outline-none"
@@ -113,7 +110,7 @@ export default function Payment({ onBack, setCurrentView }) {
           </label>
           <input
             {...register("cardHolder", {
-              required: "Kortholder navn er påkrævet.",
+              required: "Kortholder navn er påkrævet."
             })}
             type="text"
             className="w-full text-white border border-gray-400 rounded-md p-3 bg-black focus:border-primary focus:outline-none"
@@ -137,8 +134,8 @@ export default function Payment({ onBack, setCurrentView }) {
                 required: "Udløbsdato er påkrævet.",
                 pattern: {
                   value: /^(0[1-9]|1[0-2])\/\d{2}$/,
-                  message: "Ugyldig udløbsdato (MM/ÅÅ).",
-                },
+                  message: "Ugyldig udløbsdato (MM/ÅÅ)."
+                }
               })}
               type="text"
               className="w-full text-white border border-gray-400 rounded-md p-3 bg-black focus:border-primary focus:outline-none"
@@ -160,8 +157,8 @@ export default function Payment({ onBack, setCurrentView }) {
                 required: "CVC er påkrævet.",
                 pattern: {
                   value: /^[0-9]{3}$/,
-                  message: "CVC skal være 3 cifre.",
-                },
+                  message: "CVC skal være 3 cifre."
+                }
               })}
               type="text"
               className="w-full text-white border border-gray-400 rounded-md p-3 bg-black focus:border-primary focus:outline-none"
@@ -186,7 +183,7 @@ export default function Payment({ onBack, setCurrentView }) {
             className={`px-10 py-2 bg-primary border border-primary text-white rounded-full ${
               !isValid ? "opacity-50 cursor-not-allowed" : ""
             }`}
-            disabled={!isValid} // Disable knappen, hvis formen ikke er valid
+            disabled={!isValid}
           >
             Bekræft betaling
           </button>
