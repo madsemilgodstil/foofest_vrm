@@ -31,7 +31,7 @@ const Tickets = ({ onNext }) => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4 text-primary">Vælg Billetter</h2>
+      <h2 className="text-2xl font-bold mb-4 text-primary">Select Tickets</h2>
 
       {tickets.map((ticket) => (
         <div key={ticket.id} className="flex justify-between items-center mb-4">
@@ -87,7 +87,7 @@ const Tickets = ({ onNext }) => {
           }`}
           disabled={!hasSelectedTickets} // Disable button hvis ingen billetter er valgt
         >
-          Gå videre til Camping
+          Next
         </button>
       </div>
     </div>

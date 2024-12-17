@@ -3,8 +3,8 @@ import { reserveSpot, fullfillReservation } from "../lib/database";
 
 // Standarddata for billetter og campingområder
 const defaultTickets = [
-  { id: 1, title: "Foo-Billet", price: 799, quantity: 0 },
-  { id: 2, title: "VIP-Billet", price: 1299, quantity: 0 },
+  { id: 1, title: "Foo - Ticket", price: 799, quantity: 0 },
+  { id: 2, title: "VIP - Ticket", price: 1299, quantity: 0 },
 ];
 
 const defaultCampingSelection = {

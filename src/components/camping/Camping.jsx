@@ -43,7 +43,7 @@ const Camping = ({ onNext, onBack }) => {
       if (selectedArea && totalTents > selectedArea.available) {
         updateCampingSelection({ area: null }); // Nulstil området, hvis der er for mange telte
         setAreaError(
-          "Der er ikke nok pladser til de valgte telte. Vælg et andet område."
+          "There are not enough places for the selected tents. Select another area."
         ); // Sæt fejlbesked
       } else {
         setAreaError(""); // Fjern fejlbesked, hvis der er plads
@@ -97,13 +97,13 @@ const Camping = ({ onNext, onBack }) => {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4 text-primary">
-        Vælg Camping Område
+        Select Camping Area
       </h2>
       <div className="grid grid-cols-2 gap-4">
         {campingSelection.areas?.map((area) => (
           <button
             key={area.area}
-            className={`p-4 border rounded ${
+            className={`p-4 border rounded-xl ${
               campingSelection.area === area.area
                 ? "border-primary"
                 : "border-gray-500"
@@ -126,8 +126,8 @@ const Camping = ({ onNext, onBack }) => {
               }`}
             >
               {area.available === 0 || area.available < totalTents
-                ? "Ikke nok pladser"
-                : `${area.available} Ledige Pladser`}
+                ? "Not enough space"
+                : `${area.available} Vacant Places`}
             </p>
           </button>
         ))}
@@ -135,12 +135,13 @@ const Camping = ({ onNext, onBack }) => {
 
       {/* Fejlbesked under campingområder */}
       {areaError && <p className="text-red-500 text-sm mt-4">{areaError}</p>}
-
-      <h3 className="text-xl font-bold mt-6">Tilkøb af Telte</h3>
+      <h2 className="text-2xl font-bold mb-4 mt-8 text-primary">
+        Choose tents
+      </h2>
 
       {/* 2 Personers Telt */}
       <div className="flex justify-between items-center mb-4">
-        <p>2 Personers Telt</p>
+        <p>2 Person Tent</p>
         <div className="flex items-center space-x-2">
           <button
             onClick={() =>
@@ -179,7 +180,7 @@ const Camping = ({ onNext, onBack }) => {
 
       {/* 3 Personers Telt */}
       <div className="flex justify-between items-center mb-4">
-        <p>3 Personers Telt</p>
+        <p>3 Person Tent</p>
         <div className="flex items-center space-x-2">
           <button
             onClick={() =>
@@ -225,7 +226,7 @@ const Camping = ({ onNext, onBack }) => {
           className="border border-primary text-primary w-5 h-5 rounded-md bg-black focus:outline-none focus:ring-2 focus:ring-primary"
         />
         <label htmlFor="greenCamping" className="text-lg text-white ml-2">
-          Grøn Camping
+          Green Camping
         </label>
       </div>
 
@@ -236,7 +237,7 @@ const Camping = ({ onNext, onBack }) => {
           onClick={onBack}
           className="px-10 py-2 border border-primary text-white rounded-full"
         >
-          Tilbage til Billetter
+          Back
         </button>
         <button
           onClick={onNextHandler} // Kald onNextHandler i stedet for handleNext
@@ -245,7 +246,7 @@ const Camping = ({ onNext, onBack }) => {
           }`}
           disabled={!canProceedToPayment}
         >
-          Gå videre til Info
+          Next
         </button>
       </div>
     </div>

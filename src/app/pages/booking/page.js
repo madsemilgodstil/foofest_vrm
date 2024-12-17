@@ -78,15 +78,15 @@ const Booking = () => {
       {/* Display global timer */}
       {timerActive && (
         <div className='sticky top-0 z-50 bg-black text-primary border-b border-t border-primary text-center py-2 mb-8'>
-          Reservation udløber om: {Math.floor(timer / 60)}:
+          Reservation expires in: {Math.floor(timer / 60)}:
           {String(timer % 60).padStart(2, '0')}
         </div>
       )}
 
       <div className='px-4 max-w-5xl mx-auto'>
-        <h1 className='text-3xl font-bold mb-6 text-center'>Booking</h1>
+      <h1 className='text-center text-4xl font-bold font-titan text-white'>Booking</h1>
 
-        <div className='grid grid-cols-[65%_30%] justify-between'>
+        <div className='flex flex-col md:grid md:grid-cols-[65%_30%] lg:justify-between gap-4'>
           <div className='ticket-selection'>
             {currentView === 'tickets' && (
               <Tickets onNext={() => setCurrentView('camping')} />
@@ -116,7 +116,9 @@ const Booking = () => {
 
             {currentView === 'login' && (
               <div>
-                <h1>RET DENNE TIL</h1>
+                <h2 className="text-2xl font-bold mb-4 text-primary">Payment completed! Thank you for your order.</h2>
+                <p className="mb-4">You can review your purchased items in the cart. Additionally, a confirmation email with all your order details has been sent to you.</p>
+                <p>Thank you for choosing us, and we hope you enjoy your experience!</p>
               </div>
             )}
           </div>
