@@ -25,7 +25,7 @@ const Navigation = () => {
         <div>
           <Link href="/">
             <h1
-              className={`text-4xl font-moiraione  font-extrabold ${
+              className={`text-4xl font-titan  font-extrabold ${
                 pathname === "/"
                   ? "text-primary"
                   : "text-white hover:text-primary transition ease-out duration-300"

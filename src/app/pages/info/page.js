@@ -6,6 +6,9 @@ const Info = () => {
   return (
     <>
       <>
+        <h1 className='text-center text-4xl font-bold font-titan text-white'>
+          information
+        </h1>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-8 px-2 max-w-7xl mx-auto my-8'>
           <div className='contact-info flex flex-col justify-center items-start h-min'>
             <h2 className='text-2xl font-bold text-primary'>Kontakt os</h2>

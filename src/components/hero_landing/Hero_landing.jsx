@@ -20,7 +20,7 @@ function HeroLanding() {
 
       <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10 px-4">
         <div className="flex flex-col items-center space-y-8 text-center mb-32 sm:mb-44">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-primary font-moiraione z-20">
+          <h2 className="font-titan font-extrabold text-4xl sm:text-5xl lg:text-8xl  text-primary z-20">
             FooFest 2025
           </h2>
 

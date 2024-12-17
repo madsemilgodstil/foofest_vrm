@@ -60,7 +60,17 @@ export default function RootLayout ({ children }) {
   return (
     <html lang='en'>
       <body
-        className={`${geistSans.variable} ${oswald.variable} ${moiraione.variable} ${geistMono.variable} antialiased`}
+        className={`
+    ${geistSans.variable} 
+    ${geistMono.variable} 
+    ${moiraione.variable} 
+    ${oswald.variable} 
+    ${gajra.variable} 
+    ${rubik.variable} 
+    ${russo.variable} 
+    ${titan.variable} 
+    antialiased
+  `}
       >
         <AuthProvider>
           <Navigation />

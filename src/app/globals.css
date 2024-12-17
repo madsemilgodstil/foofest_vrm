@@ -7,27 +7,27 @@ body {
 }
 
 .font-moiraione {
-  font-family: var(--font-moiraione);
+  font-family: var(--font-moiraione), sans-serif;
 }
 
 .font-oswald {
-  font-family: var(--font-oswald);
+  font-family: var(--font-oswald), sans-serif;
 }
 
 .font-gajra {
-  font-family: var(--font-gajra);
+  font-family: var(--font-gajra), sans-serif;
 }
 
 .font-rubik {
-  font-family: var(--font-rubik);
+  font-family: var(--font-rubik), sans-serif;
 }
 
 .font-russo {
-  font-family: var(--font-russo);
+  font-family: var(--font-russo), sans-serif;
 }
 
 .font-titan {
-  font-family: var(--font-titan);
+  font-family: var(--font-titan), sans-serif;
 }
 
 @layer base {
