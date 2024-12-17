@@ -27,10 +27,11 @@ const Basket = () => {
   const total = ticketTotal + tentTotal + greenCampingPrice + bookingFee;
 
   return (
-    <div className="sticky top-5 right-0 border border-primary rounded-lg p-4  text-white">
+    <div className="sticky top-16 border border-primary p-4 text-white rounded-xl">
+      {/* Billetter Overskrift */}
       {totalTickets > 0 && (
         <>
-          <h3 className="font-bold text-lg text-primary mb-2">Billetter</h3>
+          <h3 className="font-bold text-lg text-primary mb-2">Tickets</h3>
           <div className="mb-4">
             {tickets.map(
               (ticket) =>
@@ -55,7 +56,7 @@ const Basket = () => {
 
           {campingSelection.area && (
             <div className="flex justify-between items-center">
-              <p className="text-white">Område:</p>
+              <p className="text-white">Area:</p>
               <p className="text-white">{campingSelection.area}</p>
             </div>
           )}
@@ -63,7 +64,7 @@ const Basket = () => {
           {campingSelection.tents.twoPerson > 0 && (
             <div className="flex justify-between mb-2">
               <p className="text-white">
-                2 personers telt x {campingSelection.tents.twoPerson}
+                2 person tent x {campingSelection.tents.twoPerson}
               </p>
               <p className="text-white">
                 {campingSelection.tents.twoPerson * 299} DKK
@@ -73,7 +74,7 @@ const Basket = () => {
           {campingSelection.tents.threePerson > 0 && (
             <div className="flex justify-between mb-2">
               <p className="text-white">
-                3 personers telt x {campingSelection.tents.threePerson}
+                3 person tent x {campingSelection.tents.threePerson}
               </p>
               <p className="text-white">
                 {campingSelection.tents.threePerson * 399} DKK
@@ -84,35 +85,35 @@ const Basket = () => {
           <hr className="border-primary my-4" />
         </>
       )}
-
-      <h3 className="font-bold text-lg text-primary mb-2">Oversigt</h3>
+      {/* Oversigt */}
+      <h3 className="font-bold text-lg text-primary mb-2">Overview</h3>
       {tickets.some((ticket) => ticket.quantity > 0) && (
         <div className="flex justify-between mb-2">
-          <p>Billetter x {totalTickets}</p>
+          <p>Tickets x {totalTickets}</p>
           <p>{ticketTotal} DKK</p>
         </div>
       )}
       {totalTents > 0 && (
         <div className="flex justify-between mb-2">
-          <p>Telte x {totalTents}</p>
+          <p>Tents x {totalTents}</p>
           <p>{tentTotal} DKK</p>
         </div>
       )}
       {campingSelection.greenCamping && (
         <div className="flex justify-between mb-2">
-          <p>Grøn camping</p>
+          <p>Green camping</p>
           <p>{greenCampingPrice} DKK</p>
         </div>
       )}
       <div className="flex justify-between mb-2">
-        <p>Booking gebyr</p>
+        <p>Booking fee</p>
         <p>{bookingFee} DKK</p>
       </div>
 
       <hr className="border-primary my-4" />
 
       <div className="flex justify-between text-lg font-bold">
-        <p>I ALT</p>
+        <p>TOTAL:</p>
         <p>{total} DKK</p>
       </div>
     </div>

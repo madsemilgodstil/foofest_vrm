@@ -11,15 +11,16 @@ export default function Payment({ onBack, setCurrentView }) {
   const completeReservation = useBookingStore(
     (state) => state.completeReservation
   );
+  const greenCampingFee = campingSelection.greenCamping ? 249 : 0; // Green Camping Fee
 
   const bookingFee = 99;
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid }
+    formState: { errors, isValid },
   } = useForm({
-    mode: "onChange"
+    mode: "onChange",
   });
 
   const handlePayment = async () => {
@@ -52,52 +53,58 @@ export default function Payment({ onBack, setCurrentView }) {
         ) +
         campingSelection.tents.twoPerson * 299 +
         campingSelection.tents.threePerson * 399 +
+        greenCampingFee +
         bookingFee;
 
       alert(`
-        Betaling gennemført! Tak for din ordre.
+        Payment completed! Thank you for your order.
   
         Reservation ID: ${reservationId}
   
-        Bestillingsdetaljer:
+        Order details:
         ${ticketDetails}
         ${tentsDetails}
+         ${
+           campingSelection.greenCamping
+             ? `Green Camping: ${greenCampingFee} DKK`
+             : ""
+         }
   
-        Booking gebyr: ${bookingFee} DKK
+        Booking fee: ${bookingFee} DKK
   
-        I ALT: ${totalAmount} DKK
+        TOTAL: ${totalAmount} DKK
       `);
 
       if (setCurrentView) {
         setCurrentView("login");
       }
     } else {
-      alert("Noget gik galt med din reservation. Prøv igen.");
+      alert("Something went wrong with your reservation. Try again.");
     }
   };
 
   return (
-    <div className="mx-auto bg-black text-white p-6 rounded-md">
+    <div className="mx-auto bg-black text-white">
       <h2 className="text-2xl font-bold mb-4 text-primary">
-        Betalingsoplysninger
+        Payment information
       </h2>
 
       <form onSubmit={handleSubmit(handlePayment)} className="space-y-4">
         <div>
           <label htmlFor="cardNumber" className="block text-sm font-bold mb-1">
-            Kortnummer
+            Card number
           </label>
           <input
             {...register("cardNumber", {
-              required: "Kortnummer er påkrævet.",
+              required: "Card number is required.",
               pattern: {
                 value: /^[0-9]{13,19}$/,
-                message: "Kortnummer skal være mellem 13 og 19 cifre."
-              }
+                message: "Card number must be between 13 and 19 digits.",
+              },
             })}
             type="text"
             className="w-full text-white border border-gray-400 rounded-md p-3 bg-black focus:border-primary focus:outline-none"
-            placeholder="Kort nummer"
+            placeholder="Card number"
           />
           {errors.cardNumber && (
             <p className="text-red-500 text-sm">{errors.cardNumber.message}</p>
@@ -110,11 +117,11 @@ export default function Payment({ onBack, setCurrentView }) {
           </label>
           <input
             {...register("cardHolder", {
-              required: "Kortholder navn er påkrævet."
+              required: "Cardholder name is required.",
             })}
             type="text"
             className="w-full text-white border border-gray-400 rounded-md p-3 bg-black focus:border-primary focus:outline-none"
-            placeholder="Kortholder navn"
+            placeholder="Cardholder name"
           />
           {errors.cardHolder && (
             <p className="text-red-500 text-sm">{errors.cardHolder.message}</p>
@@ -131,15 +138,15 @@ export default function Payment({ onBack, setCurrentView }) {
             </label>
             <input
               {...register("expiryDate", {
-                required: "Udløbsdato er påkrævet.",
+                required: "Expiry date is required.",
                 pattern: {
                   value: /^(0[1-9]|1[0-2])\/\d{2}$/,
-                  message: "Ugyldig udløbsdato (MM/ÅÅ)."
-                }
+                  message: "Ugyldig udløbsdato (MM/ÅÅ).",
+                },
               })}
               type="text"
               className="w-full text-white border border-gray-400 rounded-md p-3 bg-black focus:border-primary focus:outline-none"
-              placeholder="MM/ÅÅ"
+              placeholder="MM/YY"
             />
             {errors.expiryDate && (
               <p className="text-red-500 text-sm">
@@ -154,11 +161,11 @@ export default function Payment({ onBack, setCurrentView }) {
             </label>
             <input
               {...register("cvc", {
-                required: "CVC er påkrævet.",
+                required: "CVC is required.",
                 pattern: {
                   value: /^[0-9]{3}$/,
-                  message: "CVC skal være 3 cifre."
-                }
+                  message: "CVC must be 3 digits.",
+                },
               })}
               type="text"
               className="w-full text-white border border-gray-400 rounded-md p-3 bg-black focus:border-primary focus:outline-none"
@@ -176,7 +183,7 @@ export default function Payment({ onBack, setCurrentView }) {
             type="button"
             className="px-10 py-2 border border-primary text-white rounded-full"
           >
-            Tilbage til Camping
+            Back
           </button>
           <button
             type="submit"
@@ -185,7 +192,7 @@ export default function Payment({ onBack, setCurrentView }) {
             }`}
             disabled={!isValid}
           >
-            Bekræft betaling
+            Confirm payment
           </button>
         </div>
       </form>

@@ -176,8 +176,7 @@ const Schedule = ({ stages }) => {
                                     <span>{act}</span>
                                     {cancelled && (
                                       <span className="text-red-500 font-semibold">
-                                        (AFLYST){" "}
-                                        {/* Tilføjer "AFLYST" hvis cancelled er true */}
+                                        (CANCELED)
                                       </span>
                                     )}
                                     <span className="text-gray-500 text-[10px]">
@@ -225,24 +224,10 @@ const Schedule = ({ stages }) => {
                                   </SheetDescription>
                                 )}
 
-                                {selectedBand?.bio && (
-                                  <SheetDescription className="text-sm my-2">
-                                    {selectedBand.bio}
-                                  </SheetDescription>
-                                )}
-
-                                {selectedBand?.members && (
-                                  <SheetDescription className="text-sm my-2">
-                                    <strong>Members:</strong>{" "}
-                                    {Array.isArray(selectedBand.members)
-                                      ? selectedBand.members.join(", ")
-                                      : selectedBand.members}
-                                  </SheetDescription>
-                                )}
-
-                                {selectedBand?.logoCredits && (
-                                  <SheetDescription className="text-xs text-gray-500 text-center mt-4">
-                                    {selectedBand.logoCredits}
+                                {/* Cancelled Notice */}
+                                {selectedBand?.cancelled && (
+                                  <SheetDescription className="text-red-500 font-semibold">
+                                    CANCELED
                                   </SheetDescription>
                                 )}
                               </SheetHeader>
