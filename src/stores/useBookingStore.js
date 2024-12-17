@@ -38,20 +38,20 @@ const useBookingStore = create((set, get) => ({
       campingSelection: { ...defaultCampingSelection }
     }),
 
-  createReservation: async (area, amount) => {
-    try {
-      const { id, timeout } = await reserveSpot(area, amount)
-      set({
-        reservationId: id,
-        timer: timeout / 1000,
-        timerActive: true
-      })
-      return id
-    } catch (error) {
-      console.error('Fejl ved oprettelse af reservation:', error)
-      return null
-    }
-  },
+    createReservation: async (area, totalTents) => {
+      try {
+        const { id, timeout } = await reserveSpot(area, totalTents); // Sender totalTents til backend
+        set({
+          reservationId: id,
+          timer: timeout / 1000,
+          timerActive: true,
+        });
+        return id;
+      } catch (error) {
+        console.error("Fejl ved oprettelse af reservation:", error);
+        return null;
+      }
+    },
 
   completeReservation: async () => {
     const { reservationId } = get()

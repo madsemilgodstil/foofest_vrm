@@ -73,10 +73,10 @@ export async function getCampingAreas () {
 }
 
 //PUT
-export async function reserveSpot (area, amount) {
+export async function reserveSpot (area, totalTents) {
   const bodyContent = JSON.stringify({
     area: area,
-    amount: amount
+    amount: totalTents
   })
 
   const response = await fetch(`${url}/reserve-spot`, {

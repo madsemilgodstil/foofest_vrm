@@ -66,7 +66,7 @@ const Modal = ({ isOpen, onClose }) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-black border-2 border-darkorange p-8  shadow-lg max-w-lg w-full relative text-white"
+        className="bg-black border-2 border-darkorange p-5 m-5 md:p-8 md:m-0 shadow-lg max-w-lg w-full relative text-white"
       >
         <button
           onClick={onClose}

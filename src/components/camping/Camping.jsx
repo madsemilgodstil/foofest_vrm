@@ -25,7 +25,7 @@ const Camping = ({ onNext, onBack }) => {
       const areas = await getCampingAreas();
       const formattedAreas = areas.map((area) => ({
         area: area.name || area.area,
-        available: area.spots_left || area.available,
+        available: area.available, // Tilgængelige pladser
       }));
 
       updateCampingSelection({ areas: formattedAreas });
@@ -82,15 +82,10 @@ const Camping = ({ onNext, onBack }) => {
     }
   };
 
-  const hasSelectedArea = !!campingSelection.area;
-  const hasSelectedTent =
-    campingSelection.tents.twoPerson + campingSelection.tents.threePerson > 0;
-
-  const canProceedToPayment =
-    totalTickets > 0 && hasSelectedArea && hasSelectedTent;
+  const canProceedToPayment = totalTents > 0 && campingSelection.area;
 
   const onNextHandler = () => {
-    onNext();
+    onNext(totalTents);
   };
 
   return (
