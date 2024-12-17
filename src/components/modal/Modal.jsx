@@ -13,7 +13,7 @@ import { getUserByCredentials, createUser } from "@/lib/supabaseUser";
 const schema = z.object({
   name: z.string().optional(),
   email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters")
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 const Modal = ({ isOpen, onClose }) => {
@@ -25,9 +25,9 @@ const Modal = ({ isOpen, onClose }) => {
     register,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors },
   } = useForm({
-    resolver: zodResolver(schema)
+    resolver: zodResolver(schema),
   });
 
   const onSubmit = async (data) => {
@@ -44,7 +44,7 @@ const Modal = ({ isOpen, onClose }) => {
         const newUser = {
           user_name: data.name,
           user_email: data.email,
-          user_password: data.password
+          user_password: data.password,
         };
         const createdUser = await createUser(newUser);
         login(createdUser);
@@ -75,7 +75,8 @@ const Modal = ({ isOpen, onClose }) => {
         >
           ✕
         </button>
-        <h2 className="text-2xl font-semibold mb-6 text-center text-white">
+
+        <h2 className="text-center text-2xl font-bold font-titan text-white">
           {isLogin ? "Login to FooFest" : "Create an Account"}
         </h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

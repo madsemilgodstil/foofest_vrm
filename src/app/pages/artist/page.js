@@ -41,8 +41,8 @@ export default async function DisplayArtists () {
   return (
     <div className='px-10'>
       <div className='flex flex-col items-center justify-center my-12'>
-        <h1 className='text-7xl font-bold font-titan text-white'>
-          All Artists
+        <h1 className='text-center text-4xl font-bold font-titan text-white'>
+          All artist
         </h1>
       </div>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mx-8'>
