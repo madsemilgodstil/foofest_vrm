@@ -53,10 +53,10 @@ const Booking = () => {
     const amount = tickets.reduce((total, ticket) => total + ticket.quantity, 0) // Beregn samlet antal billetter
 
     // Valider input
-    if (!area || amount === 0) {
-      alert('Vælg et område og mindst én billet for at fortsætte.')
-      return
-    }
+    // if (!area || amount === 0) {
+    //   alert('Vælg et område og mindst én billet for at fortsætte.')
+    //   return
+    // }
 
     try {
       // Opret reservation dynamisk
