@@ -12,16 +12,6 @@ const Basket = () => {
     0
   );
 
-  // const totalTickets = tickets.reduce(
-  //   (total, ticket) => total + ticket.quantity,
-  //   0
-  // );
-
-  // const totalTents =
-  //   campingSelection.tents.twoPerson +
-  //   campingSelection.tents.threePerson +
-  //   (campingSelection.tents.ownTent || 0);
-
   const tentTotal =
     campingSelection.tents.twoPerson * 299 +
     campingSelection.tents.threePerson * 399; // ownTent er gratis (0 DKK)

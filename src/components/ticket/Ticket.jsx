@@ -13,8 +13,8 @@ const Tickets = ({ onNext }) => {
       ticket.id === id ? { ...ticket, quantity: Math.max(0, quantity) } : ticket
     );
 
-    if (totalTickets > 10) {
-      setErrorMessage("Du kan maks købe 10 billetter.");
+    if (totalTickets >= 10) {
+      setErrorMessage("You can buy a maximum of 10 tickets.");
       return;
     }
 
