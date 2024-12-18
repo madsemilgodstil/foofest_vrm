@@ -14,7 +14,7 @@ const Basket = () => {
 
   const tentTotal =
     campingSelection.tents.twoPerson * 299 +
-    campingSelection.tents.threePerson * 399; // ownTent er gratis (0 DKK)
+    campingSelection.tents.threePerson * 399;
 
   const greenCampingPrice = campingSelection.greenCamping ? 249 : 0;
   const bookingFee = 99;
@@ -22,7 +22,6 @@ const Basket = () => {
 
   return (
     <div className="sticky top-16 border border-primary p-4 text-white rounded-xl">
-      {/* Billetter Overskrift */}
       {totalTickets > 0 && (
         <>
           <h3 className="font-bold text-lg text-primary mb-2">Tickets</h3>
@@ -98,7 +97,7 @@ const Basket = () => {
       {totalTents > 0 && (
         <div className="flex justify-between mb-2">
           <p>Tents x {totalTents}</p>
-          <p>{tentTotal} DKK</p> {/* ownTent er 0 DKK, så total ændres ikke */}
+          <p>{tentTotal} DKK</p>
         </div>
       )}
       {campingSelection.greenCamping && (
