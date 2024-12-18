@@ -43,16 +43,19 @@ const Booking = () => {
   }, [timer, timerActive, resetBooking])
 
   const handleCampingNext = async () => {
-    const { campingSelection, createReservation } = useBookingStore.getState();
-    const { area, tents } = campingSelection;
+    const { campingSelection, createReservation, getTotalTents } = useBookingStore.getState();
+    const { area } = campingSelection;
+
+      // Hent totalTents dynamisk fra zustand
+      const totalTents = getTotalTents();
   
     // Beregn totalTents
-    const totalTents = tents.twoPerson + tents.threePerson;
+    // const totalTents = tents.twoPerson + tents.threePerson + tents.ownTent;
   
-    if (!area || totalTents === 0) {
-      alert("Vælg et område og mindst ét telt for at fortsætte.");
-      return;
-    }
+    // if (!area || totalTents === 0) {
+    //   alert("Vælg et område og mindst ét telt for at fortsætte.");
+    //   return;
+    // }
   
     try {
       const reservationId = await createReservation(area, totalTents); // Sender totalTents

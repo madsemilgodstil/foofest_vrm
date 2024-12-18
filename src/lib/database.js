@@ -93,7 +93,7 @@ export async function reserveSpot (area, totalTents) {
   // Sørg for, at data indeholder `id` og `timeout`
   return {
     id: data.id, // Ekstraher ID fra respons
-    timeout: data.timeout || 300000 // Sæt en default timeout, hvis den mangler
+    timeout: data.timeout
   }
 }
 

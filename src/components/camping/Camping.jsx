@@ -17,8 +17,12 @@ const Camping = ({ onNext, onBack }) => {
     0
   );
 
-  const totalTents =
-    campingSelection.tents.twoPerson + campingSelection.tents.threePerson;
+  const totalTents = useBookingStore((state) => state.getTotalTents());
+
+  // const totalTents =
+  //   campingSelection.tents.twoPerson +
+  //   campingSelection.tents.threePerson +
+  //   campingSelection.tents.ownTent;
 
   useEffect(() => {
     const fetchCampingAreas = async () => {
@@ -61,12 +65,14 @@ const Camping = ({ onNext, onBack }) => {
 
     updatedTents[type] = newValue;
 
-    const totalTents = updatedTents.twoPerson + updatedTents.threePerson;
+    const newTotalTents =
+      updatedTents.twoPerson + updatedTents.threePerson + updatedTents.ownTent;
 
-    if (totalTents > totalTickets) {
+    if (newTotalTents > totalTickets) {
       return;
     }
 
+    // Opdater Zustand med de nye teltværdier
     updateCampingSelection({ tents: updatedTents });
   };
 
@@ -133,7 +139,7 @@ const Camping = ({ onNext, onBack }) => {
       </h2>
 
       <div className="flex justify-between items-center mb-4">
-        <p>2 Person Tent</p>
+        <p>2 Person Tent (299 DKK)</p>
         <div className="flex items-center space-x-2">
           <button
             onClick={() =>
@@ -171,7 +177,7 @@ const Camping = ({ onNext, onBack }) => {
       </div>
 
       <div className="flex justify-between items-center mb-4">
-        <p>3 Person Tent</p>
+        <p>3 Person Tent (399 DKK)</p>
         <div className="flex items-center space-x-2">
           <button
             onClick={() =>
@@ -200,6 +206,40 @@ const Camping = ({ onNext, onBack }) => {
                 "threePerson",
                 campingSelection.tents.threePerson + 1
               )
+            }
+            className="flex items-center justify-center bg-primary border border-primary text-white rounded-full hover:bg-black text-lg transition focus:outline-none h-[32px] w-[32px] cursor-pointer"
+          >
+            +
+          </button>
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center mb-4">
+        <p>Own Tent - MAX 3 persons (0 DKK)</p>
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() =>
+              handleTentChange("ownTent", campingSelection.tents.ownTent - 1)
+            }
+            className="flex items-center justify-center border border-primary text-white rounded-full bg-black hover:bg-primary text-lg transition focus:outline-none h-[32px] w-[32px] cursor-pointer"
+            disabled={campingSelection.tents.ownTent <= 0}
+          >
+            -
+          </button>
+          <input
+            type="number"
+            value={campingSelection.tents.ownTent || 0} // Fallback til 0
+            onChange={(e) => {
+              const inputValue =
+                e.target.value === "" ? 0 : parseInt(e.target.value, 10);
+              handleTentChange("ownTent", inputValue);
+            }}
+            className="w-16 text-center border border-primary text-white bg-black text-lg focus:outline-none focus:ring-0"
+            min="0"
+          />
+          <button
+            onClick={() =>
+              handleTentChange("ownTent", campingSelection.tents.ownTent + 1)
             }
             className="flex items-center justify-center bg-primary border border-primary text-white rounded-full hover:bg-black text-lg transition focus:outline-none h-[32px] w-[32px] cursor-pointer"
           >

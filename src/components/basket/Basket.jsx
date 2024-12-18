@@ -4,6 +4,7 @@ import useBookingStore from "@/stores/useBookingStore";
 const Basket = () => {
   const tickets = useBookingStore((state) => state.tickets);
   const campingSelection = useBookingStore((state) => state.campingSelection);
+  const totalTents = useBookingStore((state) => state.getTotalTents());
 
   const ticketTotal = tickets.reduce(
     (total, ticket) => total + ticket.price * ticket.quantity,
@@ -15,12 +16,14 @@ const Basket = () => {
     0
   );
 
-  const totalTents =
-    campingSelection.tents.twoPerson + campingSelection.tents.threePerson;
+  // const totalTents =
+  //   campingSelection.tents.twoPerson +
+  //   campingSelection.tents.threePerson +
+  //   (campingSelection.tents.ownTent || 0);
 
   const tentTotal =
     campingSelection.tents.twoPerson * 299 +
-    campingSelection.tents.threePerson * 399;
+    campingSelection.tents.threePerson * 399; // ownTent er gratis (0 DKK)
 
   const greenCampingPrice = campingSelection.greenCamping ? 249 : 0;
   const bookingFee = 99;
@@ -44,7 +47,6 @@ const Basket = () => {
                   </div>
                 )
             )}
-
             <hr className="border-primary my-4" />
           </div>
         </>
@@ -81,10 +83,19 @@ const Basket = () => {
               </p>
             </div>
           )}
+          {campingSelection.tents.ownTent > 0 && (
+            <div className="flex justify-between mb-2">
+              <p className="text-white">
+                Own Tent x {campingSelection.tents.ownTent}
+              </p>
+              <p className="text-white">0 DKK</p> {/* Gratis telt */}
+            </div>
+          )}
 
           <hr className="border-primary my-4" />
         </>
       )}
+
       {/* Oversigt */}
       <h3 className="font-bold text-lg text-primary mb-2">Overview</h3>
       {tickets.some((ticket) => ticket.quantity > 0) && (
@@ -96,7 +107,7 @@ const Basket = () => {
       {totalTents > 0 && (
         <div className="flex justify-between mb-2">
           <p>Tents x {totalTents}</p>
-          <p>{tentTotal} DKK</p>
+          <p>{tentTotal} DKK</p> {/* ownTent er 0 DKK, så total ændres ikke */}
         </div>
       )}
       {campingSelection.greenCamping && (

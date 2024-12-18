@@ -6,6 +6,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 
 const Info = ({ onNext, setCurrentView }) => {
   const tickets = useBookingStore((state) => state.tickets);
+  const totalTents = useBookingStore((state) => state.getTotalTents());
   const createReservation = useBookingStore((state) => state.createReservation);
   const reservationId = useBookingStore((state) => state.reservationId);
   const setReservationId = useBookingStore((state) => state.setReservationId);
@@ -42,7 +43,7 @@ const Info = ({ onNext, setCurrentView }) => {
       const fetchReservation = async () => {
         try {
           const selectedArea = campingSelection.area || "Default"; // Fallback til "Default" hvis intet er valgt
-          const id = await createReservation(selectedArea, totalTickets); // Dynamisk område
+          const id = await createReservation(selectedArea, totalTents); // Dynamisk område
 
           console.log("Reservation ID oprettet:", id);
           setReservationId(id);

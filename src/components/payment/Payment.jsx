@@ -37,14 +37,33 @@ export default function Payment({ onBack, setCurrentView }) {
         )
         .join("\n");
 
-      const tentsDetails = `
-        2 Personers Telte x ${campingSelection.tents.twoPerson} - ${
-        campingSelection.tents.twoPerson * 299
-      } DKK
-        3 Personers Telte x ${campingSelection.tents.threePerson} - ${
-        campingSelection.tents.threePerson * 399
-      } DKK
-      `.trim();
+      const tents = [
+        {
+          name: "2 Personers Telte",
+          quantity: campingSelection.tents.twoPerson,
+          price: 299,
+        },
+        {
+          name: "3 Personers Telte",
+          quantity: campingSelection.tents.threePerson,
+          price: 399,
+        },
+        {
+          name: "Own Tent",
+          quantity: campingSelection.tents.ownTent,
+          price: 0,
+        },
+      ];
+
+      const tentsDetails = tents
+        .filter((tent) => tent.quantity > 0)
+        .map(
+          (tent) =>
+            `${tent.name} x ${tent.quantity} - ${
+              tent.quantity * tent.price
+            } DKK`
+        )
+        .join("\n");
 
       const totalAmount =
         tickets.reduce(
@@ -53,27 +72,32 @@ export default function Payment({ onBack, setCurrentView }) {
         ) +
         campingSelection.tents.twoPerson * 299 +
         campingSelection.tents.threePerson * 399 +
+        campingSelection.tents.ownTent * 0 +
         greenCampingFee +
         bookingFee;
 
-      alert(`
-        Payment completed! Thank you for your order.
-  
-        Reservation ID: ${reservationId}
-  
-        Order details:
-        ${ticketDetails}
-        ${tentsDetails}
-         ${
-           campingSelection.greenCamping
-             ? `Green Camping: ${greenCampingFee} DKK`
-             : ""
-         }
-  
-        Booking fee: ${bookingFee} DKK
-  
-        TOTAL: ${totalAmount} DKK
-      `);
+      const greenCampingDetails = campingSelection.greenCamping
+        ? `Green Camping: ${greenCampingFee} DKK`
+        : "";
+
+      const alertMessage = [
+        "Payment completed! Thank you for your order.",
+        "",
+        `Reservation ID: ${reservationId}`,
+        "",
+        "Order details:",
+        ticketDetails,
+        tentsDetails,
+        greenCampingDetails,
+        "",
+        `Booking fee: ${bookingFee} DKK`,
+        "",
+        `TOTAL: ${totalAmount} DKK`,
+      ]
+        .filter((line) => line) // Fjern tomme linjer
+        .join("\n");
+
+      alert(alertMessage);
 
       if (setCurrentView) {
         setCurrentView("login");

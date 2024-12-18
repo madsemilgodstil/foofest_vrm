@@ -8,7 +8,7 @@ const defaultTickets = [
 
 const defaultCampingSelection = {
   area: null,
-  tents: { twoPerson: 0, threePerson: 0 },
+  tents: { twoPerson: 0, threePerson: 0, ownTent: 0  },
   greenCamping: false,
   areas: []
 }
@@ -19,6 +19,12 @@ const useBookingStore = create((set, get) => ({
   timer: 0,
   timerActive: false,
   reservationId: null,
+
+    // Beregn totalTents - Rasmus
+    getTotalTents: () => {
+      const { tents } = get().campingSelection;
+      return tents.twoPerson + tents.threePerson + tents.ownTent;
+    },
 
   setTimer: time => set({ timer: time, timerActive: true }),
 
@@ -40,7 +46,7 @@ const useBookingStore = create((set, get) => ({
 
     createReservation: async (area, totalTents) => {
       try {
-        const { id, timeout } = await reserveSpot(area, totalTents); // Sender totalTents til backend
+        const { id, timeout } = await reserveSpot(area, totalTents); // totalTents inkluderer eget telt
         set({
           reservationId: id,
           timer: timeout / 1000,
@@ -70,40 +76,44 @@ const useBookingStore = create((set, get) => ({
     }
   },
 
-  updateTickets: updatedTickets => {
-    set(state => {
+  updateTickets: (updatedTickets) => {
+    set((state) => {
       const totalTickets = updatedTickets.reduce(
         (total, ticket) => total + ticket.quantity,
         0
-      )
-
-      const totalTents =
-        state.campingSelection.tents.twoPerson +
-        state.campingSelection.tents.threePerson
-
-      let updatedTents = { ...state.campingSelection.tents }
-      if (totalTents > totalTickets) {
-        while (
-          updatedTents.twoPerson + updatedTents.threePerson >
-          totalTickets
-        ) {
-          if (updatedTents.threePerson > 0) {
-            updatedTents.threePerson -= 1
-          } else if (updatedTents.twoPerson > 0) {
-            updatedTents.twoPerson -= 1
-          }
+      );
+  
+      let updatedTents = { ...state.campingSelection.tents };
+  
+      // Brug getTotalTents til at starte med
+      let totalTents = get().getTotalTents();
+  
+      // Sørg for, at teltantal ikke overstiger billetter
+      while (totalTents > totalTickets) {
+        if (updatedTents.ownTent > 0) {
+          updatedTents.ownTent -= 1; // Juster ownTent først
+        } else if (updatedTents.threePerson > 0) {
+          updatedTents.threePerson -= 1;
+        } else if (updatedTents.twoPerson > 0) {
+          updatedTents.twoPerson -= 1;
         }
+  
+        // Opdater totalTents dynamisk
+        totalTents =
+          updatedTents.twoPerson +
+          updatedTents.threePerson +
+          updatedTents.ownTent;
       }
-
+  
       return {
         ...state,
         tickets: updatedTickets,
         campingSelection: {
           ...state.campingSelection,
-          tents: updatedTents
-        }
-      }
-    })
+          tents: updatedTents,
+        },
+      };
+    });
   },
 
   updateCampingSelection: updatedCamping =>
