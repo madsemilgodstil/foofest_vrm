@@ -4,18 +4,12 @@ import useBookingStore from "@/stores/useBookingStore";
 const Tickets = ({ onNext }) => {
   const tickets = useBookingStore((state) => state.tickets);
   const updateTickets = useBookingStore((state) => state.updateTickets);
-  // const campingSelection = useBookingStore((state) => state.campingSelection);
-  // const resetSelectedArea = useBookingStore((state) => state.resetSelectedArea);
+  const totalTickets = useBookingStore((state) => state.getTotalTickets()); // Hent totalTickets direkte
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleQuantityChange = (id, quantity) => {
     const updatedTickets = tickets.map((ticket) =>
       ticket.id === id ? { ...ticket, quantity: Math.max(0, quantity) } : ticket
-    );
-
-    const totalTickets = updatedTickets.reduce(
-      (total, ticket) => total + ticket.quantity,
-      0
     );
 
     if (totalTickets > 10) {
@@ -24,10 +18,10 @@ const Tickets = ({ onNext }) => {
     }
 
     setErrorMessage("");
-    updateTickets(updatedTickets);
+    updateTickets(updatedTickets); // Opdater tickets i Zustand
   };
 
-  const hasSelectedTickets = tickets.some((ticket) => ticket.quantity > 0);
+  const hasSelectedTickets = totalTickets > 0; // Reduceret logik
 
   return (
     <div>

@@ -5,7 +5,8 @@ import useBookingStore from "@/stores/useBookingStore";
 import { useForm, useFieldArray } from "react-hook-form";
 
 const Info = ({ onNext, setCurrentView }) => {
-  const tickets = useBookingStore((state) => state.tickets);
+  // const tickets = useBookingStore((state) => state.tickets);
+  const totalTickets = useBookingStore((state) => state.getTotalTickets());
   const totalTents = useBookingStore((state) => state.getTotalTents());
   const createReservation = useBookingStore((state) => state.createReservation);
   const reservationId = useBookingStore((state) => state.reservationId);
@@ -14,10 +15,10 @@ const Info = ({ onNext, setCurrentView }) => {
   const { setTimer } = useBookingStore();
   // const { resetBooking } = useBookingStore();
 
-  const totalTickets = tickets.reduce(
-    (total, ticket) => total + ticket.quantity,
-    0
-  );
+  // const totalTickets = tickets.reduce(
+  //   (total, ticket) => total + ticket.quantity,
+  //   0
+  // );
 
   const { control, register, handleSubmit, setValue } = useForm({
     defaultValues: {

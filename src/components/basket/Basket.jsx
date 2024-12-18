@@ -5,16 +5,17 @@ const Basket = () => {
   const tickets = useBookingStore((state) => state.tickets);
   const campingSelection = useBookingStore((state) => state.campingSelection);
   const totalTents = useBookingStore((state) => state.getTotalTents());
+  const totalTickets = useBookingStore((state) => state.getTotalTickets());
 
   const ticketTotal = tickets.reduce(
     (total, ticket) => total + ticket.price * ticket.quantity,
     0
   );
 
-  const totalTickets = tickets.reduce(
-    (total, ticket) => total + ticket.quantity,
-    0
-  );
+  // const totalTickets = tickets.reduce(
+  //   (total, ticket) => total + ticket.quantity,
+  //   0
+  // );
 
   // const totalTents =
   //   campingSelection.tents.twoPerson +

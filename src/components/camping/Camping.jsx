@@ -5,17 +5,18 @@ import useBookingStore from "@/stores/useBookingStore";
 import { getCampingAreas } from "@/lib/database";
 
 const Camping = ({ onNext, onBack }) => {
-  const tickets = useBookingStore((state) => state.tickets);
+  // const tickets = useBookingStore((state) => state.tickets);
   const campingSelection = useBookingStore((state) => state.campingSelection);
+  const totalTickets = useBookingStore((state) => state.getTotalTickets());
   const updateCampingSelection = useBookingStore(
     (state) => state.updateCampingSelection
   );
   const [areaError, setAreaError] = useState("");
 
-  const totalTickets = tickets.reduce(
-    (total, ticket) => total + ticket.quantity,
-    0
-  );
+  // const totalTickets = tickets.reduce(
+  //   (total, ticket) => total + ticket.quantity,
+  //   0
+  // );
 
   const totalTents = useBookingStore((state) => state.getTotalTents());
 

@@ -20,6 +20,14 @@ const useBookingStore = create((set, get) => ({
   timerActive: false,
   reservationId: null,
 
+    // Beregn totalTickets - Rasmus
+    getTotalTickets: () => {
+      return get().tickets.reduce(
+        (total, ticket) => total + ticket.quantity,
+        0
+      );
+    },
+
     // Beregn totalTents - Rasmus
     getTotalTents: () => {
       const { tents } = get().campingSelection;
