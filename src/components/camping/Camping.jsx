@@ -2,42 +2,20 @@
 
 import React, { useState, useEffect } from "react";
 import useBookingStore from "@/stores/useBookingStore";
-import { getCampingAreas } from "@/lib/database";
 
 const Camping = ({ onNext, onBack }) => {
-  // const tickets = useBookingStore((state) => state.tickets);
   const campingSelection = useBookingStore((state) => state.campingSelection);
   const totalTickets = useBookingStore((state) => state.getTotalTickets());
+  const totalTents = useBookingStore((state) => state.getTotalTents());
   const updateCampingSelection = useBookingStore(
     (state) => state.updateCampingSelection
   );
+  const fetchCampingAreas = useBookingStore((state) => state.fetchCampingAreas);
   const [areaError, setAreaError] = useState("");
 
-  // const totalTickets = tickets.reduce(
-  //   (total, ticket) => total + ticket.quantity,
-  //   0
-  // );
-
-  const totalTents = useBookingStore((state) => state.getTotalTents());
-
-  // const totalTents =
-  //   campingSelection.tents.twoPerson +
-  //   campingSelection.tents.threePerson +
-  //   campingSelection.tents.ownTent;
-
   useEffect(() => {
-    const fetchCampingAreas = async () => {
-      const areas = await getCampingAreas();
-      const formattedAreas = areas.map((area) => ({
-        area: area.name || area.area,
-        available: area.available, // Tilgængelige pladser
-      }));
-
-      updateCampingSelection({ areas: formattedAreas });
-    };
-
     fetchCampingAreas();
-  }, [updateCampingSelection]);
+  }, [fetchCampingAreas]);
 
   useEffect(() => {
     if (campingSelection.area) {
@@ -48,7 +26,7 @@ const Camping = ({ onNext, onBack }) => {
         updateCampingSelection({ area: null });
         setAreaError(
           "There are not enough places for the selected tents. Select another area."
-        ); // Sæt fejlbesked
+        );
       } else {
         setAreaError("");
       }
@@ -73,7 +51,6 @@ const Camping = ({ onNext, onBack }) => {
       return;
     }
 
-    // Opdater Zustand med de nye teltværdier
     updateCampingSelection({ tents: updatedTents });
   };
 
@@ -229,7 +206,7 @@ const Camping = ({ onNext, onBack }) => {
           </button>
           <input
             type="number"
-            value={campingSelection.tents.ownTent || 0} // Fallback til 0
+            value={campingSelection.tents.ownTent || 0}
             onChange={(e) => {
               const inputValue =
                 e.target.value === "" ? 0 : parseInt(e.target.value, 10);

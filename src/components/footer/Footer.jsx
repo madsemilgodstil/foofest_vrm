@@ -37,16 +37,19 @@ const Footer = () => {
           <Link href="mailto:foofest@info.dk" className="hover:text-primary">
             Mail: Foofest@info.dk
           </Link>
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2244.6965400706226!2d37.60481267691555!3d55.76377357308834!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a5aaea55555%3A0x799d9c88d68b6abe!2sTverskaya%20St%2C%2012%2C%20Moskva%2C%20Rusland%2C%20125009!5e0!3m2!1sda!2sdk!4v1733402670162!5m2!1sda!2sdk"
-            width="100%"
-            height="200"
-            style={{ marginTop: 10, border: "0" }}
-            allowFullScreen=""
-            aria-hidden="false"
-            tabIndex="0"
-            className="rounded-lg"
-          ></iframe>
+          <div className="relative">
+            <div className="absolute top-0 left-0 w-full h-full bg-black opacity-20 rounded-lg pointer-events-none"></div>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2244.6965400706226!2d37.60481267691555!3d55.76377357308834!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a5aaea55555%3A0x799d9c88d68b6abe!2sTverskaya%20St%2C%2012%2C%20Moskva%2C%20Rusland%2C%20125009!5e0!3m2!1sda!2sdk!4v1733402670162!5m2!1sda!2sdk"
+              width="100%"
+              height="200"
+              style={{ marginTop: 10, border: "0" }}
+              allowFullScreen=""
+              aria-hidden="false"
+              tabIndex="0"
+              className="rounded-xl"
+            ></iframe>
+          </div>
         </div>
 
         {/* Social Section */}

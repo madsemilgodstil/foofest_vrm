@@ -28,7 +28,7 @@ function HeroLanding() {
             <Link href="/pages/artist">
               <Button
                 variant="default"
-                className="px-8 py-4 sm:px-12 sm:py-7 bg-black border border-primary text-white font-bold rounded-full hover:bg-primary"
+                className="px-6 py-2 rounded-full border bg-black text-white border-primary hover:bg-primary transition ease-out duration-200"
               >
                 Line-up
               </Button>
@@ -37,7 +37,7 @@ function HeroLanding() {
             <Link href="/pages/booking">
               <Button
                 variant="default"
-                className="px-8 py-4 sm:px-12 sm:py-7 bg-black border border-primary font-bold text-white rounded-full hover:bg-primary"
+                className="px-6 py-2 rounded-full border bg-black text-white border-primary hover:bg-primary transition ease-out duration-200"
               >
                 Tickets
               </Button>

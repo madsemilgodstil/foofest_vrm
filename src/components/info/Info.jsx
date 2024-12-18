@@ -5,7 +5,6 @@ import useBookingStore from "@/stores/useBookingStore";
 import { useForm, useFieldArray } from "react-hook-form";
 
 const Info = ({ onNext, setCurrentView }) => {
-  // const tickets = useBookingStore((state) => state.tickets);
   const totalTickets = useBookingStore((state) => state.getTotalTickets());
   const totalTents = useBookingStore((state) => state.getTotalTents());
   const createReservation = useBookingStore((state) => state.createReservation);
@@ -13,12 +12,6 @@ const Info = ({ onNext, setCurrentView }) => {
   const setReservationId = useBookingStore((state) => state.setReservationId);
   const campingSelection = useBookingStore((state) => state.campingSelection);
   const { setTimer } = useBookingStore();
-  // const { resetBooking } = useBookingStore();
-
-  // const totalTickets = tickets.reduce(
-  //   (total, ticket) => total + ticket.quantity,
-  //   0
-  // );
 
   const { control, register, handleSubmit, setValue } = useForm({
     defaultValues: {
@@ -43,8 +36,8 @@ const Info = ({ onNext, setCurrentView }) => {
     if (totalTickets > 0 && !reservationId) {
       const fetchReservation = async () => {
         try {
-          const selectedArea = campingSelection.area || "Default"; // Fallback til "Default" hvis intet er valgt
-          const id = await createReservation(selectedArea, totalTents); // Dynamisk område
+          const selectedArea = campingSelection.area || "Default";
+          const id = await createReservation(selectedArea, totalTents);
 
           console.log("Reservation ID oprettet:", id);
           setReservationId(id);
@@ -62,13 +55,6 @@ const Info = ({ onNext, setCurrentView }) => {
     setReservationId,
     campingSelection.area,
   ]);
-
-  // Log reservationId, når det opdateres
-  // useEffect(() => {
-  //   if (reservationId) {
-  //     console.log("Reservation ID opdateret:", reservationId);
-  //   }
-  // }, [reservationId]);
 
   const onSubmit = (data) => {
     console.log("Form data:", data.forms);

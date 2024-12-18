@@ -5,15 +5,9 @@ import { useForm } from "react-hook-form";
 import useBookingStore from "@/stores/useBookingStore";
 
 export default function Payment({ onBack, setCurrentView }) {
-  const tickets = useBookingStore((state) => state.tickets);
-  const campingSelection = useBookingStore((state) => state.campingSelection);
-  const reservationId = useBookingStore((state) => state.reservationId);
   const completeReservation = useBookingStore(
     (state) => state.completeReservation
   );
-  const greenCampingFee = campingSelection.greenCamping ? 249 : 0; // Green Camping Fee
-
-  const bookingFee = 99;
 
   const {
     register,
@@ -27,83 +21,11 @@ export default function Payment({ onBack, setCurrentView }) {
     const success = await completeReservation();
 
     if (success) {
-      const ticketDetails = tickets
-        .filter((ticket) => ticket.quantity > 0)
-        .map(
-          (ticket) =>
-            `${ticket.title} x ${ticket.quantity} - ${
-              ticket.price * ticket.quantity
-            } DKK`
-        )
-        .join("\n");
-
-      const tents = [
-        {
-          name: "2 Personers Telte",
-          quantity: campingSelection.tents.twoPerson,
-          price: 299,
-        },
-        {
-          name: "3 Personers Telte",
-          quantity: campingSelection.tents.threePerson,
-          price: 399,
-        },
-        {
-          name: "Own Tent",
-          quantity: campingSelection.tents.ownTent,
-          price: 0,
-        },
-      ];
-
-      const tentsDetails = tents
-        .filter((tent) => tent.quantity > 0)
-        .map(
-          (tent) =>
-            `${tent.name} x ${tent.quantity} - ${
-              tent.quantity * tent.price
-            } DKK`
-        )
-        .join("\n");
-
-      const totalAmount =
-        tickets.reduce(
-          (total, ticket) => total + ticket.price * ticket.quantity,
-          0
-        ) +
-        campingSelection.tents.twoPerson * 299 +
-        campingSelection.tents.threePerson * 399 +
-        campingSelection.tents.ownTent * 0 +
-        greenCampingFee +
-        bookingFee;
-
-      const greenCampingDetails = campingSelection.greenCamping
-        ? `Green Camping: ${greenCampingFee} DKK`
-        : "";
-
-      const alertMessage = [
-        "Payment completed! Thank you for your order.",
-        "",
-        `Reservation ID: ${reservationId}`,
-        "",
-        "Order details:",
-        ticketDetails,
-        tentsDetails,
-        greenCampingDetails,
-        "",
-        `Booking fee: ${bookingFee} DKK`,
-        "",
-        `TOTAL: ${totalAmount} DKK`,
-      ]
-        .filter((line) => line) // Fjern tomme linjer
-        .join("\n");
-
-      alert(alertMessage);
-
       if (setCurrentView) {
-        setCurrentView("login");
+        setCurrentView("purchased");
       }
     } else {
-      alert("Something went wrong with your reservation. Try again.");
+      console.error("Something went wrong with your reservation. Try again.");
     }
   };
 

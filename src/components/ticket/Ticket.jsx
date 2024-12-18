@@ -4,7 +4,8 @@ import useBookingStore from "@/stores/useBookingStore";
 const Tickets = ({ onNext }) => {
   const tickets = useBookingStore((state) => state.tickets);
   const updateTickets = useBookingStore((state) => state.updateTickets);
-  const totalTickets = useBookingStore((state) => state.getTotalTickets()); // Hent totalTickets direkte
+  const totalTickets = useBookingStore((state) => state.getTotalTickets());
+
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleQuantityChange = (id, quantity) => {
@@ -18,10 +19,10 @@ const Tickets = ({ onNext }) => {
     }
 
     setErrorMessage("");
-    updateTickets(updatedTickets); // Opdater tickets i Zustand
+    updateTickets(updatedTickets);
   };
 
-  const hasSelectedTickets = totalTickets > 0; // Reduceret logik
+  const hasSelectedTickets = totalTickets > 0;
 
   return (
     <div>

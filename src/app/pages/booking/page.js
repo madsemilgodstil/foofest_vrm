@@ -7,6 +7,7 @@ import Payment from '@/components/payment/Payment'
 import Basket from '@/components/basket/Basket'
 import Info from '@/components/info/Info'
 import useBookingStore from '@/stores/useBookingStore'
+import Progress from '@/components/progress/Progress'
 
 const Booking = () => {
   const [currentView, setCurrentView] = useState('tickets')
@@ -45,20 +46,11 @@ const Booking = () => {
   const handleCampingNext = async () => {
     const { campingSelection, createReservation, getTotalTents } = useBookingStore.getState();
     const { area } = campingSelection;
+    const totalTents = getTotalTents();
 
-      // Hent totalTents dynamisk fra zustand
-      const totalTents = getTotalTents();
-  
-    // Beregn totalTents
-    // const totalTents = tents.twoPerson + tents.threePerson + tents.ownTent;
-  
-    // if (!area || totalTents === 0) {
-    //   alert("Vælg et område og mindst ét telt for at fortsætte.");
-    //   return;
-    // }
   
     try {
-      const reservationId = await createReservation(area, totalTents); // Sender totalTents
+      const reservationId = await createReservation(area, totalTents); 
       if (reservationId) {
         console.log("Reservation oprettet:", reservationId);
         setCurrentView("info");
@@ -74,14 +66,15 @@ const Booking = () => {
   return (
     <>
       {timerActive && (
-        <div className='sticky top-0 z-50 bg-black text-primary border-b border-t border-primary text-center py-2 mb-8'>
+        <div className='sticky top-0 z-20 bg-black text-primary border-b border-t border-primary text-center py-2 mb-8'>
           Reservation expires in: {Math.floor(timer / 60)}:
           {String(timer % 60).padStart(2, '0')}
         </div>
       )}
 
       <div className='px-4 max-w-5xl mx-auto'>
-      <h1 className='text-center text-4xl font-bold font-titan text-whit my-12'>Booking</h1>
+      <h1 className='text-center text-4xl font-bold font-titan text-whit mt-12'>Booking</h1>
+      <Progress currentStep={currentView} />
 
         <div className='flex flex-col md:grid md:grid-cols-[65%_30%] lg:justify-between gap-4'>
           <div className='ticket-selection'>
@@ -111,13 +104,20 @@ const Booking = () => {
               />
             )}
 
-            {currentView === 'login' && (
-              <div>
-                <h2 className="text-2xl font-bold mb-4 text-primary">Payment completed! Thank you for your order.</h2>
-                <p className="mb-4">You can review your purchased items in the cart. Additionally, a confirmation email with all your order details has been sent to you.</p>
-                <p>Thank you for choosing us, and we hope you enjoy your experience!</p>
-              </div>
-            )}
+          {currentView === 'purchased' && (
+            <div>
+              <h2 className="text-2xl font-bold mb-4 text-primary">
+                Payment completed! Thank you for your order.
+              </h2>
+              <p className="text-white mb-4">
+                Reservation ID: <span className="font-semibold">{useBookingStore.getState().reservationId}</span>
+              </p>
+              <p className="mb-4">
+                You can review your purchased items in the cart. Additionally, a confirmation email with all your order details has been sent to you.
+              </p>
+              <p>Thank you for choosing us, and we hope you enjoy your experience!</p>
+            </div>
+          )}
           </div>
 
           <div className='basket-wrapper'>
