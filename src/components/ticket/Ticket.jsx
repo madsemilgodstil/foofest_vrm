@@ -13,7 +13,12 @@ const Tickets = ({ onNext }) => {
       ticket.id === id ? { ...ticket, quantity: Math.max(0, quantity) } : ticket
     );
 
-    if (totalTickets >= 10) {
+    const newTotalTickets = updatedTickets.reduce(
+      (total, ticket) => total + ticket.quantity,
+      0
+    );
+
+    if (newTotalTickets > 10) {
       setErrorMessage("You can buy a maximum of 10 tickets.");
       return;
     }

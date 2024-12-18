@@ -19,7 +19,7 @@ const Progress = ({ currentStep }) => {
 
               <span
                 className={`text-sm absolute top-7 ${
-                  currentStep === step ? "text-primary" : "text-black"
+                  currentStep === step ? "text-primary" : "text-background"
                 }`}
               >
                 {capitalize(step)}
