@@ -27,7 +27,7 @@ async function fetchBandsAndSchedules () {
   try {
     const bands = await getBands()
     const schedules = (await getScheduleSlider()) || {}
-    console.log('Fetched Schedules:', schedules)
+    
     return { bands, schedules }
   } catch (error) {
     console.error('Error fetching data:', error)
@@ -46,7 +46,7 @@ export default async function DisplayArtists () {
         </h1>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mx-0 md:mx-8">
-        {bands.map(band => {
+        {bands.map((band, index ) => {
           const bandSchedule = []
 
           if (schedules && Object.keys(schedules).length > 0) {
@@ -67,7 +67,7 @@ export default async function DisplayArtists () {
           }
 
           return (
-            <Sheet key={band.id}>
+            <Sheet key={band.id || index}>
               <SheetTrigger asChild>
                 <Card className='hover:scale-105 transition ease-in-out duration-300 hover:border-primary border-2 cursor-pointer rounded-xl'>
                   <CardContent className='p-0'>
