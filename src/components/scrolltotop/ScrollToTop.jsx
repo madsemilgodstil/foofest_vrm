@@ -19,7 +19,7 @@ export default function ScrollToTop() {
     <div className="fixed bottom-5 right-5 z-20">
       <button
         onClick={scrollToTop}
-        className="bg-primary text-white px-4 py-2 rounded shadow-md"
+        className="px-6 py-2 bg-primary text-white rounded-full hover:bg-black border border-primary transition ease-out duration-200"
       >
         Top
       </button>

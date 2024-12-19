@@ -1,7 +1,7 @@
 const InfoText = () => {
   return (
-    <div className="max-w-4xl mx-auto mb-10  p-6 text-center">
-      <h1 className="text-4xl font-bold text-primary mb-4">
+    <div className="max-w-4xl mx-auto mb-10 mt-10  p-6 text-center">
+      <h1 className="text-4xl font-extrabold text-primary mb-4 font-titan">
         About FooFest 2025
       </h1>
       <p className="text-lg text-inherit leading-relaxed">

@@ -8,7 +8,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetDescription,
-  SheetTitle,
+  SheetTitle
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -20,7 +20,7 @@ const Schedule = ({ stages }) => {
   const allDays = [
     ...new Set(
       stages.flatMap(({ stageSchedule }) => Object.keys(stageSchedule))
-    ),
+    )
   ];
 
   const allGenres = [
@@ -32,7 +32,7 @@ const Schedule = ({ stages }) => {
             .filter((genre) => genre && genre !== "Unknown")
         )
       )
-    ),
+    )
   ];
 
   const handleStageFilter = (stageName) => {
@@ -145,7 +145,7 @@ const Schedule = ({ stages }) => {
                             members,
                             logo,
                             logoCredits,
-                            cancelled,
+                            cancelled
                           },
                           index
                         ) => (
@@ -162,10 +162,10 @@ const Schedule = ({ stages }) => {
                                     members,
                                     logo,
                                     logoCredits,
-                                    cancelled,
+                                    cancelled
                                   })
                                 }
-                                className={`hover:scale-105 transition ease-in-out duration-300 border rounded-[10px] cursor-pointer ${
+                                className={`hover:scale-[1.03] transition ease-in-out duration-300 border rounded-[10px] cursor-pointer ${
                                   cancelled
                                     ? "bg-red-900 border-red-500 text-white" // Hvis aflyst: rød baggrund og border
                                     : "border-darkorange hover:border-primary hover:text-primary"
