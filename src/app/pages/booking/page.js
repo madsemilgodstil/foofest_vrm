@@ -72,7 +72,7 @@ const Booking = () => {
         </div>
       )}
 
-      <div className='px-4 max-w-5xl mx-auto'>
+      <div className='px-4 max-w-5xl mx-auto mb-16'>
       <h1 className='text-center text-4xl font-bold font-titan text-whit mt-12'>Booking</h1>
       <Progress currentStep={currentView} />
 

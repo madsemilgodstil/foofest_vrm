@@ -49,7 +49,6 @@ export async function getScheduleSlider () {
       throw new Error(`Failed to fetch schedule: ${response.status}`)
     }
     const data = await response.json()
-    console.log('Server Fetched Schedule Data:', data) // Debugging log
     return data || {}
   } catch (error) {
     console.error('Error fetching schedule:', error)
